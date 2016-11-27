@@ -1,0 +1,7 @@
+group 'pl.jcommerce.apicat'
+version '1.0-SNAPSHOT'
+
+dependencies {
+    compile project(':apicat-repository')
+	compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc2'
+}
