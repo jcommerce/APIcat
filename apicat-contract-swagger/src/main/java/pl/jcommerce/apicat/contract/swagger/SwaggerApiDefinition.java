@@ -83,7 +83,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
 
     @Override
     public void validateSpecifications(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
-        Optional<ApiContractValidator> apiContractValidator = apiContractValidators.stream().filter(a -> a.support(apiSpecification) && a.support(apiDefinition)).findAny();
+        Optional<ApiContractValidator> apiContractValidator = apiContractValidators.stream().filter(a -> a.support(apiDefinition, apiSpecification)).findAny();
         if (apiContractValidator.isPresent()) {
             if(!apiContractValidator.get().validate(apiDefinition, apiSpecification))
                 valid = false;

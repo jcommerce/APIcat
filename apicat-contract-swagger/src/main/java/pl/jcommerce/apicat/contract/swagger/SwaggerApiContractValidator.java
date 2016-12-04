@@ -16,18 +16,11 @@ public class SwaggerApiContractValidator implements ApiContractValidator {
 
     private ContractsValidator contractsValidator = new ContractsValidatorImpl();
 
-    @Override
-    public boolean support(ApiDefinition apiDefinition) {
-        boolean result = false;
-        if (apiDefinition instanceof SwaggerApiDefinition && ((SwaggerApiDefinition) apiDefinition).getSwaggerDefinition() != null)
-            result = true;
-        return result;
-    }
 
     @Override
-    public boolean support(ApiSpecification apiSpecification) {
+    public boolean support(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
         boolean result = false;
-        if (apiSpecification instanceof SwaggerApiSpecification && ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition() != null)
+        if (apiDefinition instanceof SwaggerApiDefinition  && apiSpecification instanceof SwaggerApiSpecification )
             result = true;
         return result;
     }

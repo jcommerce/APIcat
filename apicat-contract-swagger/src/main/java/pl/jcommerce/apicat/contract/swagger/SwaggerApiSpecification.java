@@ -1,15 +1,25 @@
 package pl.jcommerce.apicat.contract.swagger;
 
+import com.google.auto.service.AutoService;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import lombok.*;
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 
 
-class SwaggerApiSpecification extends ApiSpecification {
+@AutoService(ApiSpecification.class)
+public class SwaggerApiSpecification extends ApiSpecification {
 
-    @Getter
-    @Setter
+    public static String TYPE = "Swagger";
+
+
+    @Override
+    public String getType() {
+        return TYPE;
+    }
+
+    @Getter    @Setter
     private Swagger swaggerDefinition;
 
     public static ApiSpecification fromContent(String content) {
@@ -29,4 +39,6 @@ class SwaggerApiSpecification extends ApiSpecification {
         swaggerApiSpecification.setSwaggerDefinition(swaggerDefinition);
         return swaggerApiSpecification;
     }
+
+
 }
