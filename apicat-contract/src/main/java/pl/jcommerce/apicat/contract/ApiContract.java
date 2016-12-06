@@ -7,6 +7,7 @@ import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
@@ -41,8 +42,12 @@ public class ApiContract {
     @Getter @Setter
     private boolean autodiscoverValidators = true;
 
+    /**
+     * Information if ApiContract is valid
+     * This flag is set after successful validation
+     */
     @Getter
-    private boolean valid = false;
+    private Optional<Boolean> valid = Optional.empty();
 
 
     /**
@@ -56,16 +61,24 @@ public class ApiContract {
         if (validators == null)
             validators = initValidators();
         validators.add(apiContractValidator);
+        valid = Optional.empty();
     }
 
     /**
      * Validate contract
      */
     public void validate() {
+        if (!apiSpecification.getValid().isPresent())
+            apiSpecification.validate();
+
+        //TODO: refactor after ApiDefinition refactoring
+        if (!apiDefinition.isValid())
+            apiDefinition.validate();
+
         if (validators == null)
             validators = initValidators();
         validators.forEach(apiContractValidator -> apiContractValidator.validate(this));
-        valid = true;
+        valid = Optional.of(true);
     }
 
     /**

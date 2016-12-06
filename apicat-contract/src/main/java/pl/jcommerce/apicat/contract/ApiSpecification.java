@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ServiceLoader;
-import java.util.Set;
+import java.util.*;
 
 /**
  * ApiSpecification defines API requirements using specific implementation/format
@@ -89,9 +86,14 @@ public abstract class ApiSpecification {
     @Setter
     private boolean autodiscoverValidators = true;
 
-
+    /**
+     * Information if ApiSpecification is valid
+     * This flag is set after successful validation
+     */
     @Getter
-    private boolean valid = false;
+    private Optional<Boolean> valid = Optional.empty();
+
+
 
     /**
      * Add {@code apiContractValidator}
@@ -104,6 +106,7 @@ public abstract class ApiSpecification {
         if (validators == null)
             validators = initValidators();
         validators.add(apiSpecificationValidator);
+        valid = Optional.empty();
     }
 
     /**
@@ -113,7 +116,27 @@ public abstract class ApiSpecification {
         if (validators == null)
             validators = initValidators();
         validators.forEach(apiSpecificationValidator -> apiSpecificationValidator.validate(this));
-        valid = true;
+        valid = Optional.of(true);
+    }
+
+
+    /**
+     * Validate ApiContract
+     */
+    public void validateContract() {
+        apiContract.validate();
+    }
+
+    /**
+     * Makes temporary ApiContract and do validation
+     *
+     * @param apiDefinition second part of contract
+     */
+    public void validateAgainsApiDefinition(ApiDefinition apiDefinition) {
+        ApiContract temporaryContract = new ApiContract();
+        temporaryContract.setApiDefinition(apiDefinition);
+        temporaryContract.setApiSpecification(this);
+        temporaryContract.validate();
     }
 
 
@@ -133,6 +156,8 @@ public abstract class ApiSpecification {
         }
         return validators;
     }
+
+
 }
 
 
