@@ -1,6 +1,5 @@
 package pl.jcommerce.apicat.contract.validation;
 
-
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
@@ -15,7 +14,7 @@ public interface ApiContractValidator {
     /**
      * Verify if validator supports {@code apiDefinition} and {@code apiSpecification}
      *
-     * @param apiDefinition object to validate
+     * @param apiDefinition    object to validate
      * @param apiSpecification object to validate
      * @return
      */
@@ -32,11 +31,11 @@ public interface ApiContractValidator {
     /**
      * Validate {@code apiDefinition} and {@code apiSpecification}
      *
-     * @param apiDefinition object to validate
+     * @param apiDefinition    object to validate
      * @param apiSpecification object to validate
      * @return
      */
-    //TODO: change to void
+    //TODO: change to validation result
     boolean validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification);
 
     /**
@@ -49,4 +48,3 @@ public interface ApiContractValidator {
     boolean validate(ApiContract apiContract);
 
 }
-

@@ -1,8 +1,8 @@
 package pl.jcommerce.apicat.contract;
 
-
 import lombok.Getter;
 import lombok.Setter;
+import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 
 import java.util.*;
@@ -20,13 +20,56 @@ public abstract class ApiSpecification {
     /**
      * ApiContract
      */
-    @Getter @Setter
+    @Getter
+    @Setter
     private ApiContract apiContract;
 
     /**
      * ApiContract validators
      */
     private List<ApiSpecificationValidator> validators;
+    /**
+     * Api specification name
+     */
+    @Getter
+    @Setter
+    private String name;
+    /**
+     * Api specification version
+     */
+    @Getter
+    @Setter
+    private String version;
+    /**
+     * Api specification stage
+     */
+    @Getter
+    @Setter
+    private ApiSpecificationStage stage;
+    /**
+     * Api specification author
+     */
+    @Getter
+    @Setter
+    private String author;
+    /**
+     * Api specification text content
+     */
+    @Getter
+    @Setter
+    private String content;
+    /**
+     * Information if validators should be loaded automatically
+     */
+    @Getter
+    @Setter
+    private boolean autodiscoverValidators = true;
+    /**
+     * Information if ApiSpecification is valid
+     * This flag is set after successful validation
+     */
+    @Getter
+    private Optional<Boolean> valid = Optional.empty();
 
     /**
      * Retrieves ApiSpecification types from available implementations
@@ -45,64 +88,13 @@ public abstract class ApiSpecification {
     public abstract String getType();
 
     /**
-     * Api specification name
-     */
-    @Getter
-    @Setter
-    private String name;
-
-    /**
-     * Api specification version
-     */
-    @Getter
-    @Setter
-    private String version;
-
-    /**
-     * Api specification stage
-     */
-    @Getter
-    @Setter
-    private ApiSpecificationStage stage;
-
-    /**
-     * Api specification author
-     */
-    @Getter
-    @Setter
-    private String author;
-
-    /**
-     * Api specification text content
-     */
-    @Getter
-    @Setter
-    private String content;
-
-    /**
-     * Information if validators should be loaded automatically
-     */
-    @Getter
-    @Setter
-    private boolean autodiscoverValidators = true;
-
-    /**
-     * Information if ApiSpecification is valid
-     * This flag is set after successful validation
-     */
-    @Getter
-    private Optional<Boolean> valid = Optional.empty();
-
-
-
-    /**
      * Add {@code apiContractValidator}
      *
      * @param apiSpecificationValidator
      */
     public void addValidator(ApiSpecificationValidator apiSpecificationValidator) {
         if (!apiSpecificationValidator.support(this))
-            throw new RuntimeException("Provided apiSpecificationValidator doesn't support this specification");
+            throw new ApicatSystemException("Provided apiSpecificationValidator doesn't support this specification");
         if (validators == null)
             validators = initValidators();
         validators.add(apiSpecificationValidator);
@@ -113,12 +105,16 @@ public abstract class ApiSpecification {
      * Validate specification
      */
     public void validate() {
+        System.out.println("About to validate ApiSpecification: " + this);
         if (validators == null)
             validators = initValidators();
         validators.forEach(apiSpecificationValidator -> apiSpecificationValidator.validate(this));
         valid = Optional.of(true);
     }
 
+    public boolean isValidated() {
+        return valid.isPresent();
+    }
 
     /**
      * Validate ApiContract
@@ -140,24 +136,24 @@ public abstract class ApiSpecification {
     }
 
 
-
     /**
      * Init validators
      *
      * @return validators
      */
     private List<ApiSpecificationValidator> initValidators() {
+        System.out.println("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
         List<ApiSpecificationValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiSpecificationValidator.class).forEach(apiSpecificationValidator -> {
-                if (apiSpecificationValidator.support(this))
-                    addValidator(apiSpecificationValidator);
+                if (apiSpecificationValidator.support(this)) {
+                    System.out.println("Adding validator: " + apiSpecificationValidator);
+                    //addValidator(apiSpecificationValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
+                    validators.add(apiSpecificationValidator);
+                    valid = Optional.empty();
+                }
             });
         }
         return validators;
     }
-
-
 }
-
-
