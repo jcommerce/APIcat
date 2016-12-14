@@ -67,7 +67,6 @@ class EndpointAnalyzer implements ContractAnalyzer {
         }
     }
 
-
     private void createOperationDetails(String endpoint, Path providerPath, Operation providerOperation) {
         operationDetails = new OperationDetails();
         operationDetails.setEndpoint(endpoint);
@@ -76,7 +75,7 @@ class EndpointAnalyzer implements ContractAnalyzer {
     }
 
     private void checkSingleParametersExistence(Parameter providerParameter, List<Parameter> consumerParameters) {
-        if(!consumerParameters.stream().filter(p -> p.equals(providerParameter)).findAny().isPresent()) {
+        if(consumerParameters.stream().noneMatch(p -> p.equals(providerParameter))) {
             if (providerParameter.getRequired()) {
                 setContractToInvalid(contract);
             }

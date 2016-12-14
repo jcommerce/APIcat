@@ -5,18 +5,22 @@ import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.models.HttpMethod;
 import org.junit.After;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.swagger.TestUtils;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by krka on 28.10.2016.
  */
 public class ContractsValidationTest {
+
+    private final Logger logger = LoggerFactory.getLogger(ContractsValidationTest.class);
 
     private List<String> differences;
     private Contract contract;
@@ -24,7 +28,7 @@ public class ContractsValidationTest {
     @After
     public void cleanUp() {
         if (differences != null)
-            System.out.println(Arrays.toString(differences.toArray()));
+            logger.info(Arrays.toString(differences.toArray()));
     }
 
     @Test

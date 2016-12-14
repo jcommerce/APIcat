@@ -2,6 +2,8 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 
@@ -16,6 +18,8 @@ import java.util.*;
  * @author Daniel Charczyński
  */
 public abstract class ApiSpecification {
+
+    private final Logger logger = LoggerFactory.getLogger(ApiSpecification.class);
 
     /**
      * ApiContract
@@ -105,7 +109,7 @@ public abstract class ApiSpecification {
      * Validate specification
      */
     public void validate() {
-        System.out.println("About to validate ApiSpecification: " + this);
+        logger.info("About to validate ApiSpecification: " + this);
         if (validators == null)
             validators = initValidators();
         validators.forEach(apiSpecificationValidator -> apiSpecificationValidator.validate(this));
@@ -142,12 +146,12 @@ public abstract class ApiSpecification {
      * @return validators
      */
     private List<ApiSpecificationValidator> initValidators() {
-        System.out.println("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        logger.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
         List<ApiSpecificationValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiSpecificationValidator.class).forEach(apiSpecificationValidator -> {
                 if (apiSpecificationValidator.support(this)) {
-                    System.out.println("Adding validator: " + apiSpecificationValidator);
+                    logger.info("Adding validator: " + apiSpecificationValidator);
                     //addValidator(apiSpecificationValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiSpecificationValidator);
                     valid = Optional.empty();

@@ -2,6 +2,8 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 
@@ -14,6 +16,8 @@ import java.util.ServiceLoader;
  * @author Daniel Charczyński
  */
 public class ApiContract {
+
+    private final Logger logger = LoggerFactory.getLogger(ApiContract.class);
 
     /**
      * ApiContract validators
@@ -66,7 +70,7 @@ public class ApiContract {
      * Validate contract
      */
     public void validate() {
-        System.out.println("About to validate ApiContract: " + this);
+        logger.info("About to validate ApiContract: " + this);
         if (!apiSpecification.isValidated()) {
             apiSpecification.validate();
         }
@@ -90,12 +94,12 @@ public class ApiContract {
      * @return validators
      */
     private List<ApiContractValidator> initValidators() {
-        System.out.println("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        logger.info("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
         List<ApiContractValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiContractValidator.class).forEach(apiContractValidator -> {
                 if (apiContractValidator.support(this)) {
-                    System.out.println("Adding contract validator: " + apiContractValidator);
+                    logger.info("Adding contract validator: " + apiContractValidator);
                     //addValidator(apiContractValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiContractValidator);
                     valid = Optional.empty();

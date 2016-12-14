@@ -16,6 +16,5 @@ public class ServiceLoaderApiTest {
         Assert.assertNotNull(apiSpecification);
         Assert.assertTrue(apiSpecification instanceof SwaggerApiSpecification);
         Assert.assertEquals(SwaggerApiSpecification.TYPE, apiSpecification.getType());
-
     }
 }

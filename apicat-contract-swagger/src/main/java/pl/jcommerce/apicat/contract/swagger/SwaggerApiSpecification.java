@@ -3,9 +3,9 @@ package pl.jcommerce.apicat.contract.swagger;
 import com.google.auto.service.AutoService;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import pl.jcommerce.apicat.contract.ApiSpecification;
-import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 
 
 @AutoService(ApiSpecification.class)

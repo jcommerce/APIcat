@@ -2,6 +2,8 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 
@@ -17,10 +19,11 @@ import java.util.ServiceLoader;
  */
 public abstract class ApiDefinition {
 
-
     //TODO: adjust to model
     //TODO: move ApiContractValidator to APIContract
     //TODO: all methods should be implemented
+
+    private final Logger logger = LoggerFactory.getLogger(ApiDefinition.class);
 
     protected String name;
 
@@ -71,7 +74,7 @@ public abstract class ApiDefinition {
     }
 
     public void validate() {
-        System.out.println("About to validate ApiDefinition: " + this);
+        logger.info("About to validate ApiDefinition: " + this);
         if (validators == null)
             validators = initValidators();
         validators.forEach(apiDefinitionValidator -> apiDefinitionValidator.validate(this));
@@ -82,7 +85,7 @@ public abstract class ApiDefinition {
         boolean contractsValid = true;
         for (ApiContract apiContract : apiContracts) {
             apiContract.validate();
-            boolean contractValid = apiContract.getValid().get();
+            boolean contractValid = apiContract.getValid().orElse(false);
             contractsValid = contractValid && contractsValid;
         }
         contractsAreValid = Optional.of(contractsValid);
@@ -108,12 +111,12 @@ public abstract class ApiDefinition {
 
 
     private List<ApiDefinitionValidator> initValidators() {
-        System.out.println("ApiDefinition - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        logger.info("ApiDefinition - about to init validators. autodiscover validators: " + autodiscoverValidators);
         List<ApiDefinitionValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiDefinitionValidator.class).forEach(apiDefinitionValidator -> {
                 if (apiDefinitionValidator.support(this)) {
-                    System.out.println("Adding definition validator: " + apiDefinitionValidator);
+                    logger.info("Adding definition validator: " + apiDefinitionValidator);
                     //addValidator(apiDefinitionValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiDefinitionValidator);
                     valid = Optional.empty();
