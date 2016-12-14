@@ -7,25 +7,19 @@ import lombok.Getter;
 import lombok.Setter;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 
-
 @AutoService(ApiSpecification.class)
 public class SwaggerApiSpecification extends ApiSpecification {
 
     public static String TYPE = "Swagger";
-
-
-    @Override
-    public String getType() {
-        return TYPE;
-    }
-
-    @Getter    @Setter
+    @Getter
+    @Setter
     private Swagger swaggerDefinition;
 
     public static ApiSpecification fromContent(String content) {
         Swagger swaggerDefinition = new SwaggerParser().parse(content);
-        if (swaggerDefinition == null)
+        if (swaggerDefinition == null) {
             throw new SwaggerOpenAPISpecificationException();
+        }
         SwaggerApiSpecification swaggerApiSpecification = new SwaggerApiSpecification();
         swaggerApiSpecification.setSwaggerDefinition(swaggerDefinition);
         return swaggerApiSpecification;
@@ -33,12 +27,16 @@ public class SwaggerApiSpecification extends ApiSpecification {
 
     public static ApiSpecification fromPath(String path) {
         Swagger swaggerDefinition = new SwaggerParser().read(path);
-        if (swaggerDefinition == null)
+        if (swaggerDefinition == null) {
             throw new SwaggerOpenAPISpecificationException();
+        }
         SwaggerApiSpecification swaggerApiSpecification = new SwaggerApiSpecification();
         swaggerApiSpecification.setSwaggerDefinition(swaggerDefinition);
         return swaggerApiSpecification;
     }
 
-
+    @Override
+    public String getType() {
+        return TYPE;
+    }
 }

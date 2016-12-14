@@ -28,12 +28,12 @@ public class SwaggerApiDefinitionBuilder {
         return swaggerApiDefinitionBuilder;
     }
 
-    public static SwaggerApiDefinitionBuilder withoutAutodiscoveryValidators() {
+    public SwaggerApiDefinitionBuilder withoutAutodiscoveryValidators() {
         swaggerApiDefinitionBuilder.swaggerApiDefinition.setAutodiscoverValidators(Boolean.FALSE);
         return swaggerApiDefinitionBuilder;
     }
 
-    public static SwaggerApiDefinitionBuilder withContractedApiSpecification(ApiSpecification apiSpecification) {
+    public SwaggerApiDefinitionBuilder withContractedApiSpecification(ApiSpecification apiSpecification) {
         ApiContract apiContract = new ApiContract();
         apiContract.setApiSpecification(apiSpecification);
         apiContract.setApiDefinition(swaggerApiDefinitionBuilder.swaggerApiDefinition);
@@ -41,7 +41,7 @@ public class SwaggerApiDefinitionBuilder {
         return swaggerApiDefinitionBuilder;
     }
 
-    public static SwaggerApiDefinitionBuilder withApiDefinitionValidator(ApiDefinitionValidator apiDefinitionValidator) {
+    public SwaggerApiDefinitionBuilder withApiDefinitionValidator(ApiDefinitionValidator apiDefinitionValidator) {
         swaggerApiDefinitionBuilder.swaggerApiDefinition.addValidator(apiDefinitionValidator);
         return swaggerApiDefinitionBuilder;
     }

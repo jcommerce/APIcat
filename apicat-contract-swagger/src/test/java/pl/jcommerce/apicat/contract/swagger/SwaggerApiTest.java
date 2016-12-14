@@ -5,6 +5,7 @@ import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -16,8 +17,7 @@ public class SwaggerApiTest {
     public void shouldValidateDefinitionPass() {
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
         apiDefinition.validate();
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(isContractValid);
+        assertTrue(apiDefinition.isValid());
     }
 
     @Test(expected = ApicatSystemException.class)
@@ -35,8 +35,7 @@ public class SwaggerApiTest {
                         withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).
                         build();
         apiDefinition.validate();
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(isContractValid);
+        assertTrue(apiDefinition.isValid());
     }
 
     @Test
@@ -46,8 +45,7 @@ public class SwaggerApiTest {
                 //withApiContractValidator(new SwaggerApiContractValidator()).withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).
                         build();
         apiDefinition.validate();
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(!isContractValid);
+        assertFalse(apiDefinition.isValid());
     }
 
     @Test
@@ -57,8 +55,7 @@ public class SwaggerApiTest {
                 //withApiContractValidator(new SwaggerApiContractValidator()).
                         build();
         apiDefinition.validateAllContracts();
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(isContractValid);
+        assertTrue(apiDefinition.isValid());
     }
 
     @Test
@@ -79,8 +76,7 @@ public class SwaggerApiTest {
                 //withApiContractValidator(new SwaggerApiContractValidator()).
                         build();
         apiDefinition.validateAllContracts();
-        boolean isContractValid = apiDefinition.areContractsValid();
-        assertTrue(!isContractValid);
+        assertFalse(apiDefinition.areContractsValid());
     }
 
     @Test
@@ -88,8 +84,7 @@ public class SwaggerApiTest {
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutRequiredParameter.yaml"));
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).withContractedApiSpecification(apiSpecification).build();
         apiDefinition.validateAllContracts();
-        boolean isContractValid = apiDefinition.areContractsValid(); //TODO verify
-        assertTrue(!isContractValid);
+        assertFalse(apiDefinition.areContractsValid());
     }
 
     @Test
@@ -99,8 +94,7 @@ public class SwaggerApiTest {
                         build();
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutEndpoint.yaml"));
         apiDefinition.validateAgainstApiSpecifications(apiSpecification);
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(isContractValid);
+        assertTrue(apiDefinition.isValid());
     }
 
     @Test
@@ -110,24 +104,15 @@ public class SwaggerApiTest {
                         build();
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutRequiredParameter.yaml"));
         apiDefinition.validateAgainstApiSpecifications(apiSpecification);
-        boolean isContractValid = apiDefinition.isValid();
-        assertTrue(!isContractValid);
+        assertFalse(apiDefinition.isValid());
     }
 
     @Test(expected = SwaggerOpenAPISpecificationException.class)
     public void shouldSwaggerOpenAPISpecificationExceptionBeDetected() {
-        ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("inconsistentConsumerContract.yaml"));
-        ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).
-                withoutAutodiscoveryValidators().
-                withContractedApiSpecification(apiSpecification).
-                //withApiContractValidator(new SwaggerApiContractValidator()).
-                        build();
+        SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("inconsistentConsumerContract.yaml"));
     }
 
     private String localizeSwaggerDefinitions(String consumerContractLocation) {
         return TestUtils.getTestConstractsPath() + "/yaml/" + consumerContractLocation;
-
-
     }
-
 }

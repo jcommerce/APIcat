@@ -23,8 +23,9 @@ public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
     public boolean validate(ApiDefinition apiDefinition) {
         boolean isValid = true;
         SwaggerApiDefinition swaggerApiDefinition = (SwaggerApiDefinition) apiDefinition;
-        if (swaggerApiDefinition.getSwaggerDefinition() == null)
+        if (swaggerApiDefinition.getSwaggerDefinition() == null) {
             isValid = false;
+        }
         return isValid;
     }
 }

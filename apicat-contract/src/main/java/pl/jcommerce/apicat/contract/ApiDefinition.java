@@ -75,9 +75,11 @@ public abstract class ApiDefinition {
 
     public void validate() {
         logger.info("About to validate ApiDefinition: " + this);
-        if (validators == null)
+        if (validators == null) {
             validators = initValidators();
+        }
         validators.forEach(apiDefinitionValidator -> apiDefinitionValidator.validate(this));
+        //Validation result is always true
         valid = Optional.of(true);
     }
 
