@@ -16,8 +16,14 @@ public class ValidationResult {
     private List<ValidationProblem> problemList = new ArrayList<>();
 
     public void merge(ValidationResult anotherResult) {
-        //TODO: implement me.
-        //Set validation result category: if any problem with error level -> error, if only warnings - warn category, if no problems - CORRECT
+        this.problemList.addAll(anotherResult.getProblemList());
+
+        if (anotherResult.getValidationResultCategory() == ValidationResultCategory.ERROR) {
+            validationResultCategory = ValidationResultCategory.ERROR;
+        }
+        if ((anotherResult.getValidationResultCategory() == ValidationResultCategory.WARN) && (validationResultCategory != ValidationResultCategory.ERROR)) {
+            validationResultCategory = ValidationResultCategory.WARN;
+        }
     }
 
     public void addProblem(ValidationProblem problem) {
