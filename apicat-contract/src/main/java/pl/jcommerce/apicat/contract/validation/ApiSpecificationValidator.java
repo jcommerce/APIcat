@@ -9,8 +9,6 @@ import pl.jcommerce.apicat.contract.ApiSpecification;
  */
 public interface ApiSpecificationValidator {
 
-
-
     /**
      * Verify if validator supports {@code apiSpecification}
      *
@@ -28,4 +26,3 @@ public interface ApiSpecificationValidator {
     boolean validate(ApiSpecification apiSpecification);
 
 }
-

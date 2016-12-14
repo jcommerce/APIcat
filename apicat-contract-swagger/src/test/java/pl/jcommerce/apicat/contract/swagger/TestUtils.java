@@ -8,7 +8,6 @@ import java.net.URISyntaxException;
  */
 public class TestUtils {
 
-
     public static String getTestConstractsPath() {
         try {
             File contractsFile = new File(ClassLoader.getSystemResource("contracts").toURI());

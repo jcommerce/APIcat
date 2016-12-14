@@ -1,4 +1,3 @@
----
 swagger: "2.0"
 info:
   description: "This is a sample server Petstore server.\n\n[Learn about Swagger](http://swagger.io)\

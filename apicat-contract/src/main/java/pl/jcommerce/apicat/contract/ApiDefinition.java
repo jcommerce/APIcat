@@ -1,6 +1,5 @@
 package pl.jcommerce.apicat.contract;
 
-import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
@@ -31,7 +30,7 @@ public abstract class ApiDefinition {
 
     protected List<ApiDefinitionValidator> validators = null; //TODO verify: validators==null means that initValidators method will be run in validate method. In the previous version validators list was always empty.
 
-    protected List<ApiContract> apiContracts = Lists.newArrayList();
+    protected List<ApiContract> apiContracts = new ArrayList<>();
 
 
     /**
@@ -71,9 +70,6 @@ public abstract class ApiDefinition {
 
     }
 
-    /**
-     *
-     */
     public void validate() {
         System.out.println("About to validate ApiDefinition: " + this);
         if (validators == null)

@@ -1,17 +1,19 @@
 package pl.jcommerce.apicat.contract.swagger;
 
+import com.google.auto.service.AutoService;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 
 /**
  * Created by krka on 31.10.2016.
  */
+@AutoService(ApiDefinitionValidator.class)
 public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
 
     @Override
     public boolean support(ApiDefinition apiDefinition) {
         boolean result = false;
-        if(apiDefinition instanceof SwaggerApiDefinition &&
+        if (apiDefinition instanceof SwaggerApiDefinition &&
                 ((SwaggerApiDefinition) apiDefinition).getSwaggerDefinition() != null)
             result = true;
         return result;
