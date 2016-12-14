@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,30 +32,28 @@ public abstract class ApiDefinition {
     @Setter
     protected Boolean autodiscoverValidators = Boolean.TRUE;
 
-    protected List<ApiDefinitionValidator> validators = null; //TODO verify: validators==null means that initValidators method will be run in validate method. In the previous version validators list was always empty.
-
-    protected List<ApiContract> apiContracts = new ArrayList<>();
-
+    private List<ApiDefinitionValidator> validators = null;
+    private ValidationResult validationResult = new ValidationResult();
+    private boolean apiValidated = false;
 
     /**
      * Information if ApiDefinition is valid
      * This flag is set after successful validation
      */
     @Getter
-    private Optional<Boolean> valid = Optional.empty();  //TODO verify - this field has been added for consistency with other ApiSpecification and ApiContract 
-
-    @Getter
     private Optional<Boolean> contractsAreValid = Optional.empty();
+
+    private List<ApiContract> apiContracts = new ArrayList<>();
 
     public void addValidator(ApiDefinitionValidator apiDefinitionValidator) {
         if (!apiDefinitionValidator.support(this)) {
             throw new ApicatSystemException("Provided apiDefinitionValidator doesn't support this specification. validator object: " + apiDefinitionValidator);
         }
         if (validators == null) {
-            validators = initValidators();
+            initValidators();
         }
         validators.add(apiDefinitionValidator);
-        valid = Optional.empty();
+        apiValidated = false;
     }
 
     public void addContract(ApiContract apiContract) {
@@ -73,14 +72,18 @@ public abstract class ApiDefinition {
 
     }
 
-    public void validate() {
+    public ValidationResult validate() {
         logger.info("About to validate ApiDefinition: " + this);
         if (validators == null) {
-            validators = initValidators();
+            initValidators();
         }
-        validators.forEach(apiDefinitionValidator -> apiDefinitionValidator.validate(this));
-        //Validation result is always true
-        valid = Optional.of(true);
+
+        for (ApiDefinitionValidator apiDefinitionValidator : validators) {
+            validationResult.merge(apiDefinitionValidator.validate(this));
+        }
+
+        apiValidated = true;
+        return validationResult;
     }
 
     public void validateAllContracts() {
@@ -94,7 +97,7 @@ public abstract class ApiDefinition {
     }
 
     public boolean isValidated() {
-        return valid.isPresent();
+        return apiValidated;
     }
 
     public boolean areContractsValid() {
@@ -105,28 +108,24 @@ public abstract class ApiDefinition {
     }
 
     public boolean isValid() {
-        if (valid.isPresent()) {
-            return valid.get();
+        if (apiValidated) {
+            return validationResult.getProblemList().isEmpty();
         }
         throw new IllegalStateException("Api definition hasn't been validated");
     }
 
-
-    private List<ApiDefinitionValidator> initValidators() {
+    private void initValidators() {
         logger.info("ApiDefinition - about to init validators. autodiscover validators: " + autodiscoverValidators);
-        List<ApiDefinitionValidator> validators = new ArrayList<>();
+        validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiDefinitionValidator.class).forEach(apiDefinitionValidator -> {
                 if (apiDefinitionValidator.support(this)) {
                     logger.info("Adding definition validator: " + apiDefinitionValidator);
-                    //addValidator(apiDefinitionValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiDefinitionValidator);
-                    valid = Optional.empty();
+                    apiValidated = false;
                 }
             });
         }
-
-        return validators;
     }
 
     //public abstract void validateDefinition();

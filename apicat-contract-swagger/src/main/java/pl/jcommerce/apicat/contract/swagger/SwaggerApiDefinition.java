@@ -32,8 +32,9 @@ public class SwaggerApiDefinition extends ApiDefinition {
 
     public static SwaggerApiDefinition fromPath(String path) {
         Swagger swaggerDefinition = new SwaggerParser().read(path);
-        if (swaggerDefinition == null)
+        if (swaggerDefinition == null) {
             throw new SwaggerOpenAPISpecificationException();
+        }
         SwaggerApiDefinition swaggerApiDefinition = new SwaggerApiDefinition();
         swaggerApiDefinition.setSwaggerDefinition(swaggerDefinition);
         return swaggerApiDefinition;
