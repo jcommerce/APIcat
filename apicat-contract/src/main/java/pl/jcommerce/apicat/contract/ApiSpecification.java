@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.util.*;
 
@@ -32,6 +33,11 @@ public abstract class ApiSpecification {
      * ApiContract validators
      */
     private List<ApiSpecificationValidator> validators;
+
+    private ValidationResult validationResult = new ValidationResult();
+
+    private boolean apiValidated = false;
+
     /**
      * Api specification name
      */
@@ -99,25 +105,32 @@ public abstract class ApiSpecification {
     public void addValidator(ApiSpecificationValidator apiSpecificationValidator) {
         if (!apiSpecificationValidator.support(this))
             throw new ApicatSystemException("Provided apiSpecificationValidator doesn't support this specification");
-        if (validators == null)
-            validators = initValidators();
+        if (validators == null){
+            initValidators();
+        }
         validators.add(apiSpecificationValidator);
-        valid = Optional.empty();
+        apiValidated = false;
     }
 
     /**
      * Validate specification
      */
-    public void validate() {
+    public ValidationResult validate() {
         logger.info("About to validate ApiSpecification: " + this);
-        if (validators == null)
-            validators = initValidators();
-        validators.forEach(apiSpecificationValidator -> apiSpecificationValidator.validate(this));
-        valid = Optional.of(true);
+        if (validators == null) {
+            initValidators();
+        }
+
+        for (ApiSpecificationValidator apiSpecificationValidator : validators) {
+            validationResult.merge(apiSpecificationValidator.validate(this));
+        }
+
+        apiValidated = true;
+        return validationResult;
     }
 
     public boolean isValidated() {
-        return valid.isPresent();
+        return apiValidated;
     }
 
     /**
@@ -139,25 +152,30 @@ public abstract class ApiSpecification {
         temporaryContract.validate();
     }
 
+    public boolean isValid() {
+        if(apiValidated){
+            return validationResult.getProblemList().isEmpty();
+        }
+        throw new IllegalStateException("Api specificatioin hasn't been validated");
+    }
 
     /**
      * Init validators
      *
      * @return validators
      */
-    private List<ApiSpecificationValidator> initValidators() {
+    private void initValidators() {
         logger.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
-        List<ApiSpecificationValidator> validators = new ArrayList<>();
+        validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiSpecificationValidator.class).forEach(apiSpecificationValidator -> {
                 if (apiSpecificationValidator.support(this)) {
-                    logger.info("Adding validator: " + apiSpecificationValidator);
-                    //addValidator(apiSpecificationValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
+                    logger.info("Adding specification validator: " + apiSpecificationValidator);
                     validators.add(apiSpecificationValidator);
-                    valid = Optional.empty();
+
+                    apiValidated = false;
                 }
             });
         }
-        return validators;
     }
 }

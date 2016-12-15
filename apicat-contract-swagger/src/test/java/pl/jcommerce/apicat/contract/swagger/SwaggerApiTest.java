@@ -37,6 +37,16 @@ public class SwaggerApiTest {
         apiDefinition.isValid();
     }
 
+    @Test(expected = IllegalStateException.class)
+    public void shouldApiSpecificationValidationCheckFail() {
+        ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutEndpoint.yaml"));
+        apiSpecification.validate();
+        assertTrue(apiSpecification.isValid());
+
+        apiSpecification.addValidator(new SwaggerApiSpecificationValidator());
+        apiSpecification.isValid();
+    }
+
     @Test
     public void shouldValidatePass() {
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutEndpoint.yaml"));

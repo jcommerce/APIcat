@@ -1,6 +1,7 @@
 package pl.jcommerce.apicat.contract.validation;
 
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 /**
  * Validates ApiSpecification
@@ -13,7 +14,7 @@ public interface ApiSpecificationValidator {
      * Verify if validator supports {@code apiSpecification}
      *
      * @param apiSpecification object to validate
-     * @return
+     * @return validator support check result
      */
     boolean support(ApiSpecification apiSpecification);
 
@@ -21,8 +22,8 @@ public interface ApiSpecificationValidator {
      * Validate {@code apiSpecification}
      *
      * @param apiSpecification object to validate
+     * @return list with all validation problems
      */
-    //TODO: change to void
-    boolean validate(ApiSpecification apiSpecification);
-
+    ValidationResult validate(ApiSpecification apiSpecification);
 }
+
