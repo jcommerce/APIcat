@@ -1,4 +1,4 @@
-package pl.jcommerce.apicat.contract.validation;
+package pl.jcommerce.apicat.contract.exception;
 
 
 public class ApiValidationException extends RuntimeException {

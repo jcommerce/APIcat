@@ -10,7 +10,7 @@ import java.util.List;
 public class ValidationResult {
 
     @Getter
-    private ValidationResultCategory validationResultCategory;
+    private ValidationResultCategory validationResultCategory = ValidationResultCategory.CORRECT;
 
     @Getter
     private List<ValidationProblem> problemList = new ArrayList<>();

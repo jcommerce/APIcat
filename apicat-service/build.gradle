@@ -1,8 +1,5 @@
-group 'pl.jcommerce.apicat'
-version '1.0-SNAPSHOT'
-
 dependencies {
     compile project(':apicat-contract')
-	compile project(':apicat-repository')
-	
+    compile project(':apicat-contract-swagger')
+	compile project(':apicat-repository-jpa')
 }
