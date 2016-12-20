@@ -13,6 +13,8 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
+ * Connects ApiSpecification delivered by customer with ApiDefinition used by it.
+ *
  * @author Daniel Charczyński
  */
 public class ApiContract {
@@ -76,7 +78,7 @@ public class ApiContract {
         }
 
         //TODO: refactor after ApiDefinition refactoring
-        if (!apiDefinition.isValidated()) {
+        if (!apiDefinition.isApiValidated()) {
             apiDefinition.validate();
         }
 

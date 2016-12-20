@@ -11,10 +11,10 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 import java.util.*;
 
 /**
- * ApiSpecification defines API requirements using specific implementation/format
+ * Defines which components of our system API are required by customer system.
+ * Those requirements are assigned to specified ApiDefinition via ApiContract.
+ *
  * This class creates an abstraction over specific implementations.
- * <p>
- * Assignment those requirements to specific ApiDefinition is done via ApiContract
  *
  * @author Daniel Charczyński
  */
@@ -145,7 +145,7 @@ public abstract class ApiSpecification {
      *
      * @param apiDefinition second part of contract
      */
-    public void validateAgainsApiDefinition(ApiDefinition apiDefinition) {
+    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
         ApiContract temporaryContract = new ApiContract();
         temporaryContract.setApiDefinition(apiDefinition);
         temporaryContract.setApiSpecification(this);

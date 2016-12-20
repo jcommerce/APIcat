@@ -14,7 +14,8 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
- * Defines an API
+ * Defines API exposed by our system.
+ * Contains list of all contracts using it.
  *
  * @author Daniel Charczyński
  */
@@ -37,13 +38,13 @@ public abstract class ApiDefinition {
     private boolean apiValidated = false;
 
     /**
-     * Information if ApiDefinition is valid
-     * This flag is set after successful validation
+     * Information if all contracts using this definition are valid with it.
+     * This flag is set after successful validation and need to be nullified when ApiDefinition changes.
      */
     @Getter
     private Optional<Boolean> contractsAreValid = Optional.empty();
-
     private List<ApiContract> apiContracts = new ArrayList<>();
+
 
     public void addValidator(ApiDefinitionValidator apiDefinitionValidator) {
         if (!apiDefinitionValidator.support(this)) {
@@ -60,7 +61,6 @@ public abstract class ApiDefinition {
         apiContracts.add(apiContract);
         apiContract.setApiDefinition(this); //TODO verify - the relation is bidirectional because ApiContract contains apiDefinition property
     }
-
 
     public void validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
         for (ApiSpecification apiSpecification : apiSpecifications) {
@@ -96,7 +96,7 @@ public abstract class ApiDefinition {
         contractsAreValid = Optional.of(contractsValid);
     }
 
-    public boolean isValidated() {
+    public boolean isApiValidated() {
         return apiValidated;
     }
 
