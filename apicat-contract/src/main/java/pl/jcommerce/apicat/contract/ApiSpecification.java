@@ -2,8 +2,7 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
@@ -18,9 +17,8 @@ import java.util.*;
  *
  * @author Daniel Charczyński
  */
+@Slf4j
 public abstract class ApiSpecification {
-
-    private final Logger logger = LoggerFactory.getLogger(ApiSpecification.class);
 
     /**
      * ApiContract
@@ -116,7 +114,7 @@ public abstract class ApiSpecification {
      * Validate specification
      */
     public ValidationResult validate() {
-        logger.info("About to validate ApiSpecification: " + this);
+        log.info("About to validate ApiSpecification: " + this);
         if (validators == null) {
             initValidators();
         }
@@ -153,7 +151,7 @@ public abstract class ApiSpecification {
     }
 
     public boolean isValid() {
-        if(apiValidated){
+        if(apiValidated) {
             return validationResult.getProblemList().isEmpty();
         }
         throw new IllegalStateException("Api specificatioin hasn't been validated");
@@ -165,12 +163,12 @@ public abstract class ApiSpecification {
      * @return validators
      */
     private void initValidators() {
-        logger.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        log.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
         validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiSpecificationValidator.class).forEach(apiSpecificationValidator -> {
                 if (apiSpecificationValidator.support(this)) {
-                    logger.info("Adding specification validator: " + apiSpecificationValidator);
+                    log.info("Adding specification validator: " + apiSpecificationValidator);
                     validators.add(apiSpecificationValidator);
 
                     apiValidated = false;

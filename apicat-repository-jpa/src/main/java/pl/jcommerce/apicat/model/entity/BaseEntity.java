@@ -16,6 +16,7 @@ import java.util.UUID;
 @Getter
 @MappedSuperclass
 public class BaseEntity {
+
     @Id
     @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,10 +39,12 @@ public class BaseEntity {
 
     @Override
     public boolean equals(Object objectToCompare) {
-        if (this == objectToCompare)
+        if (this == objectToCompare) {
             return true;
-        if (objectToCompare == null)
+        }
+        if (objectToCompare == null) {
             return false;
+        }
         if (!(objectToCompare instanceof BaseEntity)) {
             return false;
         }
