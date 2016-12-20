@@ -1,5 +1,13 @@
-<h1>{{title}}</h1>
-<nav>
-  <a routerLink="/definitions">Definitions</a>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{{title}}</a>
+    </div>
+    <div class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a routerLink="/definitions">Definitions</a></li>
+      </ul>
+    </div>
+  </div>
 </nav>
 <router-outlet>

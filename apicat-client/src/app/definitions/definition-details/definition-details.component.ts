@@ -19,7 +19,7 @@ export class DefinitionDetailsComponent implements OnInit {
   ngOnInit(): void {
     this.route.params
       .switchMap((params: Params) => this.definitionService.getDefinition(+params['id']))
-      .subscribe(definition => {console.log(definition); this.definition = definition;});
+      .subscribe(definition => this.definition = definition);
   }
 
 }
