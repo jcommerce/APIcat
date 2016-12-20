@@ -15,6 +15,7 @@ import java.util.Set;
 @Setter
 @Entity(name = "contractValidationDetails")
 public class ApiContractValidationDetailsEntity extends BaseEntity {
+
     @OneToOne
     private ApiContractEntity contract;
 

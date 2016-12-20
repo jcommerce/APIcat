@@ -2,8 +2,7 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
@@ -19,13 +18,12 @@ import java.util.ServiceLoader;
  *
  * @author Daniel Charczyński
  */
+@Slf4j
 public abstract class ApiDefinition {
 
     //TODO: adjust to model
     //TODO: move ApiContractValidator to APIContract
     //TODO: all methods should be implemented
-
-    private final Logger logger = LoggerFactory.getLogger(ApiDefinition.class);
 
     protected String name;
 
@@ -73,7 +71,7 @@ public abstract class ApiDefinition {
     }
 
     public ValidationResult validate() {
-        logger.info("About to validate ApiDefinition: " + this);
+        log.info("About to validate ApiDefinition: " + this);
         if (validators == null) {
             initValidators();
         }
@@ -115,12 +113,12 @@ public abstract class ApiDefinition {
     }
 
     private void initValidators() {
-        logger.info("ApiDefinition - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        log.info("ApiDefinition - about to init validators. autodiscover validators: " + autodiscoverValidators);
         validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiDefinitionValidator.class).forEach(apiDefinitionValidator -> {
                 if (apiDefinitionValidator.support(this)) {
-                    logger.info("Adding definition validator: " + apiDefinitionValidator);
+                    log.info("Adding definition validator: " + apiDefinitionValidator);
                     validators.add(apiDefinitionValidator);
                     apiValidated = false;
                 }
