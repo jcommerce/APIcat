@@ -1,0 +1,26 @@
+<form *ngIf="definition" (submit)="onSubmit()">
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="definition.name" name="name">
+  </div>
+  <div class="form-group">
+    <label for="author">Author:</label>
+    <input type="text" class="form-control" id="author" [(ngModel)]="definition.author" name="author">
+  </div>
+  <div class="form-group">
+    <label for="author">Version:</label>
+    <input type="text" class="form-control" id="version" [(ngModel)]="definition.version" name="version">
+  </div>
+  <div class="form-group">
+    <label for="format">Format:</label>
+    <select class="form-control" id="format" [(ngModel)]="definition.format" name="format">
+      <option value="SWAGGER">swagger</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="content">Content:</label>
+    <textarea class="form-control" rows="10" id="content" [(ngModel)]="definition.content" name="content"></textarea>
+  </div>
+  <button type="submit" class="btn btn-success">Submit</button>
+</form>
+

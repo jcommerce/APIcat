@@ -27,6 +27,13 @@ export class DefinitionService {
       .catch(this.handleError);
   }
 
+  create(definition: Definition): Promise<Definition> {
+    return this.http
+      .post(this.baseUrl, JSON.stringify(definition), {headers: this.headers})
+      .toPromise()
+      .then(res => res.json())
+      .catch(this.handleError);
+  }
 
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);

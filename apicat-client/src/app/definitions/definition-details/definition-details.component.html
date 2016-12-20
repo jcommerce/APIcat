@@ -1,8 +1,40 @@
-<h2>Definition Details</h2>
+<div class="page-header">
+  <h1>Definition details</h1>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <a routerLink="/definitions" class="btn btn-primary">Go to list</a>
+  </div>
+</div>
+
 <div *ngIf="definition">
-  <div>id: {{definition.id}}</div>
-  <div>name: {{definition.name}}</div>
-  <div>version: {{definition.version}}</div>
-  <div>author: {{definition.author}}</div>
-  <div>format: {{definition.format}}</div>
+  <table class="table">
+    <tr>
+      <td>id</td>
+      <td>{{definition.id}}</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>{{definition.name}}</td>
+    </tr>
+    <tr>
+      <td>version</td>
+      <td>{{definition.version}}</td>
+    </tr>
+    <tr>
+      <td>author</td>
+      <td>{{definition.author}}</td>
+    </tr>
+    <tr>
+      <td>format</td>
+      <td>{{definition.format}}</td>
+    </tr>
+    <tr>
+      <td>content</td>
+      <td>
+        <textarea readonly [ngModel]="definition.content" class="form-control" rows="15" id="content"></textarea>
+      </td>
+    </tr>
+  </table>
 </div>

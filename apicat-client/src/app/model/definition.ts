@@ -3,6 +3,6 @@ export class Definition {
   name: string;
   version: string;
   author: string;
-  format: string;
+  format: string = 'SWAGGER';
   content: string;
 }

@@ -1,13 +1,21 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" role="navigation">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">{{title}}</a>
+      <button class="navbar-toggle collapsed" (click)="isNavbarCollapsed = !isNavbarCollapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
-    <div class="collapse navbar-collapse">
+    <div class="collapse navbar-collapse" [collapse]="isNavbarCollapsed">
       <ul class="nav navbar-nav">
         <li><a routerLink="/definitions">Definitions</a></li>
       </ul>
     </div>
   </div>
 </nav>
-<router-outlet>
+<div class="container-fluid">
+  <router-outlet></router-outlet>
+</div>
