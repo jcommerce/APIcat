@@ -1,7 +1,11 @@
 package pl.jcommerce.apicat.contract.swagger;
 
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.google.auto.service.AutoService;
 import pl.jcommerce.apicat.contract.ApiDefinition;
+import pl.jcommerce.apicat.contract.swagger.validation.SwaggerApiSchemaValidator;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 import pl.jcommerce.apicat.contract.validation.problem.ProblemLevel;
 import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
@@ -23,10 +27,27 @@ public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
     public ValidationResult validate(ApiDefinition apiDefinition) {
         ValidationResult result = new ValidationResult();
         SwaggerApiDefinition swaggerApiDefinition = (SwaggerApiDefinition) apiDefinition;
-        if (swaggerApiDefinition.getSwaggerDefinition() == null) {
-            ValidationProblem problem = new ValidationProblem("Invalid SwaggerApiDefinition", ProblemLevel.ERROR);
+
+        ProcessingReport processingReport = null;
+        SwaggerApiSchemaValidator swaggerApiSchemaValidator = new SwaggerApiSchemaValidator();
+        try {
+            processingReport = swaggerApiSchemaValidator.validate(swaggerApiDefinition.getJsonNode());
+        } catch (ProcessingException e) {
+            ValidationProblem problem = new ValidationProblem("Invalid Json format", ProblemLevel.ERROR);
             result.addProblem(problem);
+            return result;
         }
+
+        if (!processingReport.isSuccess()) {
+            mapProcessingReportToValidationProblem(processingReport, result);
+        }
+
         return result;
+    }
+
+    private void mapProcessingReportToValidationProblem(ProcessingReport processingReport, ValidationResult result) {
+        for (ProcessingMessage processingMessage : processingReport) {
+            result.addProblem(new ValidationProblem(processingMessage.getMessage()));
+        }
     }
 }
