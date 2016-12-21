@@ -24,7 +24,7 @@ task copyDockerDir(type: Copy) {
 }
 
 task copyJarIntoDockerDir(type: Copy) {
-    from Jar
+    from jar.archivePath
     into 'build/docker'
 }
 
