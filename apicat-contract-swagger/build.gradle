@@ -1,5 +1,8 @@
+group 'pl.jcommerce.apicat'
+version '1.0-SNAPSHOT'
+
 dependencies {
-    compile project(':apicat-contract')
+	compile project(':apicat-contract')
 	compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc2'
 	compile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
 }
