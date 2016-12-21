@@ -1,32 +1,27 @@
-package pl.jcommerce.apicat.business.validation;
+package pl.jcommerce.apicat.contract.validation;
 
 
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
-import pl.jcommerce.apicat.model.entity.ApiContractEntity;
-import pl.jcommerce.apicat.model.entity.ApiDefinitionEntity;
 
 /**
  * Created by jada on 13.12.2016.
  */
 public abstract class ValidationStrategy {
-    abstract ApiSpecification getApiSpecificationFromContent(String content);
+    protected abstract ApiSpecification getApiSpecificationFromContent(String content);
 
-    abstract ApiDefinition getApiDefinitionFromContent(String content);
+    protected abstract ApiDefinition getApiDefinitionFromContent(String content);
 
-    public ValidationResult validateDefinition(ApiDefinitionEntity definitionEntity) {
-        ApiDefinition definition = getApiDefinitionFromContent(definitionEntity.getContent());
+    public ValidationResult validateDefinition(String definitionContent) {
+        ApiDefinition definition = getApiDefinitionFromContent(definitionContent);
 
         return definition.validate();
     }
 
     //TODO: should return ValidationResult
-    public boolean isContractValid(ApiContractEntity contractEntity) {
-        String definitionContent = contractEntity.getDefinition().getContent();
-        String specificationContent = contractEntity.getSpecification().getContent();
-
+    public boolean isContractValid(String definitionContent, String specificationContent) {
         ApiDefinition definition = getApiDefinitionFromContent(definitionContent);
         ApiSpecification specification = getApiSpecificationFromContent(specificationContent);
 
