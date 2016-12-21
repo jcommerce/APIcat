@@ -54,7 +54,7 @@ public class ApiSpecificationFactory {
      * @return type -> ApiSpecification implementation map
      */
     private static void initTypeMap() {
-        Map<String, Class<? extends ApiSpecification>> typeMap = new HashMap<>();
+        typeMap = new HashMap<>();
         ServiceLoader.load(ApiSpecification.class).forEach(apiSpecification -> {
             if (typeMap.containsKey(apiSpecification.getType())) {
                 throw new RuntimeException("Duplicated ApiSpecification implementation with type: " + apiSpecification.getType());
