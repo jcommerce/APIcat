@@ -3,10 +3,9 @@ package pl.jcommerce.apicat.contract.swagger.validation;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.models.HttpMethod;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pl.jcommerce.apicat.contract.swagger.TestUtils;
 
 import java.text.MessageFormat;
@@ -18,17 +17,17 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by krka on 28.10.2016.
  */
+@Slf4j
 public class ContractsValidationTest {
-
-    private final Logger logger = LoggerFactory.getLogger(ContractsValidationTest.class);
 
     private List<String> differences;
     private Contract contract;
 
     @After
     public void cleanUp() {
-        if (differences != null)
-            logger.info(Arrays.toString(differences.toArray()));
+        if (differences != null) {
+            log.info(Arrays.toString(differences.toArray()));
+        }
     }
 
     @Test

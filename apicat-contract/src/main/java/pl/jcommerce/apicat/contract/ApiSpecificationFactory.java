@@ -23,10 +23,12 @@ public class ApiSpecificationFactory {
      */
     public static ApiSpecification newInstance(String type) {
         try {
-            if (typeMap == null)
-                typeMap = initTypeMap();
-            if (typeMap.get(type) == null)
+            if (typeMap == null) {
+                initTypeMap();
+            }
+            if (typeMap.get(type) == null) {
                 throw new RuntimeException("Unable to find ApiSpecification implementation for type: " + type);
+            }
             return typeMap.get(type).newInstance();
         } catch (Exception e) {
             throw new RuntimeException("Unable to instantiate ApiSpecification", e);
@@ -39,8 +41,9 @@ public class ApiSpecificationFactory {
      * @return types delivered by implementations
      */
     static Set<String> getTypes() {
-        if (typeMap == null)
-            typeMap = initTypeMap();
+        if (typeMap == null) {
+            initTypeMap();
+        }
 
         return typeMap.keySet();
     }
@@ -50,17 +53,14 @@ public class ApiSpecificationFactory {
      *
      * @return type -> ApiSpecification implementation map
      */
-    private static Map<String, Class<? extends ApiSpecification>> initTypeMap() {
-        Map<String, Class<? extends ApiSpecification>> specTypeMap = new HashMap<>();
+    private static void initTypeMap() {
+        typeMap = new HashMap<>();
         ServiceLoader.load(ApiSpecification.class).forEach(apiSpecification -> {
-            if (specTypeMap.containsKey(apiSpecification.getType()))
+            if (typeMap.containsKey(apiSpecification.getType())) {
                 throw new RuntimeException("Duplicated ApiSpecification implementation with type: " + apiSpecification.getType());
-            specTypeMap.put(apiSpecification.getType(), apiSpecification.getClass());
+            }
+            typeMap.put(apiSpecification.getType(), apiSpecification.getClass());
         });
-
-        return specTypeMap;
     }
-
-
 }
 

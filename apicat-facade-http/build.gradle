@@ -1,45 +1,6 @@
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-
-apply plugin: 'com.bmuschko.docker-remote-api'
-
-jar {
-    baseName = 'apicat-web'
-    version = '1.0-SNAPSHOT'
-}
+group 'pl.jcommerce.apicat'
+version '1.0-SNAPSHOT'
 
 dependencies {
-    compile project(':apicat-service')
-
-    compile 'org.liquibase:liquibase-core'
-    compile 'org.modelmapper:modelmapper:0.7.7'
-    compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'org.springframework.boot:spring-boot-devtools'
-    compile 'mysql:mysql-connector-java'
-
-}
-
-task copyDockerDir(type: Copy) {
-    from 'src/main/docker'
-    into 'build/docker'
-}
-
-task copyJarIntoDockerDir(type: Copy) {
-    from jar.archivePath
-    into 'build/docker'
-}
-
-task buildImage(type: DockerBuildImage) {
-    dependsOn copyDockerDir
-    dependsOn copyJarIntoDockerDir
-    dependsOn build
-    tasks.findByName('copyDockerDir').mustRunAfter 'build'
-    tasks.findByName('copyJarIntoDockerDir').mustRunAfter 'copyDockerDir'
-
-    inputDir = project.file('build/docker')
-    tag = 'jcommerce/apicat'
-
-}
-
-springBoot {
-    bootRepackage.enabled = true
+    compile project(':apicat-contract')
 }

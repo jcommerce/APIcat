@@ -2,8 +2,7 @@ package pl.jcommerce.apicat.contract;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 
@@ -13,11 +12,12 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
+ * Connects ApiSpecification delivered by customer with ApiDefinition used by it.
+ *
  * @author Daniel Charczyński
  */
+@Slf4j
 public class ApiContract {
-
-    private final Logger logger = LoggerFactory.getLogger(ApiContract.class);
 
     /**
      * ApiContract validators
@@ -70,13 +70,13 @@ public class ApiContract {
      * Validate contract
      */
     public void validate() {
-        logger.info("About to validate ApiContract: " + this);
+        log.info("About to validate ApiContract: " + this);
         if (!apiSpecification.isValidated()) {
             apiSpecification.validate();
         }
 
         //TODO: refactor after ApiDefinition refactoring
-        if (!apiDefinition.isValidated()) {
+        if (!apiDefinition.isApiValidated()) {
             apiDefinition.validate();
         }
 
@@ -94,12 +94,12 @@ public class ApiContract {
      * @return validators
      */
     private List<ApiContractValidator> initValidators() {
-        logger.info("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        log.info("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
         List<ApiContractValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiContractValidator.class).forEach(apiContractValidator -> {
                 if (apiContractValidator.support(this)) {
-                    logger.info("Adding contract validator: " + apiContractValidator);
+                    log.info("Adding contract validator: " + apiContractValidator);
                     //addValidator(apiContractValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiContractValidator);
                     valid = Optional.empty();
