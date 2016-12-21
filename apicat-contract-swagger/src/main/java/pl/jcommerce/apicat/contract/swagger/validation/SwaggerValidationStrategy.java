@@ -1,10 +1,11 @@
-package pl.jcommerce.apicat.business.validation;
+package pl.jcommerce.apicat.contract.swagger.validation;
 
 
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.swagger.SwaggerApiDefinitionBuilder;
 import pl.jcommerce.apicat.contract.swagger.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.validation.ValidationStrategy;
 
 /**
  * Created by jada on 13.12.2016.

@@ -1,8 +1,8 @@
 package pl.jcommerce.apicat.business.service;
 
 import org.springframework.stereotype.Service;
-import pl.jcommerce.apicat.business.validation.SwaggerValidationStrategy;
-import pl.jcommerce.apicat.business.validation.ValidationStrategy;
+import pl.jcommerce.apicat.contract.swagger.validation.SwaggerValidationStrategy;
+import pl.jcommerce.apicat.contract.validation.ValidationStrategy;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 import pl.jcommerce.apicat.model.entity.ApiContractEntity;
@@ -27,13 +27,16 @@ public class ValidationService {
     public boolean isContractValid(ApiContractEntity contractEntity) {
         ValidationStrategy strategy = getValidationStrategy(contractEntity.getDefinition().getFormat());
 
-        return strategy.isContractValid(contractEntity);
+        String definitionContent = contractEntity.getDefinition().getContent();
+        String specificationContent = contractEntity.getSpecification().getContent();
+
+        return strategy.isContractValid(definitionContent, specificationContent);
     }
 
     public ValidationResult validateDefinition(ApiDefinitionEntity definitionEntity) {
         ValidationStrategy strategy = getValidationStrategy(definitionEntity.getFormat());
 
-        return strategy.validateDefinition(definitionEntity);
+        return strategy.validateDefinition(definitionEntity.getContent());
     }
 
     public boolean isDefinitionValid(ApiDefinitionEntity definitionEntity) {
