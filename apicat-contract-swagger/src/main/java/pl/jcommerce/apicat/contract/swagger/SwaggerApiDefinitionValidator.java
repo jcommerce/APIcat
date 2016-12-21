@@ -1,6 +1,7 @@
 package pl.jcommerce.apicat.contract.swagger;
 
 import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.LogLevel;
 import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.google.auto.service.AutoService;
@@ -47,7 +48,15 @@ public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
 
     private void mapProcessingReportToValidationProblem(ProcessingReport processingReport, ValidationResult result) {
         for (ProcessingMessage processingMessage : processingReport) {
-            result.addProblem(new ValidationProblem(processingMessage.getMessage()));
+            LogLevel logLevel = processingMessage.getLogLevel();
+            ProblemLevel problemLevel;
+            if (logLevel == LogLevel.ERROR || logLevel == LogLevel.FATAL) {
+                problemLevel = ProblemLevel.ERROR;
+            } else {
+                problemLevel = ProblemLevel.WARN;
+            }
+
+            result.addProblem(new ValidationProblem(processingMessage.getMessage(), problemLevel));
         }
     }
 }
