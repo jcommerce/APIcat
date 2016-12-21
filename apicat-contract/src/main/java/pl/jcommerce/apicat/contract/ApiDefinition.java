@@ -43,7 +43,6 @@ public abstract class ApiDefinition {
     private Optional<Boolean> contractsAreValid = Optional.empty();
     private List<ApiContract> apiContracts = new ArrayList<>();
 
-
     public void addValidator(ApiDefinitionValidator apiDefinitionValidator) {
         if (!apiDefinitionValidator.support(this)) {
             throw new ApicatSystemException("Provided apiDefinitionValidator doesn't support this specification. validator object: " + apiDefinitionValidator);
@@ -53,11 +52,13 @@ public abstract class ApiDefinition {
         }
         validators.add(apiDefinitionValidator);
         apiValidated = false;
+        contractsAreValid = Optional.empty();
     }
 
     public void addContract(ApiContract apiContract) {
         apiContracts.add(apiContract);
         apiContract.setApiDefinition(this); //TODO verify - the relation is bidirectional because ApiContract contains apiDefinition property
+        contractsAreValid = Optional.empty();
     }
 
     public void validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
@@ -67,7 +68,6 @@ public abstract class ApiDefinition {
             temporaryContract.setApiSpecification(apiSpecification);
             temporaryContract.validate();
         }
-
     }
 
     public ValidationResult validate() {
