@@ -11,6 +11,8 @@ import {DefinitionDetailsComponent} from "./definitions/definition-details/defin
 import {DefinitionFormComponent} from "./definitions/definition-form/definition-form.component";
 import {CollapseDirective} from "ng2-bootstrap";
 import {DefinitionAddComponent} from "./definitions/definition-add/definition-add.component";
+import {InMemoryDataService} from "./shared/in-memory-data.service";
+import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 
 @NgModule({
   declarations: [
@@ -27,6 +29,7 @@ import {DefinitionAddComponent} from "./definitions/definition-add/definition-ad
     BrowserModule,
     FormsModule,
     HttpModule,
+    InMemoryWebApiModule.forRoot(InMemoryDataService),
     AppRoutingModule,
   ],
   providers: [DefinitionService],

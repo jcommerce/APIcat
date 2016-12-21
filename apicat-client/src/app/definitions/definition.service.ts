@@ -6,7 +6,7 @@ import {Definition} from "../model/definition";
 @Injectable()
 export class DefinitionService {
 
-  private baseUrl = 'http://localhost:8080/api/definitions';
+  private baseUrl = '/api/definitions';
   private headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private http: Http) {
@@ -15,7 +15,7 @@ export class DefinitionService {
   getDefinitions(): Promise<Definition[]> {
     return this.http.get(this.baseUrl)
       .toPromise()
-      .then(response => response.json().content as Definition[])
+      .then(response => response.json().data as Definition[])
       .catch(this.handleError);
   }
 
@@ -23,7 +23,7 @@ export class DefinitionService {
     const url = `${this.baseUrl}/${id}`;
     return this.http.get(url)
       .toPromise()
-      .then(response => response.json() as Definition)
+      .then(response => response.json().data as Definition)
       .catch(this.handleError);
   }
 
@@ -31,7 +31,7 @@ export class DefinitionService {
     return this.http
       .post(this.baseUrl, JSON.stringify(definition), {headers: this.headers})
       .toPromise()
-      .then(res => res.json())
+      .then(res => res.json().data)
       .catch(this.handleError);
   }
 
