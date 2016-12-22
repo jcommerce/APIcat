@@ -42,8 +42,7 @@ public class SwaggerApiSpecification extends ApiSpecification {
         try {
             content = FileUtils.readFileToString(file);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Cannot read file " + path);
+            throw new ApicatSystemException(ErrorCode.READ_FILE_EXCEPTION, e.getMessage());
         }
         return createSwaggerApiSpecification(createJsonNode(getJson(content)));
     }
@@ -54,8 +53,7 @@ public class SwaggerApiSpecification extends ApiSpecification {
         try {
             node = mapper.readTree(content);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Cannot parse Json");
+            throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION, e.getMessage());
         }
         return node;
     }
