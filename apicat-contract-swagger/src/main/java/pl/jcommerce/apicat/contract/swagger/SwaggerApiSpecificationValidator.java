@@ -1,7 +1,12 @@
 package pl.jcommerce.apicat.contract.swagger;
 
+import com.github.fge.jsonschema.core.exceptions.ProcessingException;
+import com.github.fge.jsonschema.core.report.LogLevel;
+import com.github.fge.jsonschema.core.report.ProcessingMessage;
+import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.google.auto.service.AutoService;
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.swagger.validation.SwaggerApiSchemaValidator;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 import pl.jcommerce.apicat.contract.validation.problem.ProblemLevel;
 import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
@@ -17,17 +22,39 @@ public class SwaggerApiSpecificationValidator implements ApiSpecificationValidat
     @Override
     public boolean support(ApiSpecification apiSpecification) {
         return apiSpecification instanceof SwaggerApiSpecification &&
-                ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition() != null;  //TODO verify - implementation
+                ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition() != null;
     }
 
     @Override
     public ValidationResult validate(ApiSpecification apiSpecification) {
         ValidationResult result = new ValidationResult();
         SwaggerApiSpecification swaggerApiSpecification = (SwaggerApiSpecification) apiSpecification;
-        if(swaggerApiSpecification.getSwaggerDefinition() == null){
-            ValidationProblem problem = new ValidationProblem("Invalid SwaggerApiSpecification", ProblemLevel.ERROR);
+
+        ProcessingReport processingReport = null;
+        SwaggerApiSchemaValidator swaggerApiSchemaValidator = new SwaggerApiSchemaValidator();
+        try{
+            processingReport = swaggerApiSchemaValidator.validate(swaggerApiSpecification.getJsonNode());
+        }catch (ProcessingException e){
+            ValidationProblem problem = new ValidationProblem("Invalid Json format", ProblemLevel.ERROR);
             result.addProblem(problem);
+            return result;
+        }
+        if(!processingReport.isSuccess()){
+           mapProcessingRaportToValidationProblem(processingReport, result);
         }
         return result;
+    }
+
+    private  void mapProcessingRaportToValidationProblem(ProcessingReport processingReport, ValidationResult result){
+        for(ProcessingMessage processingMessage : processingReport){
+            LogLevel logLevel = processingMessage.getLogLevel();
+            ProblemLevel problemLevel;
+            if(logLevel == LogLevel.ERROR || logLevel == LogLevel.FATAL ){
+                problemLevel = ProblemLevel.ERROR;
+            } else {
+                problemLevel = ProblemLevel.WARN;
+            }
+            result.addProblem(new ValidationProblem(processingMessage.getMessage(), problemLevel));
+        }
     }
 }

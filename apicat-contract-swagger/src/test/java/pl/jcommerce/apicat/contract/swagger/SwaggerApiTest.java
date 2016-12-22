@@ -27,6 +27,13 @@ public class SwaggerApiTest {
         assertFalse(apiDefinition.isValid());
     }
 
+    @Test
+    public void shouldValidateSpecificationWithErrorsPass() {
+        ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath("contracts/json/testErrorContract.json");
+        apiSpecification.addValidator(new SwaggerApiSpecificationValidator());
+        apiSpecification.validate();
+        assertFalse(apiSpecification.isValid());
+    }
     @Test(expected = ApicatSystemException.class)
     public void shouldValidateDefinitionFailNotSupportedValidator() {
         SwaggerApiDefinition stubApiDefinition = SwaggerApiDefinition.empty();
