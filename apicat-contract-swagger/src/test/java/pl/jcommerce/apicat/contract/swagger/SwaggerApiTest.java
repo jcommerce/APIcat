@@ -150,7 +150,7 @@ public class SwaggerApiTest {
         assertFalse(apiDefinition.isValid());
     }
 
-    @Test(expected = SwaggerOpenAPISpecificationException.class)
+    @Test(expected = ApicatSystemException.class)
     public void shouldSwaggerOpenAPISpecificationExceptionBeDetected() {
         SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("inconsistentConsumerContract.yaml"));
     }

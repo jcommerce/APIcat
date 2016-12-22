@@ -32,6 +32,8 @@ public abstract class ApiSpecification {
      */
     private List<ApiSpecificationValidator> validators;
 
+    @Getter
+    @Setter
     private ValidationResult validationResult = new ValidationResult();
 
     private boolean apiValidated = false;
@@ -106,8 +108,19 @@ public abstract class ApiSpecification {
         if (validators == null){
             initValidators();
         }
-        validators.add(apiSpecificationValidator);
+        if(!validatorAlreadyAdded(apiSpecificationValidator)){
+            validators.add(apiSpecificationValidator);
+        }
         apiValidated = false;
+    }
+
+    private boolean validatorAlreadyAdded(ApiSpecificationValidator apiDefinitionValidator) {
+        for (ApiSpecificationValidator validator: validators) {
+            if (validator.getClass().equals(apiDefinitionValidator.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
