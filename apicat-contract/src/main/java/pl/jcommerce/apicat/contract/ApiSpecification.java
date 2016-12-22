@@ -140,7 +140,7 @@ public abstract class ApiSpecification {
         return validationResult;
     }
 
-    public boolean isValidated() {
+    public boolean isApiValidated() {
         return apiValidated;
     }
 
@@ -156,12 +156,13 @@ public abstract class ApiSpecification {
      *
      * @param apiDefinition second part of contract
      */
-    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
-        ApiContract temporaryContract = new ApiContract();
-        temporaryContract.setApiDefinition(apiDefinition);
-        temporaryContract.setApiSpecification(this);
-        temporaryContract.validate();
-    }
+    //TODO after ApiContract refactoring
+//    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
+//        ApiContract temporaryContract = new ApiContract();
+//        temporaryContract.setApiDefinition(apiDefinition);
+//        temporaryContract.setApiSpecification(this);
+//        temporaryContract.validate();
+//    }
 
     public boolean isValid() {
         if(apiValidated) {

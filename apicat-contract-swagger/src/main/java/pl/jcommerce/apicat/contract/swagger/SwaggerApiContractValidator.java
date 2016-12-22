@@ -7,6 +7,7 @@ import pl.jcommerce.apicat.contract.swagger.validation.ContractsValidator;
 import pl.jcommerce.apicat.contract.swagger.validation.ContractsValidatorImpl;
 import pl.jcommerce.apicat.contract.swagger.validation.Contract;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 /**
  * Created by krka on 31.10.2016.
@@ -35,18 +36,24 @@ public class SwaggerApiContractValidator implements ApiContractValidator {
     }
 
     @Override
-    public boolean validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
+    public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
         SwaggerApiDefinition swaggerApiDefinition = (SwaggerApiDefinition) apiDefinition;
         SwaggerApiSpecification swaggerApiSpecification = (SwaggerApiSpecification) apiSpecification;
         Contract contract = contractsValidator.validateContract(swaggerApiSpecification.getSwaggerDefinition(), swaggerApiDefinition.getSwaggerDefinition());
-        return contract.isValid();
+        //return contract.isValid();
+
+        //TODO
+        return new ValidationResult();
     }
 
     @Override
-    public boolean validate(ApiContract apiContract) {
+    public ValidationResult validate(ApiContract apiContract) {
         Swagger swaggerApiDefinition = ((SwaggerApiDefinition) apiContract.getApiDefinition()).getSwaggerDefinition();
         Swagger swaggerApiSpecification = ((SwaggerApiSpecification) apiContract.getApiSpecification()).getSwaggerDefinition();
         Contract contract = contractsValidator.validateContract(swaggerApiSpecification, swaggerApiDefinition);
-        return contract.isValid();
+        //return contract.isValid();
+
+        //TODO
+        return new ValidationResult();
     }
 }
