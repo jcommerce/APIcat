@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, ViewContainerRef} from "@angular/core";
 
 @Component({
   selector: 'my-app',
@@ -8,4 +8,9 @@ import {Component} from "@angular/core";
 export class AppComponent {
   public title = 'Apicat';
   public isNavbarCollapsed: boolean = true;
+  private viewContainerRef: ViewContainerRef;
+
+  public constructor(viewContainerRef:ViewContainerRef) {
+    this.viewContainerRef = viewContainerRef;
+  }
 }

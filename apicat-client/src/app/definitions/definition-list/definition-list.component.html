@@ -30,3 +30,11 @@
   </tr>
   </tbody>
 </table>
+
+<confirmation-modal id="delete-confirmation"
+                    [cancel-label]="'No'"
+                    [positive-label]="'Yes'"
+                    (loaded)="onModalLoaded($event)"
+                    (closed)="onModalClosed($event)">
+  Are you sure you want to delete selected definition?
+</confirmation-modal>

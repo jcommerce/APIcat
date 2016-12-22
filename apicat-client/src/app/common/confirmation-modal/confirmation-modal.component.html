@@ -1,0 +1,32 @@
+<div class="modal-backdrop fade in"
+     [style.display]="visible ? 'block' : 'none'"></div>
+<div class="modal"
+     tabindex="-1"
+     role="dialog"
+     style="display: block"
+     [style.display]="visible ? 'block' : 'none'">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">
+          {{title}}
+        </h4>
+      </div>
+      <div class="modal-body">
+        <ng-content></ng-content>
+      </div>
+      <div class="modal-footer">
+        <button type="button"
+                class="btn btn-success"
+                (click)="positiveAction()">
+          {{positiveLabel}}
+        </button>
+        <button type="button"
+                class="btn btn-danger"
+                (click)="cancelAction()">
+          {{cancelLabel}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,9 +11,10 @@ import {DefinitionDetailsComponent} from "./definitions/definition-details/defin
 import {DefinitionFormComponent} from "./definitions/definition-form/definition-form.component";
 import {CollapseDirective} from "ng2-bootstrap";
 import {DefinitionAddComponent} from "./definitions/definition-add/definition-add.component";
-import {InMemoryDataService} from "./shared/in-memory-data.service";
+import {InMemoryDataService} from "./common/in-memory-data.service";
 import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {DefinitionEditComponent} from "./definitions/definition-edit/definition-edit.component";
+import {ConfirmationModalComponent} from "./common/confirmation-modal/confirmation-modal.component";
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import {DefinitionEditComponent} from "./definitions/definition-edit/definition-
     DefinitionEditComponent,
     DefinitionListComponent,
     DefinitionFormComponent,
-    DefinitionDetailsComponent
+    DefinitionDetailsComponent,
+    ConfirmationModalComponent
   ],
   imports: [
     BrowserModule,
