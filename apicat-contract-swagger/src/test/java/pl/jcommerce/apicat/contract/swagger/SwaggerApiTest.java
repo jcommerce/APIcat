@@ -5,6 +5,7 @@ import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -32,6 +33,7 @@ public class SwaggerApiTest {
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/json/testErrorContract.json").withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
         apiDefinition.validate();
         assertFalse(apiDefinition.isValid());
+        assertEquals(2, apiDefinition.getValidationResult().getProblemList().size());
     }
 
     @Test(expected = ApicatSystemException.class)

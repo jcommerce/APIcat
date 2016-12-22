@@ -35,7 +35,6 @@ subprojects {
         compile "org.projectlombok:lombok:1.16.10"
         compile 'net.minidev:json-smart:2.2.1'
 
-
         testCompile 'org.springframework.boot:spring-boot-starter-test'
         testCompile 'org.hibernate:hibernate-validator:5.2.4.Final'
         testCompile 'javax.el:javax.el-api:3.0.0'
