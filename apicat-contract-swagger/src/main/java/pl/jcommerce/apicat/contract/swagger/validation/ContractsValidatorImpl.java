@@ -46,7 +46,7 @@ public class ContractsValidatorImpl implements ContractsValidator {
 
     private void doValidate (Contract contractToBeValidated) {
         // going through analyzers
-        contractAnalyzers.addAll(Lists.newArrayList(new MetadataAnalyzer(), new EndpointAnalyzer(), new DefinitionAnalyzer()));
+        contractAnalyzers.addAll(Lists.newArrayList(new MetadataAnalyzer(), new SwaggerEndpointApiContractValidator(), new DefinitionAnalyzer()));
         contractAnalyzers.forEach(c -> c.analyzeContract(contractToBeValidated));
     }
 }

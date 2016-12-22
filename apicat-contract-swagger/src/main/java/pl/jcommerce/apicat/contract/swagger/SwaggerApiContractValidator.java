@@ -5,7 +5,6 @@ import io.swagger.models.Swagger;
 import pl.jcommerce.apicat.contract.*;
 import pl.jcommerce.apicat.contract.swagger.validation.ContractsValidator;
 import pl.jcommerce.apicat.contract.swagger.validation.ContractsValidatorImpl;
-import pl.jcommerce.apicat.contract.swagger.validation.Contract;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 

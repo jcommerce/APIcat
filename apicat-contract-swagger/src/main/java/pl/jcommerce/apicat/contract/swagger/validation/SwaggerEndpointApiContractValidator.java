@@ -3,7 +3,17 @@ package pl.jcommerce.apicat.contract.swagger.validation;
 import io.swagger.models.*;
 import io.swagger.models.parameters.Parameter;
 import lombok.Data;
+import pl.jcommerce.apicat.contract.ApiContract;
+import pl.jcommerce.apicat.contract.ApiDefinition;
+import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.swagger.SwaggerApiDefinition;
+import pl.jcommerce.apicat.contract.swagger.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
+import pl.jcommerce.apicat.contract.validation.problem.ProblemLevel;
+import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +22,7 @@ import java.util.Optional;
 /**
  * Created by krka on 23.10.2016.
  */
-class EndpointAnalyzer implements ContractAnalyzer {
-
-    private Contract contract;
+class SwaggerEndpointApiContractValidator implements ApiContractValidator {
 
     private Map<String, Path> providerPaths;
 
@@ -24,12 +32,38 @@ class EndpointAnalyzer implements ContractAnalyzer {
 
     private OperationDetails operationDetails;
 
+    private ValidationResult validationResult;
+
     @Override
-    public void analyzeContract(Contract contract) {
-        this.contract = contract;
-        providerPaths = contract.getProviderSwaggerDefinition().getPaths();
-        customerPaths = contract.getCustomerSwaggerDefinition().getPaths();
+    public boolean support(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
+        boolean result = false;
+        if (apiDefinition instanceof SwaggerApiDefinition && apiSpecification instanceof SwaggerApiSpecification) {
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public boolean support(ApiContract apiContract) {
+        boolean result = false;
+        if (apiContract.getApiSpecification() instanceof SwaggerApiSpecification &&
+                ((SwaggerApiSpecification) apiContract.getApiSpecification()).getSwaggerDefinition() != null) {
+            result = true;
+        }
+        return result;
+    }
+
+    @Override
+    public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
+        providerPaths = ((SwaggerApiDefinition)apiDefinition).getSwaggerDefinition().getPaths();
+        customerPaths = ((SwaggerApiSpecification)apiSpecification).getSwaggerDefinition().getPaths();
         checkEndpointsExistence();
+        return validationResult;
+    }
+
+    @Override
+    public ValidationResult validate(ApiContract apiContract) {
+        return validate(apiContract.getApiDefinition(), apiContract.getApiSpecification());
     }
 
     private void checkEndpointsExistence () {
@@ -46,8 +80,7 @@ class EndpointAnalyzer implements ContractAnalyzer {
     private void checkSingleEndpointExistence (String endpoint, Path providerPath) {
         boolean containKey = customerPaths.containsKey(endpoint);
         if (!containKey) {
-            setContractToNotEqual(contract);
-            addContractDifference(contract, MessageConstants.ENDPOINT_NOT_USED, endpoint);
+            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.ENDPOINT_NOT_USED, endpoint), ProblemLevel.ERROR));
         } else {
             providerPath.getOperations().forEach(
                     o -> checkSingleOperationExistence(endpoint, providerPath, customerOperations.stream().filter(t -> t.getOperationId().equals(o.getOperationId())).findAny(), o));
@@ -60,10 +93,8 @@ class EndpointAnalyzer implements ContractAnalyzer {
             providerOperation.getParameters().forEach(
                     p -> checkSingleParametersExistence(p, foundOperation.get().getParameters()));
             providerOperation.getResponses().forEach((s, response) -> checkResponsesExistence(s, response, foundOperation.get().getResponses()));
-
         } else {
-            setContractToNotEqual(contract);
-            addContractDifference(contract, MessageConstants.OPERATION_NOT_USED, operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint());
+            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.OPERATION_NOT_USED, operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint())));
         }
     }
 
@@ -76,19 +107,13 @@ class EndpointAnalyzer implements ContractAnalyzer {
 
     private void checkSingleParametersExistence(Parameter providerParameter, List<Parameter> consumerParameters) {
         if(consumerParameters.stream().noneMatch(p -> p.equals(providerParameter))) {
-            if (providerParameter.getRequired()) {
-                setContractToInvalid(contract);
-            }
-            setContractToNotEqual(contract);
-            addContractDifference(contract, MessageConstants.PARAMETER_NOT_USED, providerParameter.getName(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint());
+            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PARAMETER_NOT_USED, providerParameter.getName(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint())));
         }
     }
 
     private void checkResponsesExistence(String responseCode, Response response, Map<String, Response> responses) {
         if(!responses.containsKey(responseCode)) {
-            setContractToNotEqual(contract);
-            setContractToInvalid(contract);
-            addContractDifference(contract, MessageConstants.RESPONSE_NOT_USED, responseCode, response.getDescription(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint());
+            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.RESPONSE_NOT_USED, responseCode, response.getDescription(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint() ), ProblemLevel.ERROR));
         }
     }
 
