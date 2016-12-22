@@ -21,8 +21,6 @@ export class DefinitionAddComponent implements OnInit {
 
   onSubmit(definition: Definition): void {
     this.definitionService.create(definition)
-      .then(definition =>
-        this.router.navigate(['/definitions', definition.id])
-      );
+      .subscribe(definition => this.router.navigate(['/definitions', definition.id]));
   }
 }

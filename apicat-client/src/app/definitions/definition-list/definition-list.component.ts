@@ -16,6 +16,7 @@ import {
 export class DefinitionListComponent implements OnInit {
   definitions: Definition[];
   confirmationModal: ConfirmationModalComponent;
+  errorMessage: string;
 
   constructor(private definitionService: DefinitionService) {
   }
@@ -26,7 +27,10 @@ export class DefinitionListComponent implements OnInit {
 
   getDefinitions(): void {
     this.definitionService.getDefinitions()
-      .then(definitions => this.definitions = definitions);
+      .subscribe(
+        definitions => this.definitions = definitions,
+        error => this.errorMessage = <any>error
+      );
   }
 
   delete(definition: Definition): void {
@@ -39,7 +43,7 @@ export class DefinitionListComponent implements OnInit {
 
       this.definitionService
         .delete(definition.id)
-        .then(() => this.definitions = this.definitions.filter(d => d !== definition));
+        .subscribe(() => this.definitions = this.definitions.filter(d => d !== definition));
     }
   }
 

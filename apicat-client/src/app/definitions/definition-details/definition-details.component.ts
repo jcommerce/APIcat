@@ -39,7 +39,7 @@ export class DefinitionDetailsComponent implements OnInit {
 
       this.definitionService
         .delete(definition.id)
-        .then(() => this.router.navigate(['/definitions']));
+        .subscribe(() => this.router.navigate(['/definitions']));
     }
   }
 
