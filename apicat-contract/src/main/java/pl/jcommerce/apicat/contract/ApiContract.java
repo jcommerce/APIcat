@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.ServiceLoader;
  * @author Daniel Charczyński
  */
 @Slf4j
-public class ApiContract {
+public abstract class ApiContract {
 
     /**
      * ApiContract validators
@@ -45,12 +46,10 @@ public class ApiContract {
     @Setter
     private boolean autodiscoverValidators = true;
 
-    /**
-     * Information if ApiContract is valid
-     * This flag is set after successful validation
-     */
     @Getter
-    private Optional<Boolean> valid = Optional.empty();
+    @Setter
+    private ValidationResult validationResult = new ValidationResult();
+    private boolean apiValidated = false;
 
     /**
      * Add {@code apiContractValidator}
@@ -58,34 +57,49 @@ public class ApiContract {
      * @param apiContractValidator
      */
     public void addValidator(ApiContractValidator apiContractValidator) {
-        if (!apiContractValidator.support(this))
+        if (!apiContractValidator.support(this)) {
             throw new ApicatSystemException("Provided apiContractValidator doesn't support this contract");
-        if (validators == null)
-            validators = initValidators();
-        validators.add(apiContractValidator);
-        valid = Optional.empty();
+        }
+        if (validators == null) {
+            initValidators();
+        }
+        if (!validatorAlreadyAdded(apiContractValidator)) {
+            validators.add(apiContractValidator);
+        }
+
+        apiValidated = false;
+    }
+
+    private boolean validatorAlreadyAdded(ApiContractValidator apiContractValidator) {
+        for (ApiContractValidator validator : validators) {
+            if (validator.getClass().equals(apiContractValidator.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
      * Validate contract
      */
-    public void validate() {
+    public ValidationResult validate() {
         log.info("About to validate ApiContract: " + this);
-        if (!apiSpecification.isValidated()) {
+        if (!apiSpecification.isApiValidated()) {
             apiSpecification.validate();
         }
-
-        //TODO: refactor after ApiDefinition refactoring
         if (!apiDefinition.isApiValidated()) {
             apiDefinition.validate();
         }
-
         if (validators == null) {
-            validators = initValidators();
+            initValidators();
         }
 
-        validators.forEach(apiContractValidator -> apiContractValidator.validate(this));
-        valid = Optional.of(true);
+        for (ApiContractValidator apiContractValidator : validators) {
+            validationResult.merge(apiContractValidator.validate(this));
+        }
+
+        apiValidated = true;
+        return validationResult;
     }
 
     /**
@@ -93,21 +107,17 @@ public class ApiContract {
      *
      * @return validators
      */
-    private List<ApiContractValidator> initValidators() {
+    private void initValidators() {
         log.info("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
-        List<ApiContractValidator> validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiContractValidator.class).forEach(apiContractValidator -> {
                 if (apiContractValidator.support(this)) {
                     log.info("Adding contract validator: " + apiContractValidator);
-                    //addValidator(apiContractValidator); TODO verify - stack overflow (addValidator invokes initValidators, so initValidators cannot invoke addValidator)
                     validators.add(apiContractValidator);
-                    valid = Optional.empty();
+                    apiValidated = false;
                 }
             });
         }
-
-        return validators;
     }
 
 }

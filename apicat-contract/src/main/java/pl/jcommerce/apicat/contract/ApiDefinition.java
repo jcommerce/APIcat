@@ -76,14 +76,15 @@ public abstract class ApiDefinition {
         contractsAreValid = Optional.empty();
     }
 
-    public void validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
-        for (ApiSpecification apiSpecification : apiSpecifications) {
-            ApiContract temporaryContract = new ApiContract();
-            temporaryContract.setApiDefinition(this);
-            temporaryContract.setApiSpecification(apiSpecification);
-            temporaryContract.validate();
-        }
-    }
+    //TODO after ApiContract refactoring
+//    public void validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
+//        for (ApiSpecification apiSpecification : apiSpecifications) {
+//            ApiContract temporaryContract = new ApiContract();
+//            temporaryContract.setApiDefinition(this);
+//            temporaryContract.setApiSpecification(apiSpecification);
+//            temporaryContract.validate();
+//        }
+//    }
 
     public ValidationResult validate() {
         log.info("About to validate ApiDefinition: " + this);
@@ -99,15 +100,16 @@ public abstract class ApiDefinition {
         return validationResult;
     }
 
-    public void validateAllContracts() {
-        boolean contractsValid = true;
-        for (ApiContract apiContract : apiContracts) {
-            apiContract.validate();
-            boolean contractValid = apiContract.getValid().orElse(false);
-            contractsValid = contractValid && contractsValid;
-        }
-        contractsAreValid = Optional.of(contractsValid);
-    }
+    //TODO after ApiContract refactoring
+//    public void validateAllContracts() {
+//        boolean contractsValid = true;
+//        for (ApiContract apiContract : apiContracts) {
+//            apiContract.validate();
+//            boolean contractValid = apiContract.getValid().orElse(false);
+//            contractsValid = contractValid && contractsValid;
+//        }
+//        contractsAreValid = Optional.of(contractsValid);
+//    }
 
     public boolean isApiValidated() {
         return apiValidated;
