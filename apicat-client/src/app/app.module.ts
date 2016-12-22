@@ -13,6 +13,7 @@ import {CollapseDirective} from "ng2-bootstrap";
 import {DefinitionAddComponent} from "./definitions/definition-add/definition-add.component";
 import {InMemoryDataService} from "./shared/in-memory-data.service";
 import {InMemoryWebApiModule} from "angular-in-memory-web-api";
+import {DefinitionEditComponent} from "./definitions/definition-edit/definition-edit.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {InMemoryWebApiModule} from "angular-in-memory-web-api";
     //app declarations
     AppComponent,
     DefinitionAddComponent,
+    DefinitionEditComponent,
     DefinitionListComponent,
     DefinitionFormComponent,
     DefinitionDetailsComponent

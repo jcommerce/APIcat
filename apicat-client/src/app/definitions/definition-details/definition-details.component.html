@@ -2,13 +2,14 @@
   <h1>Definition details</h1>
 </div>
 
-<div class="panel panel-default">
-  <div class="panel-body">
-    <a routerLink="/definitions" class="btn btn-primary">Go to list</a>
-  </div>
-</div>
-
 <div *ngIf="definition">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <a [routerLink]="['/definitions']" class="btn btn-default">Go to list</a>
+      <a [routerLink]="['/definitions', definition.id, 'edit']" class="btn btn-primary">Edit</a>
+    </div>
+  </div>
+
   <table class="table">
     <tr>
       <td>id</td>

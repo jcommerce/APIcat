@@ -35,6 +35,15 @@ export class DefinitionService {
       .catch(this.handleError);
   }
 
+  update(definition: Definition): Promise<Definition> {
+    const url = `${this.baseUrl}/${definition.id}`;
+    return this.http
+      .put(url, JSON.stringify(definition), {headers: this.headers})
+      .toPromise()
+      .then(() => definition)
+      .catch(this.handleError);
+  }
+
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);
 
