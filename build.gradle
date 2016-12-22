@@ -33,6 +33,7 @@ subprojects {
         compile 'io.github.robwin:assertj-swagger:0.5.0'
         compile 'com.h2database:h2'
         compile "org.projectlombok:lombok:1.16.10"
+        compile 'net.minidev:json-smart:2.2.1'
 
         testCompile 'org.springframework.boot:spring-boot-starter-test'
         testCompile 'org.hibernate:hibernate-validator:5.2.4.Final'

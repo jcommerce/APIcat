@@ -5,6 +5,7 @@ import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -14,8 +15,15 @@ import static org.junit.Assert.assertTrue;
 public class SwaggerApiTest {
 
     @Test
-    public void shouldValidateDefinitionPass() {
+    public void shouldValidateYamlDefinitionPass() {
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
+        apiDefinition.validate();
+        assertTrue(apiDefinition.isValid());
+    }
+
+    @Test
+    public void shouldValidateJsonDefinitionPass() {
+        ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/json/providerContract.json").withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
         apiDefinition.validate();
         assertTrue(apiDefinition.isValid());
     }
@@ -25,6 +33,7 @@ public class SwaggerApiTest {
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/json/testErrorContract.json").withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
         apiDefinition.validate();
         assertFalse(apiDefinition.isValid());
+        assertEquals(2, apiDefinition.getValidationResult().getProblemList().size());
     }
 
     @Test
@@ -147,6 +156,6 @@ public class SwaggerApiTest {
     }
 
     private String localizeSwaggerDefinitions(String consumerContractLocation) {
-        return TestUtils.getTestConstractsPath() + "/yaml/" + consumerContractLocation;
+        return "contracts/yaml/" + consumerContractLocation;
     }
 }

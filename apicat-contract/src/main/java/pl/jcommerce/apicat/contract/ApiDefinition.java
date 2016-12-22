@@ -32,6 +32,9 @@ public abstract class ApiDefinition {
     protected Boolean autodiscoverValidators = Boolean.TRUE;
 
     private List<ApiDefinitionValidator> validators = null;
+
+    @Getter
+    @Setter
     private ValidationResult validationResult = new ValidationResult();
     private boolean apiValidated = false;
 
@@ -50,9 +53,21 @@ public abstract class ApiDefinition {
         if (validators == null) {
             initValidators();
         }
-        validators.add(apiDefinitionValidator);
+        if (!validatorAlreadyAdded(apiDefinitionValidator)) {
+            validators.add(apiDefinitionValidator);
+        }
+
         apiValidated = false;
         contractsAreValid = Optional.empty();
+    }
+
+    private boolean validatorAlreadyAdded(ApiDefinitionValidator apiDefinitionValidator) {
+        for (ApiDefinitionValidator validator : validators) {
+            if (validator.getClass().equals(apiDefinitionValidator.getClass())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addContract(ApiContract apiContract) {
