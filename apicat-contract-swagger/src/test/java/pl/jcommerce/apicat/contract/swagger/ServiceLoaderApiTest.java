@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.ApiSpecificationFactory;
+import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
 
 /**
  * Created by Daniel Charczyński on 2016-11-30.

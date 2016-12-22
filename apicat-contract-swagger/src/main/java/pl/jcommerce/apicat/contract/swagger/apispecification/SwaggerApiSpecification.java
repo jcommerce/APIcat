@@ -1,4 +1,4 @@
-package pl.jcommerce.apicat.contract.swagger;
+package pl.jcommerce.apicat.contract.swagger.apispecification;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.parser.ParserException;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
+import pl.jcommerce.apicat.contract.swagger.SwaggerOpenAPISpecificationException;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,51 +31,51 @@ public class SwaggerApiSpecification extends ApiSpecification {
     @Setter
     private JsonNode jsonNode;
 
-    public static SwaggerApiSpecification fromContent(String content){
+    public static SwaggerApiSpecification fromContent(String content) {
         return createSwaggerApiSpecification(createJsonNode(getJson(content)));
     }
 
-    public  static SwaggerApiSpecification fromPath(String path){
+    public static SwaggerApiSpecification fromPath(String path) {
         ClassLoader classLoader = SwaggerApiSpecification.class.getClassLoader();
-        File file= new File(classLoader.getResource(path).getFile());
+        File file = new File(classLoader.getResource(path).getFile());
         String content = null;
-        try{
-            content= FileUtils.readFileToString(file);
-        }catch (IOException e){
+        try {
+            content = FileUtils.readFileToString(file);
+        } catch (IOException e) {
             e.printStackTrace();
             log.error("Cannot read file " + path);
         }
         return createSwaggerApiSpecification(createJsonNode(getJson(content)));
     }
 
-    private static JsonNode createJsonNode(String content){
-        ObjectMapper mapper= new ObjectMapper();
+    private static JsonNode createJsonNode(String content) {
+        ObjectMapper mapper = new ObjectMapper();
         JsonNode node = null;
-        try{
+        try {
             node = mapper.readTree(content);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
             log.error("Cannot parse Json");
         }
         return node;
     }
 
-    private static String getJson(String content) throws ApicatSystemException{
+    private static String getJson(String content) throws ApicatSystemException {
 
-            if (!content.trim().startsWith("{")) {
-                Yaml yaml = new Yaml();
-                try{
-                    Object obj = yaml.load(content);
-                    content = JSONValue.toJSONString(obj);
-                }catch (ParserException e){
-                    throw new ApicatSystemException(ErrorCode.PARSE_INPUT_DATA_EXCEPTION, e.getMessage());
-                }
+        if (!content.trim().startsWith("{")) {
+            Yaml yaml = new Yaml();
+            try {
+                Object obj = yaml.load(content);
+                content = JSONValue.toJSONString(obj);
+            } catch (ParserException e) {
+                throw new ApicatSystemException(ErrorCode.PARSE_INPUT_DATA_EXCEPTION, e.getMessage());
+            }
         }
 
         return content;
     }
 
-    private static SwaggerApiSpecification createSwaggerApiSpecification(JsonNode node){
+    private static SwaggerApiSpecification createSwaggerApiSpecification(JsonNode node) {
         Swagger swaggerSpecification = new SwaggerParser().read(node);
         if (swaggerSpecification == null) {
             throw new SwaggerOpenAPISpecificationException();

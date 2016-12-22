@@ -1,13 +1,14 @@
-package pl.jcommerce.apicat.contract.swagger.validation;
+package pl.jcommerce.apicat.contract.swagger.apicontract;
 
+import com.google.auto.service.AutoService;
 import io.swagger.models.*;
 import io.swagger.models.parameters.Parameter;
 import lombok.Data;
-import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
-import pl.jcommerce.apicat.contract.swagger.SwaggerApiDefinition;
-import pl.jcommerce.apicat.contract.swagger.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
+import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.swagger.validation.MessageConstants;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.problem.ProblemLevel;
 import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
@@ -22,7 +23,8 @@ import java.util.Optional;
 /**
  * Created by krka on 23.10.2016.
  */
-class SwaggerEndpointApiContractValidator implements ApiContractValidator {
+@AutoService(ApiContractValidator.class)
+public class SwaggerEndpointApiContractValidator extends SwaggerApiContractValidator {
 
     private Map<String, Path> providerPaths;
 
@@ -32,38 +34,16 @@ class SwaggerEndpointApiContractValidator implements ApiContractValidator {
 
     private OperationDetails operationDetails;
 
-    private ValidationResult validationResult;
-
-    @Override
-    public boolean support(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
-        boolean result = false;
-        if (apiDefinition instanceof SwaggerApiDefinition && apiSpecification instanceof SwaggerApiSpecification) {
-            result = true;
-        }
-        return result;
-    }
-
-    @Override
-    public boolean support(ApiContract apiContract) {
-        boolean result = false;
-        if (apiContract.getApiSpecification() instanceof SwaggerApiSpecification &&
-                ((SwaggerApiSpecification) apiContract.getApiSpecification()).getSwaggerDefinition() != null) {
-            result = true;
-        }
-        return result;
-    }
+    private ValidationResult validationResult = new ValidationResult();
 
     @Override
     public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
+        validationResult = new ValidationResult();
+
         providerPaths = ((SwaggerApiDefinition)apiDefinition).getSwaggerDefinition().getPaths();
         customerPaths = ((SwaggerApiSpecification)apiSpecification).getSwaggerDefinition().getPaths();
         checkEndpointsExistence();
         return validationResult;
-    }
-
-    @Override
-    public ValidationResult validate(ApiContract apiContract) {
-        return validate(apiContract.getApiDefinition(), apiContract.getApiSpecification());
     }
 
     private void checkEndpointsExistence () {
@@ -116,7 +96,6 @@ class SwaggerEndpointApiContractValidator implements ApiContractValidator {
             validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.RESPONSE_NOT_USED, responseCode, response.getDescription(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint() ), ProblemLevel.ERROR));
         }
     }
-
 
     @Data
     private class OperationDetails {

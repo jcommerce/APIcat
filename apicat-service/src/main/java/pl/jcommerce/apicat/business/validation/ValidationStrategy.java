@@ -30,12 +30,14 @@ public abstract class ValidationStrategy {
         ApiDefinition definition = getApiDefinitionFromContent(definitionContent);
         ApiSpecification specification = getApiSpecificationFromContent(specificationContent);
 
-        ApiContract contract = new ApiContract();
-        contract.setApiDefinition(definition);
-        contract.setApiSpecification(specification);
+        //ApiContract contract = new ApiContract();
+        //contract.setApiDefinition(definition);
+        //contract.setApiSpecification(specification);
 
-        contract.validate();
+        //contract.validate();
 
-        return contract.getValid().orElse(false);
+        //return contract.getValid().orElse(false);
+
+        return false;
     }
 }

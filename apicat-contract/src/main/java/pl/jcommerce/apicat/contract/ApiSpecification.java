@@ -20,22 +20,15 @@ import java.util.*;
 @Slf4j
 public abstract class ApiSpecification {
 
-    /**
-     * ApiContract
-     */
     @Getter
     @Setter
     private ApiContract apiContract;
 
-    /**
-     * ApiContract validators
-     */
     private List<ApiSpecificationValidator> validators;
 
     @Getter
     @Setter
     private ValidationResult validationResult = new ValidationResult();
-
     private boolean apiValidated = false;
 
     /**
@@ -123,9 +116,6 @@ public abstract class ApiSpecification {
         return false;
     }
 
-    /**
-     * Validate specification
-     */
     public ValidationResult validate() {
         log.info("About to validate ApiSpecification: " + this);
         if (validators == null) {
@@ -168,7 +158,7 @@ public abstract class ApiSpecification {
         if(apiValidated) {
             return validationResult.getProblemList().isEmpty();
         }
-        throw new IllegalStateException("Api specificatioin hasn't been validated");
+        throw new IllegalStateException("Api specification hasn't been validated");
     }
 
     /**

@@ -9,7 +9,6 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
@@ -79,9 +78,6 @@ public abstract class ApiContract {
         return false;
     }
 
-    /**
-     * Validate contract
-     */
     public ValidationResult validate() {
         log.info("About to validate ApiContract: " + this);
         if (!apiSpecification.isApiValidated()) {
@@ -102,13 +98,9 @@ public abstract class ApiContract {
         return validationResult;
     }
 
-    /**
-     * Init validators
-     *
-     * @return validators
-     */
     private void initValidators() {
         log.info("ApiContract - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiContractValidator.class).forEach(apiContractValidator -> {
                 if (apiContractValidator.support(this)) {
@@ -120,4 +112,10 @@ public abstract class ApiContract {
         }
     }
 
+    public boolean isValid() {
+        if (apiValidated) {
+            return validationResult.getProblemList().isEmpty();
+        }
+        throw new IllegalStateException("Api contract hasn't been validated");
+    }
 }

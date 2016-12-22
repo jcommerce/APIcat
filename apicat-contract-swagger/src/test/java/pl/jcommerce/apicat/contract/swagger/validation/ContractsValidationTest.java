@@ -20,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 @Slf4j
 public class ContractsValidationTest {
 
-    private List<String> differences;
+    /*private List<String> differences;
     private Contract contract;
 
     @After
@@ -133,5 +133,5 @@ public class ContractsValidationTest {
         ContractsValidator contractsValidator = new ContractsValidatorImpl();
         contract = contractsValidator.validateContract(consumerSwaggerLocation, providerSwaggerLocation);
         differences = contract.getDiffDetails().getDifferences();
-    }
+    }*/
 }

@@ -3,8 +3,8 @@ package pl.jcommerce.apicat.business.validation;
 
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
-import pl.jcommerce.apicat.contract.swagger.SwaggerApiDefinitionBuilder;
-import pl.jcommerce.apicat.contract.swagger.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinitionBuilder;
+import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
 
 /**
  * Created by jada on 13.12.2016.

@@ -1,4 +1,4 @@
-package pl.jcommerce.apicat.contract.swagger;
+package pl.jcommerce.apicat.contract.swagger.apidefinition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,6 +11,7 @@ import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;
 import pl.jcommerce.apicat.contract.ApiDefinition;
+import pl.jcommerce.apicat.contract.swagger.SwaggerOpenAPISpecificationException;
 
 import java.io.File;
 import java.io.IOException;
