@@ -7,6 +7,7 @@
     <div class="panel-body">
       <a [routerLink]="['/definitions']" class="btn btn-default">Go to list</a>
       <a [routerLink]="['/definitions', definition.id, 'edit']" class="btn btn-primary">Edit</a>
+      <button class="btn btn-danger" (click)="delete(definition)">Delete</button>
     </div>
   </div>
 

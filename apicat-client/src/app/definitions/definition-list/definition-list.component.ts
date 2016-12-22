@@ -19,6 +19,13 @@ export class DefinitionListComponent implements OnInit {
   }
 
   getDefinitions(): void {
-    this.definitionService.getDefinitions().then(definitions => this.definitions = definitions);
+    this.definitionService.getDefinitions()
+      .then(definitions => this.definitions = definitions);
+  }
+
+  delete(definition: Definition): void {
+    this.definitionService
+      .delete(definition.id)
+      .then(() => this.definitions = this.definitions.filter(d => d !== definition));
   }
 }

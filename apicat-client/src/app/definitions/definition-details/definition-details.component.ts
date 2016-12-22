@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Definition} from "../../model/definition";
 import {DefinitionService} from "../definition.service";
-import {ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 @Component({
   selector: 'definition-details',
@@ -13,7 +13,8 @@ export class DefinitionDetailsComponent implements OnInit {
   definition: Definition;
 
   constructor(private definitionService: DefinitionService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -22,4 +23,9 @@ export class DefinitionDetailsComponent implements OnInit {
       .subscribe(definition => this.definition = definition);
   }
 
+  delete(definition: Definition): void {
+    this.definitionService
+      .delete(definition.id)
+      .then(() => this.router.navigate(['/definitions']));
+  }
 }

@@ -22,7 +22,11 @@
     <td>{{definition.name}}</td>
     <td>{{definition.author}}</td>
     <td>{{definition.version}}</td>
-    <td><a class="btn btn-default" [routerLink]="['/definitions', definition.id]">details</a></td>
+    <td>
+      <a class="btn btn-default" [routerLink]="['/definitions', definition.id]">Details</a>
+      <a class="btn btn-primary" [routerLink]="['/definitions', definition.id, 'edit']">Edit</a>
+      <button class="btn btn-danger" (click)="delete(definition)">Delete</button>
+    </td>
   </tr>
   </tbody>
 </table>
