@@ -6,12 +6,13 @@ import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.parser.ParserException;
 import pl.jcommerce.apicat.contract.ApiDefinition;
-import pl.jcommerce.apicat.contract.swagger.SwaggerOpenAPISpecificationException;
+import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
+import pl.jcommerce.apicat.contract.exception.ErrorCode;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,6 @@ import java.io.IOException;
 /**
  * Created by krka on 31.10.2016.
  */
-@Slf4j
 public class SwaggerApiDefinition extends ApiDefinition {
 
     @Getter
@@ -47,8 +47,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
         try {
             content = FileUtils.readFileToString(file);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Cannot read file " + path);
+            throw new ApicatSystemException(ErrorCode.READ_FILE_EXCEPTION, e.getMessage());
         }
 
         return createSwaggerApiDefinition(createJsonNode(getJson(content)));
@@ -60,8 +59,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
         try {
             node = mapper.readTree(content);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.error("Cannot parse Json");
+            throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION, e.getMessage());
         }
         return node;
     }
@@ -69,17 +67,18 @@ public class SwaggerApiDefinition extends ApiDefinition {
     private static String getJson(String content) {
         if (!content.trim().startsWith("{")) {
             Yaml yaml = new Yaml();
-            Object obj = yaml.load(content);
-            content = JSONValue.toJSONString(obj);
+            try {
+                Object obj = yaml.load(content);
+                content = JSONValue.toJSONString(obj);
+            } catch (ParserException e) {
+                throw new ApicatSystemException(ErrorCode.PARSE_INPUT_DATA_EXCEPTION, e.getMessage());
+            }
         }
         return content;
     }
 
     private static SwaggerApiDefinition createSwaggerApiDefinition(JsonNode node) {
         Swagger swaggerDefinition = new SwaggerParser().read(node);
-        if (swaggerDefinition == null) {
-            throw new SwaggerOpenAPISpecificationException();
-        }
         SwaggerApiDefinition swaggerApiDefinition = new SwaggerApiDefinition();
         swaggerApiDefinition.setSwaggerDefinition(swaggerDefinition);
         swaggerApiDefinition.setJsonNode(node);

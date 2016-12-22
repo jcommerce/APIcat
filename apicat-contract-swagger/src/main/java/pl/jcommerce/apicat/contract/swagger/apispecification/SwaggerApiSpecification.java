@@ -6,7 +6,6 @@ import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
 import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -14,15 +13,14 @@ import org.yaml.snakeyaml.parser.ParserException;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
-import pl.jcommerce.apicat.contract.swagger.SwaggerOpenAPISpecificationException;
 
 import java.io.File;
 import java.io.IOException;
 
-@Slf4j
 public class SwaggerApiSpecification extends ApiSpecification {
 
     public static String TYPE = "Swagger";
+
     @Getter
     @Setter
     private Swagger swaggerDefinition;
@@ -75,9 +73,6 @@ public class SwaggerApiSpecification extends ApiSpecification {
 
     private static SwaggerApiSpecification createSwaggerApiSpecification(JsonNode node) {
         Swagger swaggerSpecification = new SwaggerParser().read(node);
-        if (swaggerSpecification == null) {
-            throw new SwaggerOpenAPISpecificationException();
-        }
         SwaggerApiSpecification swaggerApiSpecification = new SwaggerApiSpecification();
         swaggerApiSpecification.setSwaggerDefinition(swaggerSpecification);
         swaggerApiSpecification.setJsonNode(node);

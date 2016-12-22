@@ -1,3 +1,4 @@
+/*
 package pl.jcommerce.apicat.contract.swagger.validation;
 
 import com.google.common.collect.Lists;
@@ -14,13 +15,16 @@ import java.util.List;
 
 import static org.junit.Assert.assertTrue;
 
+*/
 /**
  * Created by krka on 28.10.2016.
- */
+ *//*
+
 @Slf4j
 public class ContractsValidationTest {
 
-    /*private List<String> differences;
+    */
+/*private List<String> differences;
     private Contract contract;
 
     @After
@@ -133,5 +137,7 @@ public class ContractsValidationTest {
         ContractsValidator contractsValidator = new ContractsValidatorImpl();
         contract = contractsValidator.validateContract(consumerSwaggerLocation, providerSwaggerLocation);
         differences = contract.getDiffDetails().getDifferences();
-    }*/
+    }*//*
+
 }
+*/

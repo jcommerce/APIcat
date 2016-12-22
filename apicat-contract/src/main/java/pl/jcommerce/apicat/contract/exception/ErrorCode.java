@@ -6,6 +6,5 @@ package pl.jcommerce.apicat.contract.exception;
 public enum ErrorCode {
     PARSE_INPUT_DATA_EXCEPTION,
     READ_FILE_EXCEPTION,
-    PARSE_JSON_EXCEPTION
-
+    PARSE_JSON_EXCEPTION,
 }
