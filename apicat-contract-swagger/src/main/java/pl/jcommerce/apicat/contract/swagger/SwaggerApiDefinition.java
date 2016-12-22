@@ -6,6 +6,10 @@ import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import net.minidev.json.JSONValue;
+import org.apache.commons.io.FileUtils;
+import org.yaml.snakeyaml.Yaml;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 
 import java.io.File;
@@ -15,7 +19,7 @@ import java.io.IOException;
 /**
  * Created by krka on 31.10.2016.
  */
-
+@Slf4j
 public class SwaggerApiDefinition extends ApiDefinition {
 
     @Getter
@@ -31,30 +35,43 @@ public class SwaggerApiDefinition extends ApiDefinition {
     }
 
     public static SwaggerApiDefinition fromContent(String content) {
+        return createSwaggerApiDefinition(createJsonNode(getJson(content)));
+    }
 
+    public static SwaggerApiDefinition fromPath(String path) {
+
+        ClassLoader classLoader = SwaggerApiDefinition.class.getClassLoader();
+        File file = new File(classLoader.getResource(path).getFile());
+        String content = null;
+        try {
+            content = FileUtils.readFileToString(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("Cannot read file " + path);
+        }
+
+        return createSwaggerApiDefinition(createJsonNode(getJson(content)));
+    }
+
+    private static JsonNode createJsonNode(String content) {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode node = null;
         try {
             node = mapper.readTree(content);
         } catch (IOException e) {
             e.printStackTrace();
+            log.error("Cannot parse Json");
         }
-
-        return createSwaggerApiDefinition(node);
+        return node;
     }
 
-    public static SwaggerApiDefinition fromPath(String path) {
-
-        ObjectMapper mapper = new ObjectMapper();
-        ClassLoader classLoader = SwaggerApiDefinition.class.getClassLoader();
-        JsonNode node = null;
-        try {
-            node = mapper.readTree(new File(classLoader.getResource(path).getFile()));
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static String getJson(String content) {
+        if (!content.trim().startsWith("{")) {
+            Yaml yaml = new Yaml();
+            Object obj = yaml.load(content);
+            content = JSONValue.toJSONString(obj);
         }
-
-        return createSwaggerApiDefinition(node);
+        return content;
     }
 
     private static SwaggerApiDefinition createSwaggerApiDefinition(JsonNode node) {

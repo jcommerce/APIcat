@@ -14,8 +14,15 @@ import static org.junit.Assert.assertTrue;
 public class SwaggerApiTest {
 
     @Test
-    public void shouldValidateDefinitionPass() {
+    public void shouldValidateYamlDefinitionPass() {
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
+        apiDefinition.validate();
+        assertTrue(apiDefinition.isValid());
+    }
+
+    @Test
+    public void shouldValidateJsonDefinitionPass() {
+        ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/json/providerContract.json").withApiDefinitionValidator(new SwaggerApiDefinitionValidator()).build();
         apiDefinition.validate();
         assertTrue(apiDefinition.isValid());
     }
@@ -140,6 +147,6 @@ public class SwaggerApiTest {
     }
 
     private String localizeSwaggerDefinitions(String consumerContractLocation) {
-        return TestUtils.getTestConstractsPath() + "/yaml/" + consumerContractLocation;
+        return "contracts/yaml/" + consumerContractLocation;
     }
 }
