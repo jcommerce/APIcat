@@ -28,6 +28,13 @@ export class AlertMessageService {
     this._alerts.next(Object.assign({}, this.dataStore).alerts);
   }
 
+  public closeAllAlerts() {
+    if (this.dataStore.alerts.length > 0) {
+      this.dataStore.alerts = [];
+      this._alerts.next(Object.assign({}, this.dataStore).alerts);
+    }
+  }
+
   public showErrorMessage(message: string): void {
     let alert = new AlertMessage(message, "danger");
     this.addAlert(alert);
