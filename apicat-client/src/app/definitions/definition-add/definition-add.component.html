@@ -8,8 +8,6 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-8 col-xs-12">
-    <definition-form [definition]="definition" (submitDefinition)="onSubmit($event)"></definition-form>
-  </div>
+<div *ngIf="definition" class="definition-form">
+  <definition-form [definition]="definition" (submitDefinition)="onSubmit($event)"></definition-form>
 </div>
