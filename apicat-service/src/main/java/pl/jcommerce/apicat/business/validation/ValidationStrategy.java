@@ -19,7 +19,7 @@ public abstract class ValidationStrategy {
     public ValidationResult validateDefinition(ApiDefinitionEntity definitionEntity) {
         ApiDefinition definition = getApiDefinitionFromContent(definitionEntity.getContent());
 
-        return definition.validate();
+        return definition.validate().orElse(null);
     }
 
     //TODO: should return ValidationResult

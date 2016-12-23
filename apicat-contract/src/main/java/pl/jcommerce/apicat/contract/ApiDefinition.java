@@ -32,8 +32,7 @@ public abstract class ApiDefinition {
 
     @Getter
     @Setter
-    private ValidationResult validationResult = new ValidationResult();
-    private boolean apiValidated = false;
+    private Optional<ValidationResult> validationResult = Optional.empty();
 
     /**
      * Information if all contracts using this definition are valid with it.
@@ -54,7 +53,7 @@ public abstract class ApiDefinition {
             validators.add(apiDefinitionValidator);
         }
 
-        apiValidated = false;
+        validationResult = Optional.empty();
         contractsAreValid = Optional.empty();
     }
 
@@ -83,17 +82,17 @@ public abstract class ApiDefinition {
 //        }
 //    }
 
-    public ValidationResult validate() {
+    public Optional<ValidationResult> validate() {
         log.info("About to validate ApiDefinition: " + this);
         if (validators == null) {
             initValidators();
         }
 
+        validationResult = Optional.of(new ValidationResult());
         for (ApiDefinitionValidator apiDefinitionValidator : validators) {
-            validationResult.merge(apiDefinitionValidator.validate(this));
+            validationResult.get().merge(apiDefinitionValidator.validate(this));
         }
 
-        apiValidated = true;
         return validationResult;
     }
 
@@ -109,7 +108,7 @@ public abstract class ApiDefinition {
 //    }
 
     public boolean isApiValidated() {
-        return apiValidated;
+        return validationResult.isPresent();
     }
 
     public boolean areContractsValid() {
@@ -120,8 +119,8 @@ public abstract class ApiDefinition {
     }
 
     public boolean isValid() {
-        if (apiValidated) {
-            return validationResult.getProblemList().isEmpty();
+        if (validationResult.isPresent()) {
+            return validationResult.get().getProblemList().isEmpty();
         }
         throw new IllegalStateException("Api definition hasn't been validated");
     }
@@ -134,7 +133,7 @@ public abstract class ApiDefinition {
                 if (apiDefinitionValidator.support(this)) {
                     log.info("Adding definition validator: " + apiDefinitionValidator);
                     validators.add(apiDefinitionValidator);
-                    apiValidated = false;
+                    validationResult = Optional.empty();
                 }
             });
         }

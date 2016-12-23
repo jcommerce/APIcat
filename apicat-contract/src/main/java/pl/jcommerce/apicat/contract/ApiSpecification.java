@@ -28,8 +28,7 @@ public abstract class ApiSpecification {
 
     @Getter
     @Setter
-    private ValidationResult validationResult = new ValidationResult();
-    private boolean apiValidated = false;
+    private Optional<ValidationResult> validationResult = Optional.empty();
 
     /**
      * Api specification name
@@ -98,7 +97,7 @@ public abstract class ApiSpecification {
         if(!validatorAlreadyAdded(apiSpecificationValidator)){
             validators.add(apiSpecificationValidator);
         }
-        apiValidated = false;
+        validationResult = Optional.empty();
     }
 
     private boolean validatorAlreadyAdded(ApiSpecificationValidator apiDefinitionValidator) {
@@ -110,22 +109,22 @@ public abstract class ApiSpecification {
         return false;
     }
 
-    public ValidationResult validate() {
+    public Optional<ValidationResult> validate() {
         log.info("About to validate ApiSpecification: " + this);
         if (validators == null) {
             initValidators();
         }
 
+        validationResult = Optional.of(new ValidationResult());
         for (ApiSpecificationValidator apiSpecificationValidator : validators) {
-            validationResult.merge(apiSpecificationValidator.validate(this));
+            validationResult.get().merge(apiSpecificationValidator.validate(this));
         }
 
-        apiValidated = true;
         return validationResult;
     }
 
     public boolean isApiValidated() {
-        return apiValidated;
+        return validationResult.isPresent();
     }
 
     /**
@@ -141,25 +140,20 @@ public abstract class ApiSpecification {
      * @param apiDefinition second part of contract
      */
     //TODO after ApiContract refactoring
-//    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
+    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
 //        ApiContract temporaryContract = new ApiContract();
 //        temporaryContract.setApiDefinition(apiDefinition);
 //        temporaryContract.setApiSpecification(this);
 //        temporaryContract.validate();
-//    }
+    }
 
     public boolean isValid() {
-        if(apiValidated) {
-            return validationResult.getProblemList().isEmpty();
+        if(validationResult.isPresent()) {
+            return validationResult.get().getProblemList().isEmpty();
         }
         throw new IllegalStateException("Api specification hasn't been validated");
     }
 
-    /**
-     * Init validators
-     *
-     * @return validators
-     */
     private void initValidators() {
         log.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
         validators = new ArrayList<>();
@@ -168,8 +162,7 @@ public abstract class ApiSpecification {
                 if (apiSpecificationValidator.support(this)) {
                     log.info("Adding specification validator: " + apiSpecificationValidator);
                     validators.add(apiSpecificationValidator);
-
-                    apiValidated = false;
+                    validationResult = Optional.empty();
                 }
             });
         }

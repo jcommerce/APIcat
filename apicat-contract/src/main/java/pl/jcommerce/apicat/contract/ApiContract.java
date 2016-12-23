@@ -9,6 +9,7 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 /**
@@ -47,8 +48,7 @@ public abstract class ApiContract {
 
     @Getter
     @Setter
-    private ValidationResult validationResult = new ValidationResult();
-    private boolean apiValidated = false;
+    private Optional<ValidationResult> validationResult = Optional.empty();
 
     /**
      * Add {@code apiContractValidator}
@@ -66,7 +66,7 @@ public abstract class ApiContract {
             validators.add(apiContractValidator);
         }
 
-        apiValidated = false;
+        validationResult = Optional.empty();
     }
 
     private boolean validatorAlreadyAdded(ApiContractValidator apiContractValidator) {
@@ -78,7 +78,7 @@ public abstract class ApiContract {
         return false;
     }
 
-    public ValidationResult validate() {
+    public Optional<ValidationResult> validate() {
         log.info("About to validate ApiContract: " + this);
         if (!apiSpecification.isApiValidated()) {
             apiSpecification.validate();
@@ -90,11 +90,11 @@ public abstract class ApiContract {
             initValidators();
         }
 
+        validationResult = Optional.of(new ValidationResult());
         for (ApiContractValidator apiContractValidator : validators) {
-            validationResult.merge(apiContractValidator.validate(this));
+            validationResult.get().merge(apiContractValidator.validate(this));
         }
 
-        apiValidated = true;
         return validationResult;
     }
 
@@ -106,15 +106,15 @@ public abstract class ApiContract {
                 if (apiContractValidator.support(this)) {
                     log.info("Adding contract validator: " + apiContractValidator);
                     validators.add(apiContractValidator);
-                    apiValidated = false;
+                    validationResult = null;
                 }
             });
         }
     }
 
     public boolean isValid() {
-        if (apiValidated) {
-            return validationResult.getProblemList().isEmpty();
+        if (validationResult.isPresent()) {
+            return validationResult.get().getProblemList().isEmpty();
         }
         throw new IllegalStateException("Api contract hasn't been validated");
     }
