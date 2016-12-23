@@ -2,6 +2,7 @@ import {Component, OnInit} from "@angular/core";
 import {Definition} from "../../model/definition";
 import {DefinitionService} from "../definition.service";
 import {Router, Params, ActivatedRoute} from "@angular/router";
+import {AlertMessageService} from "../../common/alert/alert-message.service";
 
 @Component({
   selector: 'definition-edit',
@@ -15,7 +16,8 @@ export class DefinitionEditComponent implements OnInit {
 
   constructor(private definitionService: DefinitionService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private alertMessageService: AlertMessageService) {
   }
 
   ngOnInit(): void {
@@ -26,6 +28,9 @@ export class DefinitionEditComponent implements OnInit {
 
   onSubmit(definition: Definition): void {
     this.definitionService.update(definition)
-      .subscribe(definition => this.router.navigate(['/definitions', definition.id]));
+      .subscribe(
+        definition => this.router.navigate(['/definitions', definition.id]),
+        error => this.alertMessageService.showErrorMessage("Unable to update definition. Error:" + error)
+      );
   }
 }

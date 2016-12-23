@@ -6,6 +6,7 @@ import {
   ConfirmationModalComponent,
   ModalAction
 } from "../../common/confirmation-modal/confirmation-modal.component";
+import {AlertMessageService} from "../../common/alert/alert-message.service";
 
 @Component({
   selector: 'definition-list',
@@ -16,9 +17,9 @@ import {
 export class DefinitionListComponent implements OnInit {
   definitions: Definition[];
   confirmationModal: ConfirmationModalComponent;
-  errorMessage: string;
 
-  constructor(private definitionService: DefinitionService) {
+  constructor(private definitionService: DefinitionService,
+              private alertMessageService: AlertMessageService) {
   }
 
   ngOnInit(): void {
@@ -29,8 +30,7 @@ export class DefinitionListComponent implements OnInit {
     this.definitionService.getDefinitions()
       .subscribe(
         definitions => this.definitions = definitions,
-        error => this.errorMessage = <any>error
-      );
+        error => this.alertMessageService.showErrorMessage("Unable to fetch definitions. Error:" + error));
   }
 
   delete(definition: Definition): void {
@@ -40,14 +40,21 @@ export class DefinitionListComponent implements OnInit {
   onModalClosed(result: ModalResult): void {
     if (result.action === ModalAction.POSITIVE) {
       let definition = result.topic as Definition;
-
-      this.definitionService
-        .delete(definition.id)
-        .subscribe(() => this.definitions = this.definitions.filter(d => d !== definition));
+      this.deleteDefinition(definition);
     }
+  }
+
+  private deleteDefinition(definition: Definition): void {
+    this.definitionService
+      .delete(definition.id)
+      .subscribe(
+        () => this.definitions = this.definitions.filter(d => d !== definition),
+        error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error:" + error)
+      );
   }
 
   onModalLoaded(modal: ConfirmationModalComponent): void {
     this.confirmationModal = modal;
   }
+
 }
