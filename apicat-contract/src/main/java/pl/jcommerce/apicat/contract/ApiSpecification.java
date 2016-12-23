@@ -67,12 +67,6 @@ public abstract class ApiSpecification {
     @Getter
     @Setter
     private boolean autodiscoverValidators = true;
-    /**
-     * Information if ApiSpecification is valid
-     * This flag is set after successful validation
-     */
-    @Getter
-    private Optional<Boolean> valid = Optional.empty();
 
     /**
      * Retrieves ApiSpecification types from available implementations
