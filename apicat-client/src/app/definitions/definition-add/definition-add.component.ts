@@ -3,6 +3,7 @@ import {Definition} from "../../model/definition";
 import {DefinitionService} from "../definition.service";
 import {Router} from "@angular/router";
 import {AlertMessageService} from "../../common/alert/alert-message.service";
+import {LoadingIndicatorService} from "../../common/loading-indicator/loading-indicator.service";
 
 @Component({
   selector: 'definition-add',
@@ -15,13 +16,19 @@ export class DefinitionAddComponent {
 
   constructor(private definitionService: DefinitionService,
               private router: Router,
-              private alertMessageService: AlertMessageService) {
+              private alertMessageService: AlertMessageService,
+              private loadingService: LoadingIndicatorService) {
   }
 
   onSubmit(definition: Definition): void {
+    this.loadingService.showSpinner();
+
     this.definitionService.create(definition)
       .subscribe(
-        definition => this.router.navigate(['/definitions', definition.id]),
+        definition => {
+          this.router.navigate(['/definitions', definition.id]);
+          this.loadingService.hideSpinner();
+        },
         error => this.alertMessageService.showErrorMessage("Unable to save definition. Error:" + error)
       );
   }

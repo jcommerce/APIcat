@@ -17,6 +17,8 @@ import {DefinitionEditComponent} from "./definitions/definition-edit/definition-
 import {ConfirmationModalComponent} from "./common/confirmation-modal/confirmation-modal.component";
 import {AlertMessageService} from "./common/alert/alert-message.service";
 import {ApiFormatService} from "./common/api-format.service";
+import {LoadingIndicatorComponent} from "./common/loading-indicator/loading-indicator.component";
+import {LoadingIndicatorService} from "./common/loading-indicator/loading-indicator.service";
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import {ApiFormatService} from "./common/api-format.service";
     DefinitionListComponent,
     DefinitionFormComponent,
     DefinitionDetailsComponent,
-    ConfirmationModalComponent
+    ConfirmationModalComponent,
+    LoadingIndicatorComponent
   ],
   imports: [
     AlertModule,
@@ -40,10 +43,11 @@ import {ApiFormatService} from "./common/api-format.service";
     AppRoutingModule,
   ],
   providers: [
+    AlertConfig,
     DefinitionService,
     AlertMessageService,
     ApiFormatService,
-    AlertConfig
+    LoadingIndicatorService
   ],
   bootstrap: [AppComponent]
 })

@@ -17,9 +17,12 @@
   </div>
 </nav>
 <div class="container-fluid">
-  <alert *ngFor="let alert of alerts| async" [type]="alert.type" [dismissible]="true" [dismissOnTimeout]="alert.timeToLive"
+  <alert *ngFor="let alert of alerts| async" [type]="alert.type" [dismissible]="true"
+         [dismissOnTimeout]="alert.timeToLive"
          (close)="closeAlert(alert)">
     {{ alert.content }}
   </alert>
   <router-outlet></router-outlet>
 </div>
+
+<loading-indicator></loading-indicator>

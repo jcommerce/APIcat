@@ -8,6 +8,7 @@ import {
   ModalResult
 } from "../../common/confirmation-modal/confirmation-modal.component";
 import {AlertMessageService} from "../../common/alert/alert-message.service";
+import {LoadingIndicatorService} from "../../common/loading-indicator/loading-indicator.service";
 
 @Component({
   selector: 'definition-details',
@@ -22,13 +23,19 @@ export class DefinitionDetailsComponent implements OnInit {
   constructor(private definitionService: DefinitionService,
               private route: ActivatedRoute,
               private router: Router,
-              private alertMessageService: AlertMessageService) {
+              private alertMessageService: AlertMessageService,
+              private loadingService: LoadingIndicatorService) {
   }
 
   ngOnInit(): void {
+    this.loadingService.showSpinner();
+
     this.route.params
       .switchMap((params: Params) => this.definitionService.getDefinition(+params['id']))
-      .subscribe(definition => this.definition = definition);
+      .subscribe(definition => {
+        this.loadingService.hideSpinner();
+        this.definition = definition;
+      });
   }
 
   delete(definition: Definition): void {
@@ -43,10 +50,15 @@ export class DefinitionDetailsComponent implements OnInit {
   }
 
   private deleteDefinition(definition: Definition): void {
+    this.loadingService.showSpinner();
+
     this.definitionService
       .delete(definition.id)
       .subscribe(
-        () => this.router.navigate(['/definitions']),
+        () => {
+          this.router.navigate(['/definitions']);
+          this.loadingService.hideSpinner()
+        },
         error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error:" + error)
       );
   }
