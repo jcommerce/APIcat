@@ -32,7 +32,7 @@ export class DefinitionDetailsComponent implements OnInit {
 
     this.route.params
       .switchMap((params: Params) =>
-        this.definitionService.getDefinition(+params['id']).finally(() => this.loadingService.hideSpinner())
+        this.definitionService.getOne(+params['id']).finally(() => this.loadingService.hideSpinner())
       )
       .subscribe(
         definition => this.definition = definition,

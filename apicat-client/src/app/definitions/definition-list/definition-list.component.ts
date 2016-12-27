@@ -30,7 +30,7 @@ export class DefinitionListComponent implements OnInit {
 
   getDefinitions(): void {
     this.loadingService.showSpinner();
-    this.definitionService.getDefinitions()
+    this.definitionService.getAll()
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
         definitions => this.definitions = definitions,

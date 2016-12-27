@@ -1,17 +1,17 @@
 import {Injectable} from "@angular/core";
 import {Http} from "@angular/http";
 import "rxjs/add/operator/toPromise";
-import {Definition} from "../model/definition";
+import {Specification} from "../model/specification";
 import {CrudService} from "../common/crud.service";
 
 @Injectable()
-export class DefinitionService extends CrudService<Definition> {
+export class SpecificationService extends CrudService<Specification> {
 
   constructor(http: Http) {
     super(http);
   }
 
   protected getBaseUrl(): string {
-    return '/api/definitions';
+    return '/api/specifications';
   }
 }
