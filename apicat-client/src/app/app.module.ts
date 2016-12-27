@@ -19,12 +19,13 @@ import {AlertMessageService} from "./common/alert/alert-message.service";
 import {ApiFormatService} from "./common/api-format.service";
 import {LoadingIndicatorComponent} from "./common/loading-indicator/loading-indicator.component";
 import {LoadingIndicatorService} from "./common/loading-indicator/loading-indicator.service";
+import {DashboardComponent} from "./dashboard/dashboard.component";
 
 @NgModule({
   declarations: [
     //bootstrap
     CollapseDirective,
-    //app declarations
+    //app
     AppComponent,
     DefinitionAddComponent,
     DefinitionEditComponent,
@@ -32,7 +33,8 @@ import {LoadingIndicatorService} from "./common/loading-indicator/loading-indica
     DefinitionFormComponent,
     DefinitionDetailsComponent,
     ConfirmationModalComponent,
-    LoadingIndicatorComponent
+    LoadingIndicatorComponent,
+    DashboardComponent
   ],
   imports: [
     AlertModule,
@@ -43,7 +45,9 @@ import {LoadingIndicatorService} from "./common/loading-indicator/loading-indica
     AppRoutingModule,
   ],
   providers: [
+    //bootstrap
     AlertConfig,
+    //app
     DefinitionService,
     AlertMessageService,
     ApiFormatService,

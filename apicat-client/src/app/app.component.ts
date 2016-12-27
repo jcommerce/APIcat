@@ -10,7 +10,6 @@ import {Router, NavigationEnd} from "@angular/router";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public title = 'Apicat';
   public isNavbarCollapsed: boolean = true;
   alerts: Observable<AlertMessage[]>;
 
