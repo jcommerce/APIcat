@@ -2,7 +2,6 @@ import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {Definition} from "../../model/definition";
 import {ApiFormatService} from "../../common/api-format.service";
 import {Observable} from "rxjs";
-import {ApiFormat} from "../../model/api-format";
 
 @Component({
   selector: 'definition-form',
@@ -15,7 +14,7 @@ export class DefinitionFormComponent implements OnInit {
   @Input() definition: Definition;
   @Output('submitDefinition') submitEmitter = new EventEmitter<Definition>();
 
-  formats: Observable<ApiFormat[]>;
+  formats: Observable<string[]>;
 
   constructor(private apiFormatService: ApiFormatService) {
   }

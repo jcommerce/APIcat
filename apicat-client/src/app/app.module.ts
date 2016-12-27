@@ -16,7 +16,6 @@ import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {DefinitionEditComponent} from "./definitions/definition-edit/definition-edit.component";
 import {ConfirmationModalComponent} from "./common/confirmation-modal/confirmation-modal.component";
 import {AlertMessageService} from "./common/alert/alert-message.service";
-import {InMemoryApiFormatService} from "./common/in-memory-api-format.service";
 import {ApiFormatService} from "./common/api-format.service";
 
 @NgModule({
