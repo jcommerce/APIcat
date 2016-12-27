@@ -24,11 +24,9 @@ export class DefinitionAddComponent {
     this.loadingService.showSpinner();
 
     this.definitionService.create(definition)
+      .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        definition => {
-          this.router.navigate(['/definitions', definition.id]);
-          this.loadingService.hideSpinner();
-        },
+        definition => this.router.navigate(['/definitions', definition.id]),
         error => this.alertMessageService.showErrorMessage("Unable to save definition. Error:" + error)
       );
   }

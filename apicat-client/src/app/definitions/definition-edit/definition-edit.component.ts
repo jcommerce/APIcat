@@ -24,24 +24,25 @@ export class DefinitionEditComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingService.showSpinner();
+
     this.route.params
-      .switchMap((params: Params) => this.definitionService.getDefinition(+params['id']))
-      .subscribe(definition => {
-        this.definition = definition;
-        this.loadingService.hideSpinner()
-      });
+      .switchMap((params: Params) =>
+        this.definitionService.getDefinition(+params['id']).finally(() => this.loadingService.hideSpinner())
+      )
+      .subscribe(
+        definition => this.definition = definition,
+        error => this.alertMessageService.showErrorMessage("Unable to load definition. Error: " + error)
+      );
   }
 
   onSubmit(definition: Definition): void {
     this.loadingService.showSpinner();
 
     this.definitionService.update(definition)
+      .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        definition => {
-          this.loadingService.hideSpinner();
-          this.router.navigate(['/definitions', definition.id]);
-        },
-        error => this.alertMessageService.showErrorMessage("Unable to update definition. Error:" + error)
+        definition => this.router.navigate(['/definitions', definition.id]),
+        error => this.alertMessageService.showErrorMessage("Unable to update definition. Error: " + error)
       );
   }
 }

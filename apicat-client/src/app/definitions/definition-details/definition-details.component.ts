@@ -31,11 +31,13 @@ export class DefinitionDetailsComponent implements OnInit {
     this.loadingService.showSpinner();
 
     this.route.params
-      .switchMap((params: Params) => this.definitionService.getDefinition(+params['id']))
-      .subscribe(definition => {
-        this.loadingService.hideSpinner();
-        this.definition = definition;
-      });
+      .switchMap((params: Params) =>
+        this.definitionService.getDefinition(+params['id']).finally(() => this.loadingService.hideSpinner())
+      )
+      .subscribe(
+        definition => this.definition = definition,
+        error => this.alertMessageService.showErrorMessage("Unable to load definition. Error: " + error)
+      );
   }
 
   delete(definition: Definition): void {
@@ -54,12 +56,10 @@ export class DefinitionDetailsComponent implements OnInit {
 
     this.definitionService
       .delete(definition.id)
+      .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        () => {
-          this.router.navigate(['/definitions']);
-          this.loadingService.hideSpinner()
-        },
-        error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error:" + error)
+        () => this.router.navigate(['/definitions']),
+        error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error: " + error)
       );
   }
 

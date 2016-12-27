@@ -31,11 +31,9 @@ export class DefinitionListComponent implements OnInit {
   getDefinitions(): void {
     this.loadingService.showSpinner();
     this.definitionService.getDefinitions()
+      .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        definitions => {
-          this.definitions = definitions;
-          this.loadingService.hideSpinner();
-        },
+        definitions => this.definitions = definitions,
         error => this.alertMessageService.showErrorMessage("Unable to fetch definitions. Error:" + error));
   }
 
@@ -55,11 +53,9 @@ export class DefinitionListComponent implements OnInit {
 
     this.definitionService
       .delete(definition.id)
+      .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        () => {
-          this.definitions = this.definitions.filter(d => d !== definition);
-          this.loadingService.hideSpinner();
-        },
+        () => this.definitions = this.definitions.filter(d => d !== definition),
         error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error:" + error)
       );
   }
