@@ -1,0 +1,13 @@
+<div class="page-header">
+  <h1>New specification</h1>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <a [routerLink]="['/specifications']" class="btn btn-default">Go to list</a>
+  </div>
+</div>
+
+<div *ngIf="specification" class="definition-form">
+  <specification-form [specification]="specification" (submitSpecification)="onSubmit($event)"></specification-form>
+</div>

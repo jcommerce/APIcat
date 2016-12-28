@@ -1,0 +1,40 @@
+<div class="page-header">
+  <h1>Specification list</h1>
+</div>
+<div class="panel panel-default">
+  <div class="panel-body">
+    <a routerLink="/specifications/add" class="btn btn-success">Add</a>
+  </div>
+</div>
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Author</th>
+    <th>Version</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let specification of specifications">
+    <td>{{specification.id}}</td>
+    <td>{{specification.name}}</td>
+    <td>{{specification.author}}</td>
+    <td>{{specification.version}}</td>
+    <td>
+      <a class="btn btn-default" [routerLink]="['/specifications', specification.id]">Details</a>
+      <a class="btn btn-primary" [routerLink]="['/specifications', specification.id, 'edit']">Edit</a>
+      <button class="btn btn-danger" (click)="delete(specification)">Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<confirmation-modal id="delete-confirmation"
+                    [cancel-label]="'No'"
+                    [positive-label]="'Yes'"
+                    (loaded)="onModalLoaded($event)"
+                    (closed)="onModalClosed($event)">
+  Are you sure you want to delete selected specification?
+</confirmation-modal>

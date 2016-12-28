@@ -5,6 +5,8 @@ import {DefinitionDetailsComponent} from "./definitions/definition-details/defin
 import {DefinitionAddComponent} from "./definitions/definition-add/definition-add.component";
 import {DefinitionEditComponent} from "./definitions/definition-edit/definition-edit.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {SpecificationListComponent} from "./specifications/specification-list/specification-list.component";
+import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
@@ -13,6 +15,8 @@ const routes: Routes = [
   {path: 'definitions/add', component: DefinitionAddComponent},
   {path: 'definitions/:id/edit', component: DefinitionEditComponent},
   {path: 'definitions/:id', component: DefinitionDetailsComponent},
+  {path: 'specifications', component: SpecificationListComponent},
+  {path: 'specifications/add', component: SpecificationAddComponent},
 ];
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -20,6 +20,10 @@ import {ApiFormatService} from "./common/api-format.service";
 import {LoadingIndicatorComponent} from "./common/loading-indicator/loading-indicator.component";
 import {LoadingIndicatorService} from "./common/loading-indicator/loading-indicator.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
+import {SpecificationService} from "./specifications/specification.service";
+import {SpecificationListComponent} from "./specifications/specification-list/specification-list.component";
+import {SpecificationFormComponent} from "./specifications/specification-form/specification-form.component";
+import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
 
 @NgModule({
   declarations: [
@@ -32,6 +36,9 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
     DefinitionListComponent,
     DefinitionFormComponent,
     DefinitionDetailsComponent,
+    SpecificationListComponent,
+    SpecificationFormComponent,
+    SpecificationAddComponent,
     ConfirmationModalComponent,
     LoadingIndicatorComponent,
     DashboardComponent
@@ -49,6 +56,7 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
     AlertConfig,
     //app
     DefinitionService,
+    SpecificationService,
     AlertMessageService,
     ApiFormatService,
     LoadingIndicatorService
