@@ -24,6 +24,8 @@ import {SpecificationService} from "./specifications/specification.service";
 import {SpecificationListComponent} from "./specifications/specification-list/specification-list.component";
 import {SpecificationFormComponent} from "./specifications/specification-form/specification-form.component";
 import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
+import {SpecificationEditComponent} from "./specifications/specification-edit/specification-edit.component";
+import {SpecificationDetailsComponent} from "./specifications/specification-details/specification-details.component";
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import {SpecificationAddComponent} from "./specifications/specification-add/spec
     SpecificationListComponent,
     SpecificationFormComponent,
     SpecificationAddComponent,
+    SpecificationEditComponent,
+    SpecificationDetailsComponent,
     ConfirmationModalComponent,
     LoadingIndicatorComponent,
     DashboardComponent

@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h1>Specification details</h1>
+</div>
+
+<div *ngIf="specification">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <a [routerLink]="['/specifications']" class="btn btn-default">Go to list</a>
+      <a [routerLink]="['/specifications', specification.id, 'edit']" class="btn btn-primary">Edit</a>
+      <button class="btn btn-danger" (click)="delete(specification)">Delete</button>
+    </div>
+  </div>
+
+  <table class="table">
+    <tr>
+      <td>id</td>
+      <td>{{specification.id}}</td>
+    </tr>
+    <tr>
+      <td>name</td>
+      <td>{{specification.name}}</td>
+    </tr>
+    <tr>
+      <td>version</td>
+      <td>{{specification.version}}</td>
+    </tr>
+    <tr>
+      <td>author</td>
+      <td>{{specification.author}}</td>
+    </tr>
+    <tr>
+      <td>format</td>
+      <td>{{specification.format}}</td>
+    </tr>
+    <tr>
+      <td>content</td>
+      <td>
+        <textarea readonly [ngModel]="specification.content" class="form-control" rows="15" id="content"></textarea>
+      </td>
+    </tr>
+  </table>
+
+  <confirmation-modal id="delete-confirmation"
+                      [cancel-label]="'No'"
+                      [positive-label]="'Yes'"
+                      (loaded)="onModalLoaded($event)"
+                      (closed)="onModalClosed($event)">
+    Are you sure you want to delete specification?
+  </confirmation-modal>
+</div>
