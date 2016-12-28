@@ -1,4 +1,5 @@
 <form *ngIf="specification" [formGroup]="specificationForm" (submit)="onSubmit()">
+
   <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['name'].valid && specificationForm.controls['name'].touched}">
     <label for="name">Name:</label>
     <input type="text" class="form-control" id="name" name="name" [(ngModel)]="specification.name"
@@ -6,6 +7,7 @@
     <div *ngIf="specificationForm.controls['name'].hasError('required') && specificationForm.controls['name'].touched"
          class="alert alert-danger">You must include a name.</div>
   </div>
+
   <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['author'].valid && specificationForm.controls['author'].touched}">
     <label for="author">Author:</label>
     <input type="text" class="form-control" id="author" [(ngModel)]="specification.author" name="author"
@@ -13,6 +15,7 @@
     <div *ngIf="specificationForm.controls['author'].hasError('required') && specificationForm.controls['author'].touched"
          class="alert alert-danger">You must include an author.</div>
   </div>
+
   <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['version'].valid && specificationForm.controls['version'].touched}">
     <label for="author">Version:</label>
     <input type="text" class="form-control" id="version" [(ngModel)]="specification.version" name="version"
@@ -20,6 +23,7 @@
     <div *ngIf="specificationForm.controls['version'].hasError('required') && specificationForm.controls['version'].touched"
          class="alert alert-danger">You must include a version.</div>
   </div>
+
   <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['format'].valid && specificationForm.controls['format'].touched}">
     <label for="format">Format:</label>
     <select class="form-control" id="format" [(ngModel)]="specification.format" name="format"
@@ -29,6 +33,17 @@
     <div *ngIf="specificationForm.controls['format'].hasError('required') && specificationForm.controls['format'].touched"
          class="alert alert-danger">You must select api format.</div>
   </div>
+
+  <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['stage'].valid && specificationForm.controls['stage'].touched}">
+    <label for="format">Stage:</label>
+    <select class="form-control" id="stage" [(ngModel)]="specification.stage" name="stage"
+            [formControl]="specificationForm.controls['stage']">s
+      <option *ngFor="let stage of stages | async" [value]="stage">{{stage}}</option>
+    </select>
+    <div *ngIf="specificationForm.controls['stage'].hasError('required') && specificationForm.controls['stage'].touched"
+         class="alert alert-danger">You must select api stage.</div>
+  </div>
+
   <div class="form-group" [ngClass]="{'has-error':!specificationForm.controls['content'].valid && specificationForm.controls['content'].touched}">
     <label for="content">Content:</label>
     <textarea class="form-control" rows="10" id="content" [(ngModel)]="specification.content" name="content"
@@ -36,5 +51,7 @@
     <div *ngIf="specificationForm.controls['content'].hasError('required') && specificationForm.controls['content'].touched"
          class="alert alert-danger">You must include api content.</div>
   </div>
+
   <button type="submit" class="btn btn-success" [disabled]="!specificationForm.valid">Submit</button>
+
 </form>

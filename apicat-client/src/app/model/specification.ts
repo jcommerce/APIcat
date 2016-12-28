@@ -1,4 +1,3 @@
-import {SpecificationStage} from "./specification-stage";
 import {CrudEntity} from "./crud-entity";
 
 export class Specification extends CrudEntity{
@@ -7,5 +6,5 @@ export class Specification extends CrudEntity{
   author: string;
   format: string;
   content: string;
-  stage: SpecificationStage;
+  stage: string;
 }

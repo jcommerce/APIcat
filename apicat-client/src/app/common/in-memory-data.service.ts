@@ -8,6 +8,11 @@ export class InMemoryDataService implements InMemoryDbService {
       "RAML"
     ];
 
+    let specificationStages = [
+      "DRAFT",
+      "RELEASED"
+    ];
+
     let definitions = [
       {
         id: 1,
@@ -34,6 +39,7 @@ export class InMemoryDataService implements InMemoryDbService {
         version: '1.1',
         author: 'John Doe',
         format: formats[0],
+        stage: specificationStages[0],
         content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
       },
       {
@@ -42,6 +48,7 @@ export class InMemoryDataService implements InMemoryDbService {
         version: '2016.1.1',
         author: 'Joe Doe',
         format: formats[0],
+        stage: specificationStages[1],
         content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
       }
     ];
@@ -49,7 +56,8 @@ export class InMemoryDataService implements InMemoryDbService {
     return {
       definitions: definitions,
       formats: formats,
-      specifications: specifications
+      specifications: specifications,
+      specificationStages: specificationStages
     };
   }
 }

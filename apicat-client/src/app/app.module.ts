@@ -26,6 +26,7 @@ import {SpecificationFormComponent} from "./specifications/specification-form/sp
 import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
 import {SpecificationEditComponent} from "./specifications/specification-edit/specification-edit.component";
 import {SpecificationDetailsComponent} from "./specifications/specification-details/specification-details.component";
+import {ApiStagesService} from "./common/api-stages.service";
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import {SpecificationDetailsComponent} from "./specifications/specification-deta
     SpecificationService,
     AlertMessageService,
     ApiFormatService,
-    LoadingIndicatorService
+    LoadingIndicatorService,
+    ApiStagesService
   ],
   bootstrap: [AppComponent]
 })
