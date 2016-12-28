@@ -1,25 +1,40 @@
-<form *ngIf="definition" (submit)="onSubmit()">
-  <div class="form-group">
+<form *ngIf="definition" [formGroup]="definitionForm" (submit)="onSubmit()">
+  <div class="form-group" [ngClass]="{'has-error':!definitionForm.controls['name'].valid && definitionForm.controls['name'].touched}">
     <label for="name">Name:</label>
-    <input type="text" class="form-control" id="name" [(ngModel)]="definition.name" name="name">
+    <input type="text" class="form-control" id="name" name="name" [(ngModel)]="definition.name"
+           [formControl]="definitionForm.controls['name']">
+    <div *ngIf="definitionForm.controls['name'].hasError('required') && definitionForm.controls['name'].touched"
+         class="alert alert-danger">You must include a name.</div>
   </div>
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'has-error':!definitionForm.controls['author'].valid && definitionForm.controls['author'].touched}">
     <label for="author">Author:</label>
-    <input type="text" class="form-control" id="author" [(ngModel)]="definition.author" name="author">
+    <input type="text" class="form-control" id="author" [(ngModel)]="definition.author" name="author"
+           [formControl]="definitionForm.controls['author']">
+    <div *ngIf="definitionForm.controls['author'].hasError('required') && definitionForm.controls['author'].touched"
+         class="alert alert-danger">You must include an author.</div>
   </div>
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'has-error':!definitionForm.controls['version'].valid && definitionForm.controls['version'].touched}">
     <label for="author">Version:</label>
-    <input type="text" class="form-control" id="version" [(ngModel)]="definition.version" name="version">
+    <input type="text" class="form-control" id="version" [(ngModel)]="definition.version" name="version"
+           [formControl]="definitionForm.controls['version']">
+    <div *ngIf="definitionForm.controls['version'].hasError('required') && definitionForm.controls['version'].touched"
+         class="alert alert-danger">You must include a version.</div>
   </div>
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'has-error':!definitionForm.controls['format'].valid && definitionForm.controls['format'].touched}">
     <label for="format">Format:</label>
-    <select class="form-control" id="format" [(ngModel)]="definition.format" name="format" required>
+    <select class="form-control" id="format" [(ngModel)]="definition.format" name="format"
+            [formControl]="definitionForm.controls['format']">
       <option *ngFor="let format of formats | async" [value]="format">{{format}}</option>
     </select>
+    <div *ngIf="definitionForm.controls['format'].hasError('required') && definitionForm.controls['format'].touched"
+         class="alert alert-danger">You must select api format.</div>
   </div>
-  <div class="form-group">
+  <div class="form-group" [ngClass]="{'has-error':!definitionForm.controls['content'].valid && definitionForm.controls['content'].touched}">
     <label for="content">Content:</label>
-    <textarea class="form-control" rows="10" id="content" [(ngModel)]="definition.content" name="content"></textarea>
+    <textarea class="form-control" rows="10" id="content" [(ngModel)]="definition.content" name="content"
+              [formControl]="definitionForm.controls['content']"></textarea>
+    <div *ngIf="definitionForm.controls['content'].hasError('required') && definitionForm.controls['content'].touched"
+         class="alert alert-danger">You must include api content.</div>
   </div>
-  <button type="submit" class="btn btn-success">Submit</button>
+  <button type="submit" class="btn btn-success" [disabled]="!definitionForm.valid">Submit</button>
 </form>
