@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {Router} from "@angular/router";
-import {AlertMessageService} from "../../common/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../common/loading-indicator/loading-indicator.service";
+import {AlertMessageService} from "../../shared/alert/alert-message.service";
+import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
 import {Specification} from "../../model/specification";
 import {SpecificationService} from "../specification.service";
 

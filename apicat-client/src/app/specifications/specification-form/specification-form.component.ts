@@ -1,9 +1,9 @@
 import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
-import {ApiFormatService} from "../../common/api-format.service";
+import {ApiFormatService} from "../../shared/api-format.service";
 import {Observable} from "rxjs";
 import {Specification} from "../../model/specification";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ApiStagesService} from "../../common/api-stages.service";
+import {ApiStagesService} from "../../shared/api-stages.service";
 
 @Component({
   selector: 'specification-form',

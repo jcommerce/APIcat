@@ -1,8 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {ValidationService} from "./validation.service";
-import {LoadingIndicatorService} from "../common/loading-indicator/loading-indicator.service";
+import {LoadingIndicatorService} from "../shared/loading-indicator/loading-indicator.service";
 import {Observable} from "rxjs";
-import {ApiFormatService} from "../common/api-format.service";
+import {ApiFormatService} from "../shared/api-format.service";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ValidationResult} from "../model/validation-result";
 

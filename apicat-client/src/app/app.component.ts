@@ -1,7 +1,7 @@
 import {Component, ViewContainerRef, OnInit} from "@angular/core";
-import {AlertMessageService} from "./common/alert/alert-message.service";
+import {AlertMessageService} from "./shared/alert/alert-message.service";
 import {Observable} from "rxjs";
-import {AlertMessage} from "./common/alert/alert-message";
+import {AlertMessage} from "./shared/alert/alert-message";
 import {Router, NavigationEnd} from "@angular/router";
 
 @Component({

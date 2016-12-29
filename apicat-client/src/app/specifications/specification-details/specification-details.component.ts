@@ -4,9 +4,9 @@ import {
   ConfirmationModalComponent,
   ModalAction,
   ModalResult
-} from "../../common/confirmation-modal/confirmation-modal.component";
-import {AlertMessageService} from "../../common/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../common/loading-indicator/loading-indicator.service";
+} from "../../shared/confirmation-modal/confirmation-modal.component";
+import {AlertMessageService} from "../../shared/alert/alert-message.service";
+import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
 import {Specification} from "../../model/specification";
 import {SpecificationService} from "../specification.service";
 

@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {Definition} from "../../model/definition";
-import {ApiFormatService} from "../../common/api-format.service";
+import {ApiFormatService} from "../../shared/api-format.service";
 import {Observable} from "rxjs";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 

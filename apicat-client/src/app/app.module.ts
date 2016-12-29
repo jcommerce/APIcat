@@ -11,14 +11,14 @@ import {DefinitionDetailsComponent} from "./definitions/definition-details/defin
 import {DefinitionFormComponent} from "./definitions/definition-form/definition-form.component";
 import {CollapseDirective, AlertModule, AlertConfig} from "ng2-bootstrap";
 import {DefinitionAddComponent} from "./definitions/definition-add/definition-add.component";
-import {InMemoryDataService} from "./common/in-memory-data.service";
+import {InMemoryDataService} from "./shared/in-memory-data.service";
 import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {DefinitionEditComponent} from "./definitions/definition-edit/definition-edit.component";
-import {ConfirmationModalComponent} from "./common/confirmation-modal/confirmation-modal.component";
-import {AlertMessageService} from "./common/alert/alert-message.service";
-import {ApiFormatService} from "./common/api-format.service";
-import {LoadingIndicatorComponent} from "./common/loading-indicator/loading-indicator.component";
-import {LoadingIndicatorService} from "./common/loading-indicator/loading-indicator.service";
+import {ConfirmationModalComponent} from "./shared/confirmation-modal/confirmation-modal.component";
+import {AlertMessageService} from "./shared/alert/alert-message.service";
+import {ApiFormatService} from "./shared/api-format.service";
+import {LoadingIndicatorComponent} from "./shared/loading-indicator/loading-indicator.component";
+import {LoadingIndicatorService} from "./shared/loading-indicator/loading-indicator.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {SpecificationService} from "./specifications/specification.service";
 import {SpecificationListComponent} from "./specifications/specification-list/specification-list.component";
@@ -26,7 +26,7 @@ import {SpecificationFormComponent} from "./specifications/specification-form/sp
 import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
 import {SpecificationEditComponent} from "./specifications/specification-edit/specification-edit.component";
 import {SpecificationDetailsComponent} from "./specifications/specification-details/specification-details.component";
-import {ApiStagesService} from "./common/api-stages.service";
+import {ApiStagesService} from "./shared/api-stages.service";
 import {ValidationComponent} from "./validation/validation.component";
 import {ValidationService} from "./validation/validation.service";
 
