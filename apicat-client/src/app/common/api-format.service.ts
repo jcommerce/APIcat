@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, BehaviorSubject} from "rxjs";
 import {Http} from "@angular/http";
+import {AlertMessageService} from "./alert/alert-message.service";
 
 @Injectable()
 export class ApiFormatService {
@@ -12,7 +13,7 @@ export class ApiFormatService {
 
   private baseUrl = '/api/formats';
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private alertMessageService: AlertMessageService) {
     this.dataStore = {formats: []};
     this._formats = <BehaviorSubject<string[]>>new BehaviorSubject([]);
     this.formats = this._formats.asObservable();
@@ -28,8 +29,11 @@ export class ApiFormatService {
           this.dataStore.formats = data;
           this._formats.next(Object.assign({}, this.dataStore).formats);
         },
-        error => console.error('Could not load api formats.')
+        error => this.handleError()
       );
   }
 
+  private handleError(): void {
+    this.alertMessageService.showErrorMessage("Unable to load api formats");
+  }
 }

@@ -1,6 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Observable, BehaviorSubject} from "rxjs";
 import {Http} from "@angular/http";
+import {AlertMessageService} from "./alert/alert-message.service";
 
 @Injectable()
 export class ApiStagesService {
@@ -12,7 +13,7 @@ export class ApiStagesService {
 
   private baseUrl = '/api/specificationStages';
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private alertMessageService: AlertMessageService) {
     this.dataStore = {stages: []};
     this._stages = <BehaviorSubject<string[]>>new BehaviorSubject([]);
     this.stages = this._stages.asObservable();
@@ -28,8 +29,12 @@ export class ApiStagesService {
           this.dataStore.stages = data;
           this._stages.next(Object.assign({}, this.dataStore).stages);
         },
-        error => console.error('Could not load api stages.')
+        error => this.handleError()
       );
+  }
+
+  private handleError(): void {
+    this.alertMessageService.showErrorMessage("Unable to load api specification stages");
   }
 
 }
