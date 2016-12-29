@@ -1,0 +1,50 @@
+<div class="page-header">
+  <h1>Validate definition</h1>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <form [formGroup]="form" (submit)="validate()">
+      <div class="form-group"
+           [ngClass]="{'has-error':!form.controls['format'].valid && form.controls['format'].touched}">
+        <label for="format">Format:</label>
+        <select class="form-control" id="format" [(ngModel)]="selectedFormat" name="format"
+                [formControl]="form.controls['format']">
+          <option *ngFor="let format of formats | async" [value]="format">{{format}}</option>
+        </select>
+        <div *ngIf="form.controls['format'].hasError('required') && form.controls['format'].touched"
+             class="alert alert-danger">You must select api format.
+        </div>
+      </div>
+
+      <div class="form-group"
+           [ngClass]="{'has-error':!form.controls['content'].valid && form.controls['content'].touched}">
+        <label for="content">Content:</label>
+        <textarea class="form-control" rows="10" id="content" [(ngModel)]="content" name="content"
+                  [formControl]="form.controls['content']"></textarea>
+        <div *ngIf="form.controls['content'].hasError('required') && form.controls['content'].touched"
+             class="alert alert-danger">You must include api content.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="!form.valid">Validate</button>
+    </form>
+
+  </div>
+  <div class="col-md-6">
+    <div class="alert" [ngClass]="validationResult.valid == true ? 'alert-success' : 'alert-danger'"
+         *ngIf="validationResult">
+      Your definition is {{validationResult.valid ? "valid" : "invalid"}}
+    </div>
+
+    <div class="panel panel-default" *ngIf="validationResult && validationResult.remarks.length > 0">
+      <div class="panel-heading">Remarks</div>
+      <ul class="list-group">
+        <li class="list-group-item" *ngFor="let remark of validationResult.remarks">{{remark}}</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+

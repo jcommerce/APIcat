@@ -27,6 +27,8 @@ import {SpecificationAddComponent} from "./specifications/specification-add/spec
 import {SpecificationEditComponent} from "./specifications/specification-edit/specification-edit.component";
 import {SpecificationDetailsComponent} from "./specifications/specification-details/specification-details.component";
 import {ApiStagesService} from "./common/api-stages.service";
+import {ValidationComponent} from "./validation/validation.component";
+import {ValidationService} from "./validation/validation.service";
 
 @NgModule({
   declarations: [
@@ -46,7 +48,8 @@ import {ApiStagesService} from "./common/api-stages.service";
     SpecificationDetailsComponent,
     ConfirmationModalComponent,
     LoadingIndicatorComponent,
-    DashboardComponent
+    DashboardComponent,
+    ValidationComponent
   ],
   imports: [
     AlertModule,
@@ -66,7 +69,8 @@ import {ApiStagesService} from "./common/api-stages.service";
     AlertMessageService,
     ApiFormatService,
     LoadingIndicatorService,
-    ApiStagesService
+    ApiStagesService,
+    ValidationService
   ],
   bootstrap: [AppComponent]
 })

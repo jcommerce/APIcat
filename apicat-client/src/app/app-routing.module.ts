@@ -9,10 +9,12 @@ import {SpecificationListComponent} from "./specifications/specification-list/sp
 import {SpecificationAddComponent} from "./specifications/specification-add/specification-add.component";
 import {SpecificationEditComponent} from "./specifications/specification-edit/specification-edit.component";
 import {SpecificationDetailsComponent} from "./specifications/specification-details/specification-details.component";
+import {ValidationComponent} from "./validation/validation.component";
 
 const routes: Routes = [
   {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
   {path: 'dashboard', component: DashboardComponent},
+  {path: 'validate', component: ValidationComponent},
   {path: 'definitions', component: DefinitionListComponent},
   {path: 'definitions/add', component: DefinitionAddComponent},
   {path: 'definitions/:id/edit', component: DefinitionEditComponent},
