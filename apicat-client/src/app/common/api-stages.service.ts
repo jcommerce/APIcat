@@ -11,7 +11,7 @@ export class ApiStagesService {
     stages: string[]
   };
 
-  private baseUrl = '/api/specificationStages';
+  private readonly baseUrl = '/api/specificationStages';
 
   constructor(private http: Http, private alertMessageService: AlertMessageService) {
     this.dataStore = {stages: []};

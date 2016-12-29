@@ -11,7 +11,7 @@ export class ApiFormatService {
     formats: string[]
   };
 
-  private baseUrl = '/api/formats';
+  private readonly baseUrl = '/api/formats';
 
   constructor(private http: Http, private alertMessageService: AlertMessageService) {
     this.dataStore = {formats: []};
