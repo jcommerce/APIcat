@@ -44,11 +44,11 @@
     </tr>
   </table>
 
-  <confirmation-modal id="delete-confirmation"
-                      [cancel-label]="'No'"
-                      [positive-label]="'Yes'"
+  <app-confirmation-modal id="delete-confirmation"
+                      [cancelLabel]="'No'"
+                      [positiveLabel]="'Yes'"
                       (loaded)="onModalLoaded($event)"
                       (closed)="onModalClosed($event)">
     Are you sure you want to delete specification?
-  </confirmation-modal>
+  </app-confirmation-modal>
 </div>

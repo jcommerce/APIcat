@@ -1,17 +1,17 @@
-import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {
   ConfirmationModalComponent,
   ModalAction,
   ModalResult
-} from "../../shared/confirmation-modal/confirmation-modal.component";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
-import {Specification} from "../../model/specification";
-import {SpecificationService} from "../specification.service";
+} from '../../shared/confirmation-modal/confirmation-modal.component';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
+import {Specification} from '../../model/specification';
+import {SpecificationService} from '../specification.service';
 
 @Component({
-  selector: 'specification-details',
+  selector: 'app-specification-details',
   templateUrl: './specification-details.component.html',
   styleUrls: ['./specification-details.component.scss'],
 
@@ -36,7 +36,7 @@ export class SpecificationDetailsComponent implements OnInit {
       )
       .subscribe(
         specification => this.specification = specification,
-        error => this.alertMessageService.showErrorMessage("Unable to load specification. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to load specification. Error: ' + error)
       );
   }
 
@@ -59,7 +59,7 @@ export class SpecificationDetailsComponent implements OnInit {
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
         () => this.router.navigate(['/specifications']),
-        error => this.alertMessageService.showErrorMessage("Unable to delete specification. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to delete specification. Error: ' + error)
       );
   }
 

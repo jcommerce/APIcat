@@ -1,11 +1,11 @@
-import {Component, ViewContainerRef, OnInit} from "@angular/core";
-import {AlertMessageService} from "./shared/alert/alert-message.service";
-import {Observable} from "rxjs";
-import {AlertMessage} from "./shared/alert/alert-message";
-import {Router, NavigationEnd} from "@angular/router";
+import {Component, ViewContainerRef, OnInit} from '@angular/core';
+import {AlertMessageService} from './shared/alert/alert-message.service';
+import {Observable} from 'rxjs';
+import {AlertMessage} from './shared/alert/alert-message';
+import {Router, NavigationEnd} from '@angular/router';
 
 @Component({
-  selector: 'my-app',
+  selector: 'app-component',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

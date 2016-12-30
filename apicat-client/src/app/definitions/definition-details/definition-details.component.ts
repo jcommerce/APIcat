@@ -1,17 +1,17 @@
-import {Component, OnInit} from "@angular/core";
-import {Definition} from "../../model/definition";
-import {DefinitionService} from "../definition.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {Definition} from '../../model/definition';
+import {DefinitionService} from '../definition.service';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {
   ConfirmationModalComponent,
   ModalAction,
   ModalResult
-} from "../../shared/confirmation-modal/confirmation-modal.component";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
+} from '../../shared/confirmation-modal/confirmation-modal.component';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
 
 @Component({
-  selector: 'definition-details',
+  selector: 'app-definition-details',
   templateUrl: './definition-details.component.html',
   styleUrls: ['./definition-details.component.scss'],
 
@@ -36,7 +36,7 @@ export class DefinitionDetailsComponent implements OnInit {
       )
       .subscribe(
         definition => this.definition = definition,
-        error => this.alertMessageService.showErrorMessage("Unable to load definition. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to load definition. Error: ' + error)
       );
   }
 
@@ -59,7 +59,7 @@ export class DefinitionDetailsComponent implements OnInit {
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
         () => this.router.navigate(['/definitions']),
-        error => this.alertMessageService.showErrorMessage("Unable to delete definition. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to delete definition. Error: ' + error)
       );
   }
 

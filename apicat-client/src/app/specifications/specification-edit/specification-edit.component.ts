@@ -1,12 +1,12 @@
-import {Component, OnInit} from "@angular/core";
-import {Router, Params, ActivatedRoute} from "@angular/router";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
-import {Specification} from "../../model/specification";
-import {SpecificationService} from "../specification.service";
+import {Component, OnInit} from '@angular/core';
+import {Router, Params, ActivatedRoute} from '@angular/router';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
+import {Specification} from '../../model/specification';
+import {SpecificationService} from '../specification.service';
 
 @Component({
-  selector: 'specification-edit',
+  selector: 'app-specification-edit',
   templateUrl: './specification-edit.component.html',
   styleUrls: ['./specification-edit.component.scss'],
 
@@ -31,7 +31,7 @@ export class SpecificationEditComponent implements OnInit {
       )
       .subscribe(
         specification => this.specification = specification,
-        error => this.alertMessageService.showErrorMessage("Unable to load specification. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to load specification. Error: ' + error)
       );
   }
 
@@ -41,8 +41,8 @@ export class SpecificationEditComponent implements OnInit {
     this.specificationService.update(specification)
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        specification => this.router.navigate(['/specifications', specification.id]),
-        error => this.alertMessageService.showErrorMessage("Unable to update specification. Error: " + error)
+        updatedSpecification => this.router.navigate(['/specifications', updatedSpecification.id]),
+        error => this.alertMessageService.showErrorMessage('Unable to update specification. Error: ' + error)
       );
   }
 }

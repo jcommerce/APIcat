@@ -1,8 +1,8 @@
-import {Injectable} from "@angular/core";
-import {Http} from "@angular/http";
-import "rxjs/add/operator/toPromise";
-import {Specification} from "../model/specification";
-import {CrudService} from "../shared/crud.service";
+import {Injectable} from '@angular/core';
+import {Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import {Specification} from '../model/specification';
+import {CrudService} from '../shared/crud.service';
 
 @Injectable()
 export class SpecificationService extends CrudService<Specification> {

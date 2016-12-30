@@ -1,16 +1,16 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import {
   ModalResult,
   ConfirmationModalComponent,
   ModalAction
-} from "../../shared/confirmation-modal/confirmation-modal.component";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
-import {SpecificationService} from "../specification.service";
-import {Specification} from "../../model/specification";
+} from '../../shared/confirmation-modal/confirmation-modal.component';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
+import {SpecificationService} from '../specification.service';
+import {Specification} from '../../model/specification';
 
 @Component({
-  selector: 'specification-list',
+  selector: 'app-specification-list',
   templateUrl: './specification-list.component.html',
   styleUrls: ['./specification-list.component.scss'],
 
@@ -34,7 +34,7 @@ export class SpecificationListComponent implements OnInit {
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
         specifications => this.specifications = specifications,
-        error => this.alertMessageService.showErrorMessage("Unable to fetch specifications. Error:" + error));
+        error => this.alertMessageService.showErrorMessage('Unable to fetch specifications. Error:' + error));
   }
 
   delete(specification: Specification): void {
@@ -56,7 +56,7 @@ export class SpecificationListComponent implements OnInit {
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
         () => this.specifications = this.specifications.filter(s => s !== specification),
-        error => this.alertMessageService.showErrorMessage("Unable to delete specification. Error:" + error)
+        error => this.alertMessageService.showErrorMessage('Unable to delete specification. Error:' + error)
       );
   }
 

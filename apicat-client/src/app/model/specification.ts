@@ -1,6 +1,6 @@
-import {CrudEntity} from "./crud-entity";
+import {CrudEntity} from './crud-entity';
 
-export class Specification extends CrudEntity{
+export class Specification extends CrudEntity {
   name: string;
   version: string;
   author: string;

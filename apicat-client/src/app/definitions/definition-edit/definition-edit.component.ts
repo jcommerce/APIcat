@@ -1,12 +1,12 @@
-import {Component, OnInit} from "@angular/core";
-import {Definition} from "../../model/definition";
-import {DefinitionService} from "../definition.service";
-import {Router, Params, ActivatedRoute} from "@angular/router";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
+import {Component, OnInit} from '@angular/core';
+import {Definition} from '../../model/definition';
+import {DefinitionService} from '../definition.service';
+import {Router, Params, ActivatedRoute} from '@angular/router';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
 
 @Component({
-  selector: 'definition-edit',
+  selector: 'app-definition-edit',
   templateUrl: './definition-edit.component.html',
   styleUrls: ['./definition-edit.component.scss'],
 
@@ -31,7 +31,7 @@ export class DefinitionEditComponent implements OnInit {
       )
       .subscribe(
         definition => this.definition = definition,
-        error => this.alertMessageService.showErrorMessage("Unable to load definition. Error: " + error)
+        error => this.alertMessageService.showErrorMessage('Unable to load definition. Error: ' + error)
       );
   }
 
@@ -41,8 +41,8 @@ export class DefinitionEditComponent implements OnInit {
     this.definitionService.update(definition)
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        definition => this.router.navigate(['/definitions', definition.id]),
-        error => this.alertMessageService.showErrorMessage("Unable to update definition. Error: " + error)
+        updatedDefinition => this.router.navigate(['/definitions', updatedDefinition.id]),
+        error => this.alertMessageService.showErrorMessage('Unable to update definition. Error: ' + error)
       );
   }
 }

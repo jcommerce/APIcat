@@ -1,6 +1,6 @@
-import {Http, Response, Headers} from "@angular/http";
-import {Observable} from "rxjs";
-import {CrudEntity} from "../model/crud-entity";
+import {Http, Response, Headers} from '@angular/http';
+import {Observable} from 'rxjs';
+import {CrudEntity} from '../model/crud-entity';
 
 export abstract class CrudService<T extends CrudEntity> {
 

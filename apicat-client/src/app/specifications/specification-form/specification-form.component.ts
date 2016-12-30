@@ -1,12 +1,12 @@
-import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
-import {ApiFormatService} from "../../shared/api-format.service";
-import {Observable} from "rxjs";
-import {Specification} from "../../model/specification";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ApiStagesService} from "../../shared/api-stages.service";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {ApiFormatService} from '../../shared/api-format.service';
+import {Observable} from 'rxjs';
+import {Specification} from '../../model/specification';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ApiStagesService} from '../../shared/api-stages.service';
 
 @Component({
-  selector: 'specification-form',
+  selector: 'app-specification-form',
   templateUrl: './specification-form.component.html',
   styleUrls: ['./specification-form.component.scss'],
 
@@ -14,10 +14,10 @@ import {ApiStagesService} from "../../shared/api-stages.service";
 export class SpecificationFormComponent implements OnInit {
 
   @Input() specification: Specification;
-  @Output('submitSpecification') submitEmitter = new EventEmitter<Specification>();
+  @Output() submitSpecification = new EventEmitter<Specification>();
 
   formats: Observable<string[]>;
-  stages: Observable<string[]>
+  stages: Observable<string[]>;
   specificationForm: FormGroup;
 
   constructor(private apiFormatService: ApiFormatService,
@@ -30,7 +30,7 @@ export class SpecificationFormComponent implements OnInit {
       'format': [null, Validators.required],
       'stage': [null, Validators.required],
       'content': [null, Validators.required]
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -39,6 +39,6 @@ export class SpecificationFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.submitEmitter.emit(this.specification);
+    this.submitSpecification.emit(this.specification);
   }
 }

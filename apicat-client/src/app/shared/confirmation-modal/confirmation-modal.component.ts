@@ -1,32 +1,24 @@
-import {Component, Input, Output, EventEmitter, OnInit} from "@angular/core";
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 
 
 @Component({
-  selector: 'confirmation-modal',
+  selector: 'app-confirmation-modal',
   templateUrl: './confirmation-modal.component.html'
 })
 export class ConfirmationModalComponent implements OnInit {
 
-  @Input('title') private title: string = 'Confirmation';
-  @Input('cancel-label') private cancelLabel: string = 'No';
-  @Input('positive-label') private positiveLabel: string = 'Yes';
+  @Input() title: string = 'Confirmation';
+  @Input() cancelLabel: string = 'No';
+  @Input() positiveLabel: string = 'Yes';
 
-  /**
-   * Fires an event when the modal is closed. The argument indicated how it was closed.
-   * @type {EventEmitter<ModalResult>}
-   */
-  @Output('closed') private closeEmitter: EventEmitter<ModalResult> = new EventEmitter<ModalResult>();
-  /**
-   * Fires an event when the modal is ready with a pointer to the modal.
-   * @type {EventEmitter<ConfirmationModalComponent>}
-   */
-  @Output('loaded') private loadedEmitter: EventEmitter<ConfirmationModalComponent> = new EventEmitter<ConfirmationModalComponent>();
+  @Output() closed: EventEmitter<ModalResult> = new EventEmitter<ModalResult>();
+  @Output() loaded: EventEmitter<ConfirmationModalComponent> = new EventEmitter<ConfirmationModalComponent>();
 
-  private visible: boolean = false;
-  private topic: any = null;
+  public visible: boolean = false;
+  private topic: any;
 
   ngOnInit() {
-    this.loadedEmitter.next(this);
+    this.loaded.next(this);
   }
 
   show(topic: any) {
@@ -34,9 +26,9 @@ export class ConfirmationModalComponent implements OnInit {
     this.topic = topic;
   }
 
-  private positiveAction() {
+  public positiveAction() {
     this.visible = false;
-    this.closeEmitter.next({
+    this.closed.next({
       topic: this.topic,
       action: ModalAction.POSITIVE
     });
@@ -44,9 +36,9 @@ export class ConfirmationModalComponent implements OnInit {
     return false;
   }
 
-  private cancelAction() {
+  public cancelAction() {
     this.visible = false;
-    this.closeEmitter.next({
+    this.closed.next({
       topic: this.topic,
       action: ModalAction.CANCEL
     });

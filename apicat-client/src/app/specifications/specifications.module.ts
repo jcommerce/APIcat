@@ -1,17 +1,17 @@
-import {NgModule} from "@angular/core";
-import {SpecificationDetailsComponent} from "./specification-details/specification-details.component";
-import {SpecificationAddComponent} from "./specification-add/specification-add.component";
-import {SpecificationFormComponent} from "./specification-form/specification-form.component";
-import {SpecificationListComponent} from "./specification-list/specification-list.component";
-import {SpecificationEditComponent} from "./specification-edit/specification-edit.component";
-import {SpecificationService} from "./specification.service";
-import {SharedModule} from "../shared/shared.module";
+import {NgModule} from '@angular/core';
+import {SpecificationDetailsComponent} from './specification-details/specification-details.component';
+import {SpecificationAddComponent} from './specification-add/specification-add.component';
+import {SpecificationFormComponent} from './specification-form/specification-form.component';
+import {SpecificationListComponent} from './specification-list/specification-list.component';
+import {SpecificationEditComponent} from './specification-edit/specification-edit.component';
+import {SpecificationService} from './specification.service';
+import {SharedModule} from '../shared/shared.module';
 
 @NgModule({
   imports: [
     SharedModule
   ],
-  declarations:[
+  declarations: [
     SpecificationListComponent,
     SpecificationFormComponent,
     SpecificationAddComponent,
@@ -21,8 +21,7 @@ import {SharedModule} from "../shared/shared.module";
   providers: [
     SpecificationService
   ],
-  exports: [
-  ]
+  exports: []
 })
 export class SpecificationsModule {
 }

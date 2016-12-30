@@ -1,7 +1,7 @@
-import {Injectable} from "@angular/core";
-import {Observable, BehaviorSubject} from "rxjs";
-import {Http} from "@angular/http";
-import {AlertMessageService} from "./alert/alert-message.service";
+import {Injectable} from '@angular/core';
+import {Observable, BehaviorSubject} from 'rxjs';
+import {Http} from '@angular/http';
+import {AlertMessageService} from './alert/alert-message.service';
 
 @Injectable()
 export class ApiFormatService {
@@ -34,6 +34,6 @@ export class ApiFormatService {
   }
 
   private handleError(): void {
-    this.alertMessageService.showErrorMessage("Unable to load api formats");
+    this.alertMessageService.showErrorMessage('Unable to load api formats');
   }
 }

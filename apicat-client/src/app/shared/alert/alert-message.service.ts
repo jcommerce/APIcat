@@ -1,6 +1,6 @@
-import {Injectable} from "@angular/core";
-import {AlertMessage} from "./alert-message";
-import {BehaviorSubject, Observable} from "rxjs";
+import {Injectable} from '@angular/core';
+import {AlertMessage} from './alert-message';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable()
 export class AlertMessageService {
@@ -36,7 +36,7 @@ export class AlertMessageService {
   }
 
   public showErrorMessage(message: string): void {
-    let alert = new AlertMessage(message, "danger");
+    let alert = new AlertMessage(message, 'danger');
     this.addAlert(alert);
   }
 }

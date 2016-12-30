@@ -1,12 +1,12 @@
-import {Component} from "@angular/core";
-import {Definition} from "../../model/definition";
-import {DefinitionService} from "../definition.service";
-import {Router} from "@angular/router";
-import {AlertMessageService} from "../../shared/alert/alert-message.service";
-import {LoadingIndicatorService} from "../../shared/loading-indicator/loading-indicator.service";
+import {Component} from '@angular/core';
+import {Definition} from '../../model/definition';
+import {DefinitionService} from '../definition.service';
+import {Router} from '@angular/router';
+import {AlertMessageService} from '../../shared/alert/alert-message.service';
+import {LoadingIndicatorService} from '../../shared/loading-indicator/loading-indicator.service';
 
 @Component({
-  selector: 'definition-add',
+  selector: 'app-definition-add',
   templateUrl: './definition-add.component.html',
   styleUrls: ['./definition-add.component.scss'],
 
@@ -26,8 +26,8 @@ export class DefinitionAddComponent {
     this.definitionService.create(definition)
       .finally(() => this.loadingService.hideSpinner())
       .subscribe(
-        definition => this.router.navigate(['/definitions', definition.id]),
-        error => this.alertMessageService.showErrorMessage("Unable to save definition. Error:" + error)
+        createdDefinition => this.router.navigate(['/definitions', createdDefinition.id]),
+        error => this.alertMessageService.showErrorMessage('Unable to save definition. Error:' + error)
       );
   }
 }

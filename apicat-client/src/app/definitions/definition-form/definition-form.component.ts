@@ -1,11 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
-import {Definition} from "../../model/definition";
-import {ApiFormatService} from "../../shared/api-format.service";
-import {Observable} from "rxjs";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Definition} from '../../model/definition';
+import {ApiFormatService} from '../../shared/api-format.service';
+import {Observable} from 'rxjs';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 @Component({
-  selector: 'definition-form',
+  selector: 'app-definition-form',
   templateUrl: './definition-form.component.html',
   styleUrls: ['./definition-form.component.scss'],
 
@@ -13,7 +13,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 export class DefinitionFormComponent implements OnInit {
 
   @Input() definition: Definition;
-  @Output('submitDefinition') submitEmitter = new EventEmitter<Definition>();
+  @Output() submitDefinition = new EventEmitter<Definition>();
 
   formats: Observable<string[]>;
   definitionForm: FormGroup;
@@ -26,7 +26,7 @@ export class DefinitionFormComponent implements OnInit {
       'version': [null, Validators.required],
       'format': [null, Validators.required],
       'content': [null, Validators.required]
-    })
+    });
   }
 
   ngOnInit(): void {
@@ -34,6 +34,6 @@ export class DefinitionFormComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.submitEmitter.emit(this.definition);
+    this.submitDefinition.emit(this.definition);
   }
 }

@@ -1,16 +1,20 @@
-import {InMemoryDbService} from "angular-in-memory-web-api";
+import {InMemoryDbService} from 'angular-in-memory-web-api';
 
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
+    const sampleSwaggerDefinition = '---\r\nswagger: \'2.0\'\r\ninfo:\r\n  version: 1.0.0\r\n  title: ' +
+      'Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    ' +
+      'get:\r\n      responses:\r\n        200:\r\n          description: Echo GET';
+
     let formats = [
-      "SWAGGER",
-      "APIARY",
-      "RAML"
+      'SWAGGER',
+      'APIARY',
+      'RAML'
     ];
 
     let specificationStages = [
-      "DRAFT",
-      "RELEASED"
+      'DRAFT',
+      'RELEASED'
     ];
 
     let definitions = [
@@ -20,7 +24,7 @@ export class InMemoryDataService implements InMemoryDbService {
         version: '2.3.5',
         author: 'John Doe',
         format: formats[0],
-        content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
+        content: sampleSwaggerDefinition
       },
       {
         id: 2,
@@ -28,7 +32,7 @@ export class InMemoryDataService implements InMemoryDbService {
         version: '21',
         author: 'Joe Doe',
         format: formats[0],
-        content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
+        content: sampleSwaggerDefinition
       }
     ];
 
@@ -40,7 +44,7 @@ export class InMemoryDataService implements InMemoryDbService {
         author: 'John Doe',
         format: formats[0],
         stage: specificationStages[0],
-        content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
+        content: sampleSwaggerDefinition
       },
       {
         id: 67,
@@ -49,7 +53,7 @@ export class InMemoryDataService implements InMemoryDbService {
         author: 'Joe Doe',
         format: formats[0],
         stage: specificationStages[1],
-        content: "---\r\nswagger: '2.0'\r\ninfo:\r\n  version: 1.0.0\r\n  title: Echo\r\nschemes:\r\n  - http\r\nhost: mazimi-prod.apigee.net\r\nbasePath: /echo\r\npaths:\r\n  /:\r\n    get:\r\n      responses:\r\n        200:\r\n          description: Echo GET"
+        content: sampleSwaggerDefinition
       }
     ];
 

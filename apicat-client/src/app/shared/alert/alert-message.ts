@@ -8,7 +8,7 @@ export class AlertMessage {
   constructor(content: string, type: AlertType, timeToLive?: number) {
     this.content = content;
     this.type = type;
-    if (typeof timeToLive === "number") {
+    if (typeof timeToLive === 'number') {
       this.timeToLive = timeToLive;
     }
   }

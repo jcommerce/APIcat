@@ -1,13 +1,13 @@
-import {Component, OnInit} from "@angular/core";
-import {ValidationService} from "./validation.service";
-import {LoadingIndicatorService} from "../shared/loading-indicator/loading-indicator.service";
-import {Observable} from "rxjs";
-import {ApiFormatService} from "../shared/api-format.service";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ValidationResult} from "../model/validation-result";
+import {Component, OnInit} from '@angular/core';
+import {ValidationService} from './validation.service';
+import {LoadingIndicatorService} from '../shared/loading-indicator/loading-indicator.service';
+import {Observable} from 'rxjs';
+import {ApiFormatService} from '../shared/api-format.service';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {ValidationResult} from '../model/validation-result';
 
 @Component({
-  selector: 'validation',
+  selector: 'app-validation-component',
   templateUrl: './validation.component.html',
   styleUrls: ['./validation.component.scss'],
 
@@ -27,7 +27,7 @@ export class ValidationComponent implements OnInit {
     this.form = fb.group({
       'format': [null, Validators.required],
       'content': [null, Validators.required]
-    })
+    });
   }
 
   ngOnInit(): void {

@@ -1,20 +1,19 @@
-import {NgModule} from "@angular/core";
-import {SharedModule} from "../shared/shared.module";
-import {ValidationService} from "./validation.service";
-import {ValidationComponent} from "./validation.component";
+import {NgModule} from '@angular/core';
+import {SharedModule} from '../shared/shared.module';
+import {ValidationService} from './validation.service';
+import {ValidationComponent} from './validation.component';
 
 @NgModule({
   imports: [
     SharedModule
   ],
-  declarations:[
+  declarations: [
     ValidationComponent
   ],
   providers: [
     ValidationService
   ],
-  exports: [
-  ]
+  exports: []
 })
 export class ValidationModule {
 }
