@@ -1,5 +1,0 @@
-export * from './specification-list/specification-list.component'
-export * from './specification-form/specification-form.component'
-export * from './specification-add/specification-add.component'
-export * from './specification-edit/specification-edit.component'
-export * from './specification-details/specification-details.component'
