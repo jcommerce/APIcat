@@ -101,10 +101,10 @@ public class SwaggerApiTest {
     public void shouldValidateAllContractsWithoutAutodiscoveryValidatorsPass() {
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutEndpoint.yaml"));
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath(localizeSwaggerDefinitions("providerContract.yaml")).withoutAutodiscoveryValidators().withContractedApiSpecification(apiSpecification).
-                //withApiContractValidator(new SwaggerApiContractValidator()).
+//                withApiContractValidator(new SwaggerApiContractValidator()).
                         build();
         //TODO
-        //apiDefinition.validateAllContracts();
+        apiDefinition.validateAllContracts();
         assertTrue(apiDefinition.isValid());
     }
 
@@ -150,7 +150,7 @@ public class SwaggerApiTest {
                         build();
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutEndpoint.yaml"));
         //TODO
-        //apiDefinition.validateAgainstApiSpecifications(apiSpecification);
+        apiDefinition.validateAgainstApiSpecifications(apiSpecification);
         assertTrue(apiDefinition.isValid());
     }
 
@@ -161,7 +161,7 @@ public class SwaggerApiTest {
                         build();
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath(localizeSwaggerDefinitions("consumerContractWithoutRequiredParameter.yaml"));
         //TODO
-        //apiDefinition.validateAgainstApiSpecifications(apiSpecification);
+        apiDefinition.validateAgainstApiSpecifications(apiSpecification);
         assertFalse(apiDefinition.isValid());
     }
 

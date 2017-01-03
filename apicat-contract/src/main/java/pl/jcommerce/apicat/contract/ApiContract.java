@@ -18,7 +18,7 @@ import java.util.ServiceLoader;
  * @author Daniel Charczyński
  */
 @Slf4j
-public abstract class ApiContract {
+public class ApiContract {
 
     /**
      * ApiContract validators
