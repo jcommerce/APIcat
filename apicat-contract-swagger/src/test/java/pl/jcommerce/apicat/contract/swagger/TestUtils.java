@@ -8,13 +8,12 @@ import java.net.URISyntaxException;
  */
 public class TestUtils {
 
-    public static String getTestConstractsPath() {
+    public static String getTestContractsPath() {
         try {
             File contractsFile = new File(ClassLoader.getSystemResource("contracts").toURI());
             return contractsFile.getPath();
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

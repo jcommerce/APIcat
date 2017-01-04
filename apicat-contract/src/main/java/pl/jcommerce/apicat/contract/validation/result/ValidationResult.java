@@ -35,4 +35,12 @@ public class ValidationResult {
             validationResultCategory = ValidationResultCategory.WARN;
         }
     }
+
+    @Override
+    public String toString() {
+        return "ValidationResult{" +
+                "validationResultCategory=" + validationResultCategory +
+                ", problemList=" + problemList +
+                '}';
+    }
 }
