@@ -53,7 +53,7 @@ public class ApiContract {
     /**
      * Add {@code apiContractValidator}
      *
-     * @param apiContractValidator
+     * @param apiContractValidator contract validator to be used
      */
     public void addValidator(ApiContractValidator apiContractValidator) {
         if (!apiContractValidator.support(this)) {
@@ -62,14 +62,14 @@ public class ApiContract {
         if (validators == null) {
             initValidators();
         }
-        if (!validatorAlreadyAdded(apiContractValidator)) {
+        if (!isValidatorAlreadyAdded(apiContractValidator)) {
             validators.add(apiContractValidator);
         }
 
         validationResult = Optional.empty();
     }
 
-    private boolean validatorAlreadyAdded(ApiContractValidator apiContractValidator) {
+    private boolean isValidatorAlreadyAdded(ApiContractValidator apiContractValidator) {
         for (ApiContractValidator validator : validators) {
             if (validator.getClass().equals(apiContractValidator.getClass())) {
                 return true;
@@ -80,17 +80,27 @@ public class ApiContract {
 
     public Optional<ValidationResult> validate() {
         log.info("About to validate ApiContract: " + this);
+        validationResult = Optional.of(new ValidationResult());
+
         if (!apiSpecification.isApiValidated()) {
-            apiSpecification.validate();
+            validationResult.get().merge(apiSpecification.validate().get());
+        } else {
+            validationResult.get().merge(apiSpecification.getValidationResult().get());
         }
+
         if (!apiDefinition.isApiValidated()) {
-            apiDefinition.validate();
+            validationResult.get().merge(apiDefinition.validate().get());
+        } else {
+            validationResult.get().merge(apiDefinition.getValidationResult().get());
         }
+
+        if (!validationResult.get().getProblemList().isEmpty()) {
+            return validationResult;
+        }
+
         if (validators == null) {
             initValidators();
         }
-
-        validationResult = Optional.of(new ValidationResult());
         for (ApiContractValidator apiContractValidator : validators) {
             validationResult.get().merge(apiContractValidator.validate(this));
         }
@@ -106,7 +116,7 @@ public class ApiContract {
                 if (apiContractValidator.support(this)) {
                     log.info("Adding contract validator: " + apiContractValidator);
                     validators.add(apiContractValidator);
-                    validationResult = null;
+                    validationResult = Optional.empty();
                 }
             });
         }

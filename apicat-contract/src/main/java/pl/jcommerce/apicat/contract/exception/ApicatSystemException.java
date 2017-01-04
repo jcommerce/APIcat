@@ -2,7 +2,11 @@ package pl.jcommerce.apicat.contract.exception;
 
 public class ApicatSystemException extends RuntimeException {
 
-    private  ErrorCode errorCode;
+    private ErrorCode errorCode;
+
+    public ApicatSystemException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+    }
 
     public ApicatSystemException(String message) {
         super(message);

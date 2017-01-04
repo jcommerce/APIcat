@@ -6,6 +6,7 @@ import com.github.fge.jsonschema.core.report.ProcessingMessage;
 import com.github.fge.jsonschema.core.report.ProcessingReport;
 import com.google.auto.service.AutoService;
 import pl.jcommerce.apicat.contract.ApiDefinition;
+import pl.jcommerce.apicat.contract.swagger.validation.MessageConstants;
 import pl.jcommerce.apicat.contract.swagger.validation.SwaggerApiSchemaValidator;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 import pl.jcommerce.apicat.contract.validation.problem.ProblemLevel;
@@ -56,7 +57,8 @@ public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
                 problemLevel = ProblemLevel.WARN;
             }
 
-            result.addProblem(new ValidationProblem(processingMessage.getMessage(), problemLevel));
+            result.addProblem(new ValidationProblem(MessageConstants.INCONSISTENT_PROVIDER_CONTRACT + ": " + processingMessage.getMessage(),
+                    problemLevel));
         }
     }
 }

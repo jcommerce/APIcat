@@ -1,7 +1,10 @@
 package pl.jcommerce.apicat.contract.swagger.apicontract;
 
 import com.google.auto.service.AutoService;
-import io.swagger.models.*;
+import io.swagger.models.HttpMethod;
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.Response;
 import io.swagger.models.parameters.Parameter;
 import lombok.Data;
 import pl.jcommerce.apicat.contract.ApiDefinition;
@@ -40,24 +43,24 @@ public class SwaggerEndpointApiContractValidator extends SwaggerApiContractValid
     public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
         validationResult = new ValidationResult();
 
-        providerPaths = ((SwaggerApiDefinition)apiDefinition).getSwaggerDefinition().getPaths();
-        customerPaths = ((SwaggerApiSpecification)apiSpecification).getSwaggerDefinition().getPaths();
+        providerPaths = ((SwaggerApiDefinition) apiDefinition).getSwaggerDefinition().getPaths();
+        customerPaths = ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition().getPaths();
         checkEndpointsExistence();
         return validationResult;
     }
 
-    private void checkEndpointsExistence () {
+    private void checkEndpointsExistence() {
         createCustomerOperations(customerPaths);
         providerPaths.forEach(this::checkSingleEndpointExistence);
     }
 
-    private void createCustomerOperations (Map<String, Path> customerPaths) {
+    private void createCustomerOperations(Map<String, Path> customerPaths) {
         customerOperations = new ArrayList<>();
         customerPaths.forEach((k, v) ->
                 customerOperations.addAll(v.getOperations()));
     }
 
-    private void checkSingleEndpointExistence (String endpoint, Path providerPath) {
+    private void checkSingleEndpointExistence(String endpoint, Path providerPath) {
         boolean containKey = customerPaths.containsKey(endpoint);
         if (!containKey) {
             validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.ENDPOINT_NOT_USED, endpoint), ProblemLevel.ERROR));
@@ -69,7 +72,7 @@ public class SwaggerEndpointApiContractValidator extends SwaggerApiContractValid
 
     private void checkSingleOperationExistence(String endpoint, Path providerPath, Optional<Operation> foundOperation, Operation providerOperation) {
         createOperationDetails(endpoint, providerPath, providerOperation);
-        if(foundOperation.isPresent()) {
+        if (foundOperation.isPresent()) {
             providerOperation.getParameters().forEach(
                     p -> checkSingleParametersExistence(p, foundOperation.get().getParameters()));
             providerOperation.getResponses().forEach((s, response) -> checkResponsesExistence(s, response, foundOperation.get().getResponses()));
@@ -92,19 +95,15 @@ public class SwaggerEndpointApiContractValidator extends SwaggerApiContractValid
     }
 
     private void checkResponsesExistence(String responseCode, Response response, Map<String, Response> responses) {
-        if(!responses.containsKey(responseCode)) {
-            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.RESPONSE_NOT_USED, responseCode, response.getDescription(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint() ), ProblemLevel.ERROR));
+        if (!responses.containsKey(responseCode)) {
+            validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.RESPONSE_NOT_USED, responseCode, response.getDescription(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint()), ProblemLevel.ERROR));
         }
     }
 
     @Data
     private class OperationDetails {
-
         private String endpoint;
-
         private HttpMethod methodName;
-
         private String operationId;
-
     }
 }

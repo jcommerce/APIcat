@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
+import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.validation.ApiSpecificationValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
@@ -86,22 +87,22 @@ public abstract class ApiSpecification {
     /**
      * Add {@code apiContractValidator}
      *
-     * @param apiSpecificationValidator
+     * @param apiSpecificationValidator specification validator to be used
      */
     public void addValidator(ApiSpecificationValidator apiSpecificationValidator) {
         if (!apiSpecificationValidator.support(this))
             throw new ApicatSystemException("Provided apiSpecificationValidator doesn't support this specification");
-        if (validators == null){
+        if (validators == null) {
             initValidators();
         }
-        if(!validatorAlreadyAdded(apiSpecificationValidator)){
+        if (!isValidatorAlreadyAdded(apiSpecificationValidator)) {
             validators.add(apiSpecificationValidator);
         }
         validationResult = Optional.empty();
     }
 
-    private boolean validatorAlreadyAdded(ApiSpecificationValidator apiDefinitionValidator) {
-        for (ApiSpecificationValidator validator: validators) {
+    private boolean isValidatorAlreadyAdded(ApiSpecificationValidator apiDefinitionValidator) {
+        for (ApiSpecificationValidator validator : validators) {
             if (validator.getClass().equals(apiDefinitionValidator.getClass())) {
                 return true;
             }
@@ -128,10 +129,10 @@ public abstract class ApiSpecification {
     }
 
     /**
-     * Validate ApiContract
+     * Validate ApiContract assigned to this specification
      */
-    public void validateContract() {
-        apiContract.validate();
+    public ValidationResult validateContract() {
+        return validateContract(apiContract);
     }
 
     /**
@@ -139,23 +140,32 @@ public abstract class ApiSpecification {
      *
      * @param apiDefinition second part of contract
      */
-    //TODO after ApiContract refactoring
-    public void validateAgainstApiDefinition(ApiDefinition apiDefinition) {
-//        ApiContract temporaryContract = new ApiContract();
-//        temporaryContract.setApiDefinition(apiDefinition);
-//        temporaryContract.setApiSpecification(this);
-//        temporaryContract.validate();
+    public ValidationResult validateAgainstApiDefinition(ApiDefinition apiDefinition) {
+        ApiContract temporaryContract = new ApiContract();
+        temporaryContract.setApiDefinition(apiDefinition);
+        temporaryContract.setApiSpecification(this);
+
+        return validateContract(temporaryContract);
+    }
+
+    private ValidationResult validateContract(ApiContract contract) {
+        Optional<ValidationResult> result = apiContract.validate();
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
+        }
     }
 
     public boolean isValid() {
-        if(validationResult.isPresent()) {
+        if (validationResult.isPresent()) {
             return validationResult.get().getProblemList().isEmpty();
         }
-        throw new IllegalStateException("Api specification hasn't been validated");
+        throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
     }
 
     private void initValidators() {
-        log.info("ApiSpecification - about to init validators. autodiscover validators: " + autodiscoverValidators);
+        log.info("ApiSpecification - about to init validators. Autodiscover validators: " + autodiscoverValidators);
         validators = new ArrayList<>();
         if (autodiscoverValidators) {
             ServiceLoader.load(ApiSpecificationValidator.class).forEach(apiSpecificationValidator -> {

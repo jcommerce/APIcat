@@ -50,9 +50,7 @@ public class ContractsValidationViaAssertjSwaggerTest {
     }
 
     private void localizeSwaggerDefinitions(String consumerContractLocation) {
-        consumerSwaggerLocation = TestUtils.getTestConstractsPath() + consumerContractLocation;
-        providerSwaggerLocation = TestUtils.getTestConstractsPath() + "/yaml/providerContract.yaml";
+        consumerSwaggerLocation = TestUtils.getTestContractsPath() + consumerContractLocation;
+        providerSwaggerLocation = TestUtils.getTestContractsPath() + "/yaml/providerContract.yaml";
     }
-
-
 }

@@ -2,6 +2,7 @@ package pl.jcommerce.apicat.contract.swagger.apispecification;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.auto.service.AutoService;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.parser.ParserException;
+import org.yaml.snakeyaml.scanner.ScannerException;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
@@ -17,6 +19,7 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import java.io.File;
 import java.io.IOException;
 
+@AutoService(ApiSpecification.class)
 public class SwaggerApiSpecification extends ApiSpecification {
 
     public static String TYPE = "Swagger";
@@ -57,13 +60,12 @@ public class SwaggerApiSpecification extends ApiSpecification {
     }
 
     private static String getJson(String content) throws ApicatSystemException {
-
         if (!content.trim().startsWith("{")) {
             Yaml yaml = new Yaml();
             try {
                 Object obj = yaml.load(content);
                 content = JSONValue.toJSONString(obj);
-            } catch (ParserException e) {
+            } catch (ParserException | ScannerException e) {
                 throw new ApicatSystemException(ErrorCode.PARSE_INPUT_DATA_EXCEPTION, e.getMessage());
             }
         }

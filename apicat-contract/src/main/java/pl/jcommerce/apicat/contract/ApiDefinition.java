@@ -4,10 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
+import pl.jcommerce.apicat.contract.exception.ErrorCode;
+import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.ServiceLoader;
 
 /**
  * Defines API exposed by our system.
@@ -31,33 +36,28 @@ public abstract class ApiDefinition {
     private List<ApiDefinitionValidator> validators = null;
 
     @Getter
-    @Setter
     private Optional<ValidationResult> validationResult = Optional.empty();
 
-    /**
-     * Information if all contracts using this definition are valid with it.
-     * This flag is set after successful validation and need to be nullified when ApiDefinition changes.
-     */
     @Getter
-    private Optional<Boolean> contractsAreValid = Optional.empty();
+    private Optional<ValidationResult> contractsValidationResults = Optional.empty();
     private List<ApiContract> apiContracts = new ArrayList<>();
 
     public void addValidator(ApiDefinitionValidator apiDefinitionValidator) {
         if (!apiDefinitionValidator.support(this)) {
-            throw new ApicatSystemException("Provided apiDefinitionValidator doesn't support this specification. validator object: " + apiDefinitionValidator);
+            throw new ApicatSystemException("Provided apiDefinitionValidator doesn't support this specification. Validator object: " + apiDefinitionValidator);
         }
         if (validators == null) {
             initValidators();
         }
-        if (!validatorAlreadyAdded(apiDefinitionValidator)) {
+        if (!isValidatorAlreadyAdded(apiDefinitionValidator)) {
             validators.add(apiDefinitionValidator);
         }
 
         validationResult = Optional.empty();
-        contractsAreValid = Optional.empty();
+        contractsValidationResults = Optional.empty();
     }
 
-    private boolean validatorAlreadyAdded(ApiDefinitionValidator apiDefinitionValidator) {
+    private boolean isValidatorAlreadyAdded(ApiDefinitionValidator apiDefinitionValidator) {
         for (ApiDefinitionValidator validator : validators) {
             if (validator.getClass().equals(apiDefinitionValidator.getClass())) {
                 return true;
@@ -69,17 +69,7 @@ public abstract class ApiDefinition {
     public void addContract(ApiContract apiContract) {
         apiContracts.add(apiContract);
         apiContract.setApiDefinition(this); //TODO verify - the relation is bidirectional because ApiContract contains apiDefinition property
-        contractsAreValid = Optional.empty();
-    }
-
-    //TODO after ApiContract refactoring
-    public void validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
-        for (ApiSpecification apiSpecification : apiSpecifications) {
-            ApiContract temporaryContract = new ApiContract();
-            temporaryContract.setApiDefinition(this);
-            temporaryContract.setApiSpecification(apiSpecification);
-            temporaryContract.validate();
-        }
+        contractsValidationResults = Optional.empty();
     }
 
     public Optional<ValidationResult> validate() {
@@ -96,34 +86,48 @@ public abstract class ApiDefinition {
         return validationResult;
     }
 
-    //TODO after ApiContract refactoring
-    public void validateAllContracts() {
-        boolean contractsValid = true;
-        for (ApiContract apiContract : apiContracts) {
-            apiContract.validate();
-//            boolean contractValid = apiContract.getValid().orElse(false);
-            boolean contractValid = apiContract.isValid();
-            contractsValid = contractValid && contractsValid;
+    public ValidationResult validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
+        ValidationResult result = new ValidationResult();
+
+        for (ApiSpecification apiSpecification : apiSpecifications) {
+            ApiContract temporaryContract = new ApiContract();
+            temporaryContract.setApiDefinition(this);
+            temporaryContract.setApiSpecification(apiSpecification);
+            temporaryContract.validate().ifPresent(result::merge);
         }
-        contractsAreValid = Optional.of(contractsValid);
+        return result;
+    }
+
+    public Optional<ValidationResult> validateAllContracts() {
+        contractsValidationResults = Optional.of(new ValidationResult());
+        for (ApiContract apiContract : apiContracts) {
+            Optional<ValidationResult> contractValidationResult = apiContract.validate();
+            contractValidationResult.ifPresent(validationResult -> contractsValidationResults.get().merge(validationResult));
+        }
+
+        return contractsValidationResults;
     }
 
     public boolean isApiValidated() {
         return validationResult.isPresent();
     }
 
-    public boolean areContractsValid() {
-        if (contractsAreValid.isPresent()) {
-            return contractsAreValid.get();
-        }
-        throw new IllegalStateException("Api contracts haven't been validated");
-    }
-
     public boolean isValid() {
         if (validationResult.isPresent()) {
             return validationResult.get().getProblemList().isEmpty();
         }
-        throw new IllegalStateException("Api definition hasn't been validated");
+        throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
+    }
+
+    public boolean areContractsValided() {
+        return contractsValidationResults.isPresent();
+    }
+
+    public boolean areContractsValid() {
+        if (contractsValidationResults.isPresent()) {
+            return contractsValidationResults.get().getProblemList().isEmpty();
+        }
+        throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
     }
 
     private void initValidators() {
@@ -140,8 +144,13 @@ public abstract class ApiDefinition {
         }
     }
 
-    //public abstract void validateDefinition();
+    public void addContractValidator(ApiContractValidator apiContractValidator) {
+        for (ApiContract contract : apiContracts) {
+            contract.setAutodiscoverValidators(autodiscoverValidators);
+            contract.addValidator(apiContractValidator);
+        }
+    }
 
-    //public abstract void validateSpecifications(ApiDefinition apiDefinition, ApiSpecification apiSpecification);
+    //public ValidationResult validateSpecifications(ApiSpecification apiSpecification);
 
 }

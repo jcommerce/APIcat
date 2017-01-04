@@ -2,6 +2,7 @@ package pl.jcommerce.apicat.contract.swagger.apidefinition;
 
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 
 /**
@@ -34,7 +35,6 @@ public class SwaggerApiDefinitionBuilder {
     }
 
     public SwaggerApiDefinitionBuilder withContractedApiSpecification(ApiSpecification apiSpecification) {
-        //TODO
         ApiContract apiContract = new ApiContract();
         apiContract.setApiSpecification(apiSpecification);
         apiContract.setApiDefinition(swaggerApiDefinitionBuilder.swaggerApiDefinition);
@@ -47,13 +47,12 @@ public class SwaggerApiDefinitionBuilder {
         return swaggerApiDefinitionBuilder;
     }
 
-//    public static SwaggerApiDefinitionBuilder withApiContractValidator(ApiContractValidator apiContractValidator) {
-//        swaggerApiDefinitionBuilder.swaggerApiDefinition.addContractValidator(apiContractValidator);
-//        return swaggerApiDefinitionBuilder;
-//    }
+    public SwaggerApiDefinitionBuilder withApiContractValidator(ApiContractValidator apiContractValidator) {
+        swaggerApiDefinitionBuilder.swaggerApiDefinition.addContractValidator(apiContractValidator);
+        return swaggerApiDefinitionBuilder;
+    }
 
     public SwaggerApiDefinition build() {
-        //swaggerApiDefinition.loadValidators();
         return swaggerApiDefinition;
     }
 
