@@ -44,9 +44,3 @@ subprojects {
         bootRepackage.enabled = false
     }
 }
-
-
-
-
-
-

@@ -4,8 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
+import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,32 +82,43 @@ public class ApiContract {
 
     public Optional<ValidationResult> validate() {
         log.info("About to validate ApiContract: " + this);
-        validationResult = Optional.of(new ValidationResult());
 
-        if (!apiSpecification.isApiValidated()) {
-            validationResult.get().merge(apiSpecification.validate().get());
-        } else {
-            validationResult.get().merge(apiSpecification.getValidationResult().get());
-        }
+        Optional<ValidationResult> checkDefinitionAndSpecificationResult = checkDefinitionAndSpecification();
 
-        if (!apiDefinition.isApiValidated()) {
-            validationResult.get().merge(apiDefinition.validate().get());
-        } else {
-            validationResult.get().merge(apiDefinition.getValidationResult().get());
-        }
-
-        if (!validationResult.get().getProblemList().isEmpty()) {
-            return validationResult;
+        if (checkDefinitionAndSpecificationResult.isPresent()) {
+            if (checkDefinitionAndSpecificationResult.get().getValidationResultCategory().equals(ValidationResultCategory.ERROR)) {
+                validationResult = checkDefinitionAndSpecificationResult;
+                return validationResult;
+            }
         }
 
         if (validators == null) {
             initValidators();
         }
+
+        validationResult = checkDefinitionAndSpecificationResult;
         for (ApiContractValidator apiContractValidator : validators) {
             validationResult.get().merge(apiContractValidator.validate(this));
         }
 
         return validationResult;
+    }
+
+    private Optional<ValidationResult> checkDefinitionAndSpecification() {
+        Optional<ValidationResult> result = Optional.of(new ValidationResult());
+        if (!apiSpecification.isApiValidated()) {
+            result.get().merge(apiSpecification.validate().get());
+        } else {
+            result.get().merge(apiSpecification.getValidationResult().get());
+        }
+
+        if (!apiDefinition.isApiValidated()) {
+            result.get().merge(apiDefinition.validate().get());
+        } else {
+            result.get().merge(apiDefinition.getValidationResult().get());
+        }
+
+        return result;
     }
 
     private void initValidators() {
@@ -126,6 +139,6 @@ public class ApiContract {
         if (validationResult.isPresent()) {
             return validationResult.get().getProblemList().isEmpty();
         }
-        throw new IllegalStateException("Api contract hasn't been validated");
+        throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
     }
 }
