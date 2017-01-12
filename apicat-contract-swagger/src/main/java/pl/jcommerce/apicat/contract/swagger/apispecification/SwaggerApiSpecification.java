@@ -22,7 +22,7 @@ import java.io.IOException;
 @AutoService(ApiSpecification.class)
 public class SwaggerApiSpecification extends ApiSpecification {
 
-    public static String TYPE = "Swagger";
+    public static final String TYPE = "Swagger";
 
     @Getter
     @Setter
@@ -39,7 +39,7 @@ public class SwaggerApiSpecification extends ApiSpecification {
     public static SwaggerApiSpecification fromPath(String path) {
         ClassLoader classLoader = SwaggerApiSpecification.class.getClassLoader();
         File file = new File(classLoader.getResource(path).getFile());
-        String content = null;
+        String content;
         try {
             content = FileUtils.readFileToString(file);
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class SwaggerApiSpecification extends ApiSpecification {
 
     private static JsonNode createJsonNode(String content) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = null;
+        JsonNode node;
         try {
             node = mapper.readTree(content);
         } catch (IOException e) {

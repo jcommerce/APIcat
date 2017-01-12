@@ -30,7 +30,7 @@ public class SwaggerApiDefinitionValidator implements ApiDefinitionValidator {
         ValidationResult result = new ValidationResult();
         SwaggerApiDefinition swaggerApiDefinition = (SwaggerApiDefinition) apiDefinition;
 
-        ProcessingReport processingReport = null;
+        ProcessingReport processingReport;
         SwaggerApiSchemaValidator swaggerApiSchemaValidator = new SwaggerApiSchemaValidator();
         try {
             processingReport = swaggerApiSchemaValidator.validate(swaggerApiDefinition.getJsonNode());

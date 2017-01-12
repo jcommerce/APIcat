@@ -23,14 +23,13 @@ import java.util.Map;
 public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractValidator {
 
     private Map<String, Model> apiSpecificationDefinitions;
-    private Map<String, Model> apiDefinitionDefinitions;
     private ValidationResult result = new ValidationResult();
 
     @Override
     public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
         result = new ValidationResult();
         apiSpecificationDefinitions = ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition().getDefinitions();
-        apiDefinitionDefinitions = ((SwaggerApiDefinition)apiDefinition).getSwaggerDefinition().getDefinitions();
+        Map<String, Model> apiDefinitionDefinitions = ((SwaggerApiDefinition) apiDefinition).getSwaggerDefinition().getDefinitions();
 
         apiDefinitionDefinitions.forEach(this::checkDefinitionExistence);
 
@@ -43,7 +42,6 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
         } else {
             providerModel.getProperties().forEach((s, property) -> checkPropertyExistence(s, property, definitionName));
         }
-
     }
 
     private void checkPropertyExistence(String propertyKey, Property property, String definitionName) {

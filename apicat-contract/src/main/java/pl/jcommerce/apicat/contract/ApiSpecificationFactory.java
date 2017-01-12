@@ -50,8 +50,6 @@ public class ApiSpecificationFactory {
 
     /**
      * Prepare type -> ApiSpecification implementation mapping
-     *
-     * @return type -> ApiSpecification implementation map
      */
     private static void initTypeMap() {
         typeMap = new HashMap<>();

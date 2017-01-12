@@ -5,9 +5,9 @@ import lombok.Getter;
 public class ValidationProblem {
 
     @Getter
-    private String message;
+    private final String message;
     @Getter
-    private ProblemLevel problemLevel;
+    private final ProblemLevel problemLevel;
 
     public ValidationProblem(String message) {
         this(message, ProblemLevel.ERROR);

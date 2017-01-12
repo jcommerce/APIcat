@@ -17,7 +17,6 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import java.io.File;
 import java.io.IOException;
 
-
 /**
  * Created by krka on 31.10.2016.
  */
@@ -43,7 +42,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
 
         ClassLoader classLoader = SwaggerApiDefinition.class.getClassLoader();
         File file = new File(classLoader.getResource(path).getFile());
-        String content = null;
+        String content;
         try {
             content = FileUtils.readFileToString(file);
         } catch (IOException e) {
@@ -55,7 +54,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
 
     private static JsonNode createJsonNode(String content) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonNode node = null;
+        JsonNode node;
         try {
             node = mapper.readTree(content);
         } catch (IOException e) {

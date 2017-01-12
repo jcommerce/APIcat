@@ -149,7 +149,7 @@ public abstract class ApiSpecification {
     }
 
     private ValidationResult validateContract(ApiContract contract) {
-        Optional<ValidationResult> result = apiContract.validate();
+        Optional<ValidationResult> result = contract.validate();
         if (result.isPresent()) {
             return result.get();
         } else {
