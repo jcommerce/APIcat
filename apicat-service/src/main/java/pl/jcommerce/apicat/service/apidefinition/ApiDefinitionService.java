@@ -1,9 +1,9 @@
 package pl.jcommerce.apicat.service.apidefinition;
 
-import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionUpdateDto;
+import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionDto;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ public interface ApiDefinitionService {
 
     Long createDefinition(ApiDefinitionCreateDto data);
 
-    ApiDefinition getDefinition(Long id);
+    ApiDefinitionDto getDefinition(Long id);
 
     Long updateDefinition(ApiDefinitionUpdateDto data);
 
