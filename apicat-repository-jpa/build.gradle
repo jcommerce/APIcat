@@ -5,4 +5,5 @@ dependencies {
     compile project(':apicat-repository')
     compile group: 'com.google.auto.service', name: 'auto-service', version: '1.0-rc2'
     compile group: 'org.eclipse.persistence', name: 'eclipselink', version: '2.5.0'
+    compile group: 'org.springframework', name: 'spring-context', version: '4.3.5.RELEASE'
 }
