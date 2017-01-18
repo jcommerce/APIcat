@@ -110,9 +110,7 @@ public class SwaggerApiTest {
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutEndpoint.yaml");
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/yaml/providerContract.yaml").build();
 
-        ApiContract apiContract = new ApiContract();
-        apiContract.setApiSpecification(apiSpecification);
-        apiContract.setApiDefinition(apiDefinition);
+        ApiContract apiContract = new ApiContract(apiDefinition, apiSpecification);
 
         Optional<ValidationResult> result = apiContract.validate();
         assertTrue(apiSpecification.isValid());

@@ -27,6 +27,8 @@ public abstract class ApiDefinition {
     //TODO: move ApiContractValidator to APIContract
     //TODO: all methods should be implemented
 
+    @Getter
+    @Setter
     protected String name;
 
     @Getter
