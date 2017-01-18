@@ -5,4 +5,5 @@ dependencies {
     compile project(':apicat-contract')
     compile project(':apicat-repository')
 
+    compile 'org.springframework:spring-context:4.3.5.RELEASE'
 }

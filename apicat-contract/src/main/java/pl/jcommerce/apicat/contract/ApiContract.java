@@ -52,6 +52,14 @@ public class ApiContract {
     @Setter
     private Optional<ValidationResult> validationResult = Optional.empty();
 
+    public ApiContract() {
+    }
+
+    public ApiContract(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
+        this.apiDefinition = apiDefinition;
+        this.apiSpecification = apiSpecification;
+    }
+
     /**
      * Add {@code apiContractValidator}
      *
