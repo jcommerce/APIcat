@@ -23,7 +23,6 @@ public class SwaggerApiDefinitionBuilder {
         return swaggerApiDefinitionBuilder;
     }
 
-
     public static SwaggerApiDefinitionBuilder fromStub(SwaggerApiDefinition swaggerApiDefinition) {
         swaggerApiDefinitionBuilder.swaggerApiDefinition = swaggerApiDefinition;
         return swaggerApiDefinitionBuilder;
