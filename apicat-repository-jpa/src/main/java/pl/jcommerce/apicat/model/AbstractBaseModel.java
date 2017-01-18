@@ -1,6 +1,7 @@
 package pl.jcommerce.apicat.model;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Id;
 
@@ -11,6 +12,7 @@ public abstract class AbstractBaseModel {
 
     @Id
     @Getter
+    @Setter
     Long id;
 
 }
