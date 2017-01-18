@@ -2,6 +2,7 @@ package pl.jcommerce.apicat.service.apispecification;
 
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
+import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationUpdateDto;
 
 /**
@@ -11,7 +12,7 @@ public interface ApiSpecificationService {
 
     Long createSpecification(ApiSpecificationCreateDto data);
 
-    ApiSpecification getSpecification(Long id);
+    ApiSpecificationDto getSpecification(Long id);
 
     Long updateSpecification(ApiSpecificationUpdateDto data);
 

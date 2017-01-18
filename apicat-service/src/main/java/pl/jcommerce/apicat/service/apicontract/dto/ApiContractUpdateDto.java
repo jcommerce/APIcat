@@ -10,7 +10,7 @@ public class ApiContractUpdateDto {
 
     @Getter
     @Setter
-    Long Id;
+    Long id;
 
     @Getter
     @Setter

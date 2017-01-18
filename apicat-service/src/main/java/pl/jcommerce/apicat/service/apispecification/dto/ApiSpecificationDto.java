@@ -1,15 +1,13 @@
-package pl.jcommerce.apicat.service.apidefinition.dto;
+package pl.jcommerce.apicat.service.apispecification.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
-import java.util.List;
-
 /**
  * Created by luwa on 18.01.17.
  */
-public class ApiDefinitionDto {
+public class ApiSpecificationDto {
 
     @Getter
     @Setter
@@ -26,10 +24,6 @@ public class ApiDefinitionDto {
     @Getter
     @Setter
     String data;
-
-    @Getter
-    @Setter
-    List<Long> contractIds;
 
     @Getter
     @Setter

@@ -12,6 +12,10 @@ public class ApiDefinitionUpdateDto {
 
     @Getter
     @Setter
+    Long id;
+
+    @Getter
+    @Setter
     String type;
 
     @Getter
@@ -21,10 +25,6 @@ public class ApiDefinitionUpdateDto {
     @Getter
     @Setter
     String data;
-
-    @Getter
-    @Setter
-    Long Id;
 
     @Getter
     @Setter
