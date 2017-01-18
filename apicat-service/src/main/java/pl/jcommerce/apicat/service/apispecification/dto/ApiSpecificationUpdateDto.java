@@ -7,6 +7,10 @@ public class ApiSpecificationUpdateDto {
 
     @Getter
     @Setter
+    Long id;
+
+    @Getter
+    @Setter
     String type;
 
     @Getter
@@ -16,8 +20,4 @@ public class ApiSpecificationUpdateDto {
     @Getter
     @Setter
     String data;
-
-    @Getter
-    @Setter
-    Long Id;
 }
