@@ -13,7 +13,7 @@ public interface ApiContractService {
 
     ApiContract getContract(Long id);
 
-    Long updateDefinition(ApiContractUpdateDto data);
+    Long updateContract(ApiContractUpdateDto data);
 
     void deleteContract(Long id);
 }
