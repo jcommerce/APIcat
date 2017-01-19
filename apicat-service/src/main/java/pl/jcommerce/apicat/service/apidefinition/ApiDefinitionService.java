@@ -12,11 +12,13 @@ import java.util.List;
  */
 public interface ApiDefinitionService {
 
-    Long createDefinition(ApiDefinitionCreateDto data);
+    Long createDefinition(ApiDefinitionCreateDto apiDefinition, byte[] content);
 
     ApiDefinitionDto getDefinition(Long id);
 
-    Long updateDefinition(ApiDefinitionUpdateDto data);
+    void updateDefinition(Long id, ApiDefinitionUpdateDto apiDefinition);
+
+    void updateDefinitionFile(Long id, byte[] content);
 
     void deleteDefinition(Long id);
 
