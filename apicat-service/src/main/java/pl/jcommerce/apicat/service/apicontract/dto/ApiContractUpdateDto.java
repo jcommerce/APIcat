@@ -6,17 +6,10 @@ import lombok.Setter;
 /**
  * Created by luwa on 18.01.17.
  */
+@Getter
+@Setter
 public class ApiContractUpdateDto {
 
-    @Getter
-    @Setter
-    Long id;
-
-    @Getter
-    @Setter
     Long definitionId;
-
-    @Getter
-    @Setter
     Long specificationId;
 }

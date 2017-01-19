@@ -1,6 +1,5 @@
 package pl.jcommerce.apicat.service.apicontract;
 
-import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractCreateDto;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractDto;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractUpdateDto;
@@ -10,11 +9,11 @@ import pl.jcommerce.apicat.service.apicontract.dto.ApiContractUpdateDto;
  */
 public interface ApiContractService {
 
-    Long createContract(ApiContractCreateDto data);
+    Long createContract(ApiContractCreateDto apiContractDto);
 
     ApiContractDto getContract(Long id);
 
-    Long updateContract(ApiContractUpdateDto data);
+    void updateContract(Long id, ApiContractUpdateDto apiContractDto);
 
     void deleteContract(Long id);
 }
