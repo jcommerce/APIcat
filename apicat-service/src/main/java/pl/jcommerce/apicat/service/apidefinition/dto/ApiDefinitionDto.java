@@ -9,29 +9,14 @@ import java.util.List;
 /**
  * Created by luwa on 18.01.17.
  */
+@Getter
+@Setter
 public class ApiDefinitionDto {
 
-    @Getter
-    @Setter
     Long id;
-
-    @Getter
-    @Setter
     String type;
-
-    @Getter
-    @Setter
     String name;
-
-    @Getter
-    @Setter
     String data;
-
-    @Getter
-    @Setter
     List<Long> contractIds;
-
-    @Getter
-    @Setter
     ValidationResult validationResult;
 }

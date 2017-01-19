@@ -88,7 +88,7 @@ public abstract class ApiDefinition {
         return validationResult;
     }
 
-    public ValidationResult validateAgainstApiSpecifications(ApiSpecification... apiSpecifications) {
+    public ValidationResult validateAgainstApiSpecifications(List<ApiSpecification> apiSpecifications) {
         ValidationResult result = new ValidationResult();
 
         for (ApiSpecification apiSpecification : apiSpecifications) {
@@ -100,14 +100,14 @@ public abstract class ApiDefinition {
         return result;
     }
 
-    public Optional<ValidationResult> validateAllContracts() {
+    public ValidationResult validateAllContracts() {
         contractsValidationResults = Optional.of(new ValidationResult());
         for (ApiContract apiContract : apiContracts) {
             Optional<ValidationResult> contractValidationResult = apiContract.validate();
             contractValidationResult.ifPresent(validationResult -> contractsValidationResults.get().merge(validationResult));
         }
 
-        return contractsValidationResults;
+        return contractsValidationResults.get();
     }
 
     public boolean isApiValidated() {
@@ -152,7 +152,4 @@ public abstract class ApiDefinition {
             contract.addValidator(apiContractValidator);
         }
     }
-
-    //public ValidationResult validateSpecifications(ApiSpecification apiSpecification);
-
 }
