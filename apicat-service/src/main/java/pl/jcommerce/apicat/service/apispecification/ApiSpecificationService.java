@@ -1,6 +1,5 @@
 package pl.jcommerce.apicat.service.apispecification;
 
-import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationUpdateDto;
@@ -10,11 +9,13 @@ import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationUpdateDt
  */
 public interface ApiSpecificationService {
 
-    Long createSpecification(ApiSpecificationCreateDto data);
+    Long createSpecification(ApiSpecificationCreateDto apiSpecificationDto, byte[] content);
 
     ApiSpecificationDto getSpecification(Long id);
 
-    Long updateSpecification(ApiSpecificationUpdateDto data);
+    void updateSpecification(Long id, ApiSpecificationUpdateDto apiSpecificationDto);
+
+    void updateSpecificationFile(Long id, byte[] content);
 
     void deleteSpecification(Long id);
 }

@@ -15,6 +15,8 @@ import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecifica
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecificationValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -139,25 +141,22 @@ public class SwaggerApiTest {
                 withContractedApiSpecification(apiSpecificationIncorrectParameter).
                 withContractedApiSpecification(apiSpecificationIncorrectEndpoint).
                 build();
-        Optional<ValidationResult> result = apiDefinition.validateAllContracts();
+        ValidationResult result = apiDefinition.validateAllContracts();
         assertTrue(apiDefinition.areContractsValided());
         assertFalse(apiDefinition.areContractsValid());
-        if (result.isPresent()) {
-            assertEquals(2, result.get().getProblemList().size());
-        } else {
-            fail();
-        }
+        assertEquals(2, result.getProblemList().size());
     }
 
     @Test
     public void shouldValidateAgainstSpecificationsWithErrors() {
-        ApiSpecification apiSpecificationIncorrectParameter = SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutNotRequiredParameter.yaml");
-        ApiSpecification apiSpecificationIncorrectEndpoint = SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutEndpoint.yaml");
+        List<ApiSpecification> apiSpecifications = new ArrayList<>();
+        apiSpecifications.add(SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutNotRequiredParameter.yaml"));
+        apiSpecifications.add(SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutEndpoint.yaml"));
 
         ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromPath("contracts/yaml/providerContract.yaml").build();
 
         assertEquals(2,
-                apiDefinition.validateAgainstApiSpecifications(apiSpecificationIncorrectEndpoint, apiSpecificationIncorrectParameter).
+                apiDefinition.validateAgainstApiSpecifications(apiSpecifications).
                         getProblemList().size());
     }
 
