@@ -1,6 +1,31 @@
 group 'pl.jcommerce.apicat'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    }
+}
+
 dependencies {
     compile project(':apicat-contract')
+    compile project(':apicat-service')
+
+    compile("org.springframework.boot:spring-boot-starter-web"){
+        exclude group:'ch.qos.logback'
+    }
+    compile("org.springframework.boot:spring-boot-devtools"){
+        exclude group:'ch.qos.logback'
+    }
+    compile "io.springfox:springfox-swagger2:2.6.1"
+    compile "io.springfox:springfox-swagger-ui:2.6.1"
+    testCompile "com.jayway.restassured:rest-assured:2.4.1"
+    compile "org.springframework.boot:spring-boot-starter-test"
+    compile "org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE"
 }
+
+apply plugin: 'org.springframework.boot'
+apply plugin: 'idea'
