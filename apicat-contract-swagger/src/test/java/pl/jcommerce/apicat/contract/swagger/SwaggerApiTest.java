@@ -142,7 +142,7 @@ public class SwaggerApiTest {
                 withContractedApiSpecification(apiSpecificationIncorrectEndpoint).
                 build();
         ValidationResult result = apiDefinition.validateAllContracts();
-        assertTrue(apiDefinition.areContractsValided());
+        assertTrue(apiDefinition.areContractsValidated());
         assertFalse(apiDefinition.areContractsValid());
         assertEquals(2, result.getProblemList().size());
     }

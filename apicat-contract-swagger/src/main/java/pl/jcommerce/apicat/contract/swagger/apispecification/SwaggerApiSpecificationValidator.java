@@ -40,12 +40,12 @@ public class SwaggerApiSpecificationValidator implements ApiSpecificationValidat
             return result;
         }
         if (!processingReport.isSuccess()) {
-            mapProcessingRaportToValidationProblem(processingReport, result);
+            mapProcessingReportToValidationProblem(processingReport, result);
         }
         return result;
     }
 
-    private void mapProcessingRaportToValidationProblem(ProcessingReport processingReport, ValidationResult result) {
+    private void mapProcessingReportToValidationProblem(ProcessingReport processingReport, ValidationResult result) {
         for (ProcessingMessage processingMessage : processingReport) {
             LogLevel logLevel = processingMessage.getLogLevel();
             ProblemLevel problemLevel;

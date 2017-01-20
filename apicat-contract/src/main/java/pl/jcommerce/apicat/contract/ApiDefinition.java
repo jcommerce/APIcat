@@ -140,7 +140,7 @@ public abstract class ApiDefinition {
         throw new ApicatSystemException(ErrorCode.API_NOT_VALIDATED);
     }
 
-    public boolean areContractsValided() {
+    public boolean areContractsValidated() {
         return contractsValidationResults.isPresent();
     }
 

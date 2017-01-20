@@ -5,7 +5,7 @@ package pl.jcommerce.apicat.exception;
  */
 public class ObjectNotFoundException extends RuntimeException {
 
-    ObjectType objectType;
+    private ObjectType objectType;
 
     public ObjectNotFoundException(ObjectType errorCode) {
         this.objectType = errorCode;
