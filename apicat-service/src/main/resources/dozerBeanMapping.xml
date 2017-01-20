@@ -17,4 +17,17 @@
         </field>
     </mapping>
 
+    <mapping>
+        <class-a>pl.jcommerce.apicat.model.ApiSpecificationModel</class-a>
+        <class-b>pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto</class-b>
+        <field>
+            <a>apiContractModel.id</a>
+            <b>contractId</b>
+        </field>
+        <field>
+            <a>content</a>
+            <b>data</b>
+        </field>
+    </mapping>
+
 </mappings>

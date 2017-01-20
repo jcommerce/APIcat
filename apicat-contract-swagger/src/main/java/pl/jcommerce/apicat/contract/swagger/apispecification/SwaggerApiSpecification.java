@@ -33,7 +33,9 @@ public class SwaggerApiSpecification extends ApiSpecification {
     private JsonNode jsonNode;
 
     public static SwaggerApiSpecification fromContent(String content) {
-        return createSwaggerApiSpecification(createJsonNode(getJson(content)));
+        SwaggerApiSpecification swaggerApiSpecification = createSwaggerApiSpecification(createJsonNode(getJson(content)));
+        swaggerApiSpecification.setContent(content);
+        return swaggerApiSpecification;
     }
 
     public static SwaggerApiSpecification fromPath(String path) {
@@ -45,7 +47,10 @@ public class SwaggerApiSpecification extends ApiSpecification {
         } catch (IOException e) {
             throw new ApicatSystemException(ErrorCode.READ_FILE_EXCEPTION, e.getMessage());
         }
-        return createSwaggerApiSpecification(createJsonNode(getJson(content)));
+
+        SwaggerApiSpecification swaggerApiSpecification = createSwaggerApiSpecification(createJsonNode(getJson(content)));
+        swaggerApiSpecification.setContent(content);
+        return swaggerApiSpecification;
     }
 
     private static JsonNode createJsonNode(String content) {
