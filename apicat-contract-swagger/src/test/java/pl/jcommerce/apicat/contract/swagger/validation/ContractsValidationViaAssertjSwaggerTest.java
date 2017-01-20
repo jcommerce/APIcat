@@ -31,7 +31,7 @@ public class ContractsValidationViaAssertjSwaggerTest {
         SwaggerAssertions.assertThat(providerSwaggerLocation).satisfiesContract(consumerSwaggerLocation);
     }
 
-    // it doesn't support the difference on the level of the granulity smaller than the whole endpoint e.g. any of the methods (in this case "put" method)
+    // it doesn't support the difference on the level of the granularity smaller than the whole endpoint e.g. any of the methods (in this case "put" method)
     @Test(expected = AssertionError.class)
     public void shouldUnusedPutMethodBeDetected() {
         localizeSwaggerDefinitions("/yaml/consumerContractWithoutPutMethod.yaml");
@@ -40,7 +40,7 @@ public class ContractsValidationViaAssertjSwaggerTest {
         Validate.notNull(providerSwaggerLocation, "actualLocation must not be null!");
     }
 
-    // it doesn't support the difference on the level of the granulity smaller than the whole endpoint e.g. parameters (in this case wrong parameter type)
+    // it doesn't support the difference on the level of the granularity smaller than the whole endpoint e.g. parameters (in this case wrong parameter type)
     @Test(expected = AssertionError.class)
     public void shouldUnusedParameterBeDetected() {
         localizeSwaggerDefinitions("/yaml/consumerContractWithoutRequiredParameter.yaml");
