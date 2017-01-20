@@ -85,7 +85,7 @@ public abstract class ApiSpecification {
     public abstract String getType();
 
     /**
-     * Add {@code apiContractValidator}
+     * Add {@code apiSpecificationValidator}
      *
      * @param apiSpecificationValidator specification validator to be used
      */

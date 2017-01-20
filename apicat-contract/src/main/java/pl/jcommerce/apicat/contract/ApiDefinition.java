@@ -33,6 +33,10 @@ public abstract class ApiDefinition {
 
     @Getter
     @Setter
+    private String content;
+
+    @Getter
+    @Setter
     protected Boolean autodiscoverValidators = Boolean.TRUE;
 
     private List<ApiDefinitionValidator> validators = null;
@@ -44,6 +48,18 @@ public abstract class ApiDefinition {
     private Optional<ValidationResult> contractsValidationResults = Optional.empty();
     private List<ApiContract> apiContracts = new ArrayList<>();
 
+    /**
+     * This value have to be unique according to all implementations
+     *
+     * @return specific implementation type
+     */
+    public abstract String getType();
+
+    /**
+     * Add {@code apiDefinitionValidator}
+     *
+     * @param apiDefinitionValidator definition validator to be used
+     */
     public void addValidator(ApiDefinitionValidator apiDefinitionValidator) {
         if (!apiDefinitionValidator.support(this)) {
             throw new ApicatSystemException("Provided apiDefinitionValidator doesn't support this specification. Validator object: " + apiDefinitionValidator);

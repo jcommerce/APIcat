@@ -90,7 +90,6 @@ public class ApiSpecificationServiceTest {
 
         apiSpecificationUpdateDto.setContractId(3L);
         apiSpecificationService.updateSpecification(specificationId, apiSpecificationUpdateDto);
-
     }
 
     private ApiSpecificationModel setupApiSpecificationModel() {

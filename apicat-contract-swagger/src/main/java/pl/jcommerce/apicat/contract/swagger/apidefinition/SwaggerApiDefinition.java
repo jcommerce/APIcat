@@ -22,6 +22,8 @@ import java.io.IOException;
  */
 public class SwaggerApiDefinition extends ApiDefinition {
 
+    public static final String TYPE = "Swagger";
+
     @Getter
     @Setter
     private Swagger swaggerDefinition;
@@ -35,11 +37,12 @@ public class SwaggerApiDefinition extends ApiDefinition {
     }
 
     public static SwaggerApiDefinition fromContent(String content) {
-        return createSwaggerApiDefinition(createJsonNode(getJson(content)));
+        SwaggerApiDefinition swaggerApiDefinition = createSwaggerApiDefinition(createJsonNode(getJson(content)));
+        swaggerApiDefinition.setContent(content);
+        return swaggerApiDefinition;
     }
 
     public static SwaggerApiDefinition fromPath(String path) {
-
         ClassLoader classLoader = SwaggerApiDefinition.class.getClassLoader();
         File file = new File(classLoader.getResource(path).getFile());
         String content;
@@ -49,7 +52,9 @@ public class SwaggerApiDefinition extends ApiDefinition {
             throw new ApicatSystemException(ErrorCode.READ_FILE_EXCEPTION, e.getMessage());
         }
 
-        return createSwaggerApiDefinition(createJsonNode(getJson(content)));
+        SwaggerApiDefinition swaggerApiDefinition = createSwaggerApiDefinition(createJsonNode(getJson(content)));
+        swaggerApiDefinition.setContent(content);
+        return swaggerApiDefinition;
     }
 
     private static JsonNode createJsonNode(String content) {
@@ -119,4 +124,9 @@ public class SwaggerApiDefinition extends ApiDefinition {
 //        } else
 //            valid = false;
 //    }
+
+    @Override
+    public String getType() {
+        return TYPE;
+    }
 }

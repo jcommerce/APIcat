@@ -20,9 +20,22 @@
     <mapping>
         <class-a>pl.jcommerce.apicat.model.ApiSpecificationModel</class-a>
         <class-b>pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto</class-b>
-        <field>
+        <field type="one-way">
             <a>apiContractModel.id</a>
             <b>contractId</b>
+        </field>
+        <field>
+            <a>content</a>
+            <b>data</b>
+        </field>
+    </mapping>
+
+    <mapping>
+        <class-a>pl.jcommerce.apicat.model.ApiDefinitionModel</class-a>
+        <class-b>pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionDto</class-b>
+        <field type="one-way">
+            <a>apiContractModels.id</a>
+            <b>contractIds</b>
         </field>
         <field>
             <a>content</a>
