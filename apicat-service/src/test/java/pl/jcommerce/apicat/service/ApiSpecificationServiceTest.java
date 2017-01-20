@@ -49,7 +49,7 @@ public class ApiSpecificationServiceTest {
     private final String content = getContent();
 
     @Test
-    public void createSpecification() {
+    public void testCreateSpecification() {
         ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
         when(apiSpecificationDao.create(any(ApiSpecificationModel.class))).thenReturn(apiSpecificationModel);
 
@@ -64,7 +64,7 @@ public class ApiSpecificationServiceTest {
     }
 
     @Test
-    public void getSpecification() {
+    public void testGetSpecification() {
         ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
         when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
 
@@ -76,7 +76,7 @@ public class ApiSpecificationServiceTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void updateSpecificationContractNotFound() {
+    public void testUpdateSpecificationContractNotFound() {
         ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
         when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
 

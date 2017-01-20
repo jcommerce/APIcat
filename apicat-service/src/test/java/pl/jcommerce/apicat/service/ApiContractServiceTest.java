@@ -44,7 +44,7 @@ public class ApiContractServiceTest {
     private final Long specificationId = 3L;
 
     @Test
-    public void createContract() {
+    public void testCreateContract() {
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
@@ -66,7 +66,7 @@ public class ApiContractServiceTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void createContractDefinitionNotFound() {
+    public void testCreateContractDefinitionNotFound() {
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
@@ -87,7 +87,7 @@ public class ApiContractServiceTest {
     }
 
     @Test
-    public void getContract() {
+    public void testGetContract() {
         ApiSpecificationModel apiSpecificationModel = new ApiSpecificationModel();
         apiSpecificationModel.setId(specificationId);
 
@@ -108,7 +108,7 @@ public class ApiContractServiceTest {
     }
 
     @Test(expected = ObjectNotFoundException.class)
-    public void updateContractSpecificationNotFound() {
+    public void testUpdateContractSpecificationNotFound() {
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
