@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.ApiSpecificationStage;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
@@ -49,7 +50,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
 
         ApiDefinition apiDefinition = null;
         try {
-            SwaggerApiDefinitionBuilder.fromContent(new String(content)).build();
+            apiDefinition = SwaggerApiDefinitionBuilder.fromContent(new String(content)).build();
         } catch (Exception ex) {
             throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION);
         }
@@ -57,7 +58,10 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
 
         apiDefinition.validate();
 
-        ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.create(mapper.map(apiDefinition, ApiDefinitionModel.class));
+        ApiDefinitionModel apiDefinitionModel = mapper.map(apiDefinitionDto, ApiDefinitionModel.class);
+        apiDefinitionModel.setStage(ApiSpecificationStage.DRAFT.name());
+        apiDefinitionModel.setContent(apiDefinition.getContent());
+        apiDefinitionDao.create(apiDefinitionModel);
         return apiDefinitionModel.getId();
     }
 

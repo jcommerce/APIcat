@@ -34,11 +34,11 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
 
     }
 
-    /*
     @Test
     public void testCreateAndReadDefinition() {
+        File definitionFile = new File("src/test/resources/json/providerContract.json");//TODO move path to
 
-        Assert.assertTrue(new File("Readme.md").exists());
+        Assert.assertTrue(definitionFile.exists());
 
         ApiDefinitionCreateDto data = new ApiDefinitionCreateDto();
         data.setName("Test definition");
@@ -46,7 +46,7 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
 
         Response response =
                 given().
-                multiPart("file", new File("Readme.md")).
+                multiPart("file", definitionFile).
                 formParam("name", "TEST").
                 formParam("type", "SWAGGER").
                 when().
@@ -64,5 +64,4 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
                 body("name", equalTo("TEST")).
                 body("type", equalTo("SWAGGER"));
     }
-*/
 }

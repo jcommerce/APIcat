@@ -25,6 +25,12 @@ dependencies {
     testCompile "com.jayway.restassured:rest-assured:2.4.1"
     compile "org.springframework.boot:spring-boot-starter-test"
     compile "org.springframework.hateoas:spring-hateoas:0.23.0.RELEASE"
+
+/*    testCompile "com.h2database:h2"
+    compile "commons-dbcp:commons-dbcp"
+    compile "org.springframework:spring-tx"
+    compile "org.springframework:spring-orm"*/
+
 }
 
 apply plugin: 'org.springframework.boot'
