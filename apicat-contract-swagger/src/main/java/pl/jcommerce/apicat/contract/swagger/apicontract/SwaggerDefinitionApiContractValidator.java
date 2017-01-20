@@ -37,7 +37,7 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
     }
 
     private void checkDefinitionExistence(String definitionName, Model providerModel) {
-        if(!apiSpecificationDefinitions.containsKey(definitionName)) {
+        if (!apiSpecificationDefinitions.containsKey(definitionName)) {
             result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.DEFINITION_NOT_USED, definitionName), ProblemLevel.ERROR));
         } else {
             providerModel.getProperties().forEach((s, property) -> checkPropertyExistence(s, property, definitionName));
@@ -45,8 +45,8 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
     }
 
     private void checkPropertyExistence(String propertyKey, Property property, String definitionName) {
-        if(!apiSpecificationDefinitions.get(definitionName).getProperties().containsKey(propertyKey)) {
-            if(property.getRequired()) {
+        if (!apiSpecificationDefinitions.get(definitionName).getProperties().containsKey(propertyKey)) {
+            if (property.getRequired()) {
                 result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, propertyKey, definitionName), ProblemLevel.ERROR));
             } else {
                 result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, propertyKey, definitionName), ProblemLevel.WARN));

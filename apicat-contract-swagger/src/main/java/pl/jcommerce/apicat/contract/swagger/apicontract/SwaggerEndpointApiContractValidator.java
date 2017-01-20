@@ -89,7 +89,7 @@ public class SwaggerEndpointApiContractValidator extends SwaggerApiContractValid
     }
 
     private void checkSingleParametersExistence(Parameter providerParameter, List<Parameter> consumerParameters) {
-        if(consumerParameters.stream().noneMatch(p -> p.equals(providerParameter))) {
+        if (consumerParameters.stream().noneMatch(p -> p.equals(providerParameter))) {
             validationResult.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PARAMETER_NOT_USED, providerParameter.getName(), operationDetails.getMethodName(), operationDetails.getOperationId(), operationDetails.getEndpoint())));
         }
     }

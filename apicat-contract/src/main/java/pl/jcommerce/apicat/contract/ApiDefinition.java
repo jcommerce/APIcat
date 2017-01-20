@@ -46,6 +46,9 @@ public abstract class ApiDefinition {
 
     @Getter
     private Optional<ValidationResult> contractsValidationResults = Optional.empty();
+
+    @Getter
+    @Setter
     private List<ApiContract> apiContracts = new ArrayList<>();
 
     /**

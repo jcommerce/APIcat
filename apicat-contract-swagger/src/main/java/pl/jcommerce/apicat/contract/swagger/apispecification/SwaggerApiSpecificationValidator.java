@@ -32,24 +32,24 @@ public class SwaggerApiSpecificationValidator implements ApiSpecificationValidat
 
         ProcessingReport processingReport;
         SwaggerApiSchemaValidator swaggerApiSchemaValidator = new SwaggerApiSchemaValidator();
-        try{
+        try {
             processingReport = swaggerApiSchemaValidator.validate(swaggerApiSpecification.getJsonNode());
-        }catch (ProcessingException e){
+        } catch (ProcessingException e) {
             ValidationProblem problem = new ValidationProblem("Invalid Json format", ProblemLevel.ERROR);
             result.addProblem(problem);
             return result;
         }
-        if(!processingReport.isSuccess()){
-           mapProcessingRaportToValidationProblem(processingReport, result);
+        if (!processingReport.isSuccess()) {
+            mapProcessingRaportToValidationProblem(processingReport, result);
         }
         return result;
     }
 
-    private void mapProcessingRaportToValidationProblem(ProcessingReport processingReport, ValidationResult result){
-        for(ProcessingMessage processingMessage : processingReport){
+    private void mapProcessingRaportToValidationProblem(ProcessingReport processingReport, ValidationResult result) {
+        for (ProcessingMessage processingMessage : processingReport) {
             LogLevel logLevel = processingMessage.getLogLevel();
             ProblemLevel problemLevel;
-            if(logLevel == LogLevel.ERROR || logLevel == LogLevel.FATAL ){
+            if (logLevel == LogLevel.ERROR || logLevel == LogLevel.FATAL) {
                 problemLevel = ProblemLevel.ERROR;
             } else {
                 problemLevel = ProblemLevel.WARN;

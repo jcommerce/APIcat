@@ -32,6 +32,15 @@ public class SwaggerApiSpecification extends ApiSpecification {
     @Setter
     private JsonNode jsonNode;
 
+    public void generateSwaggerFromContent() {
+        if ((getContent() != null) && (getSwaggerDefinition() == null)) {
+            if (jsonNode == null) {
+                setJsonNode(createJsonNode(getJson(getContent())));
+            }
+            setSwaggerDefinition(new SwaggerParser().read(jsonNode));
+        }
+    }
+
     public static SwaggerApiSpecification fromContent(String content) {
         SwaggerApiSpecification swaggerApiSpecification = createSwaggerApiSpecification(createJsonNode(getJson(content)));
         swaggerApiSpecification.setContent(content);

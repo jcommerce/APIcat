@@ -2,6 +2,7 @@ package pl.jcommerce.apicat.service.apidefinition.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
@@ -70,7 +71,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         }
 
         List<ApiContractModel> apiContractModels = new ArrayList<>();
-        if (!apiContractModels.isEmpty()) {
+        if (!(apiDefinitionDto.getContractIds() == null) && !(apiDefinitionDto.getContractIds().isEmpty())) {
             for (Long contractId : apiDefinitionDto.getContractIds()) {
                 ApiContractModel apiContractModel = apiContractDao.find(contractId);
                 if (apiContractModel == null) {
@@ -104,14 +105,22 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     @Override
     public ValidationResult validateAgainstSpecifications(Long definitionId, List<Long> specificationIds) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(definitionId);
+        if (apiDefinitionModel == null) {
+            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+        }
         //TODO Use correct ApiDefinition implementation depending on type field
-        ApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
+        SwaggerApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
+        apiDefinition.generateSwaggerFromContent();
 
         List<ApiSpecification> apiSpecifications = new ArrayList<>();
         for (Long specificationId : specificationIds) {
             ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(specificationId);
+            if (apiSpecificationModel == null) {
+                throw new ObjectNotFoundException(ObjectType.SPECIFICATION);
+            }
             //TODO Use correct ApiSpecification implementation depending on type field
-            ApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);
+            SwaggerApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);
+            apiSpecification.generateSwaggerFromContent();
             apiSpecifications.add(apiSpecification);
         }
 
@@ -121,8 +130,26 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     @Override
     public ValidationResult validateAgainstAllSpecifications(Long id) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
+        if (apiDefinitionModel == null) {
+            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+        }
         //TODO Use correct ApiDefinition implementation depending on type field
-        ApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
+        SwaggerApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
+        apiDefinition.generateSwaggerFromContent();
+
+        List<ApiContract> apiContracts = new ArrayList<>();
+        for (ApiContractModel apiContractModel : apiDefinitionModel.getApiContractModels()) {
+            ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(apiContractModel.getApiSpecificationModel().getId());
+            SwaggerApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);
+            apiSpecification.generateSwaggerFromContent();
+
+            ApiContract apiContract = new ApiContract();
+            apiContract.setApiDefinition(apiDefinition);
+            apiContract.setApiSpecification(apiSpecification);
+            apiContracts.add(apiContract);
+        }
+        apiDefinition.setApiContracts(apiContracts);
+
         return apiDefinition.validateAllContracts();
     }
 }

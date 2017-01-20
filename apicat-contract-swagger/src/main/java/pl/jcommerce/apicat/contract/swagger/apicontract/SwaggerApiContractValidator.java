@@ -1,6 +1,8 @@
 package pl.jcommerce.apicat.contract.swagger.apicontract;
 
-import pl.jcommerce.apicat.contract.*;
+import pl.jcommerce.apicat.contract.ApiContract;
+import pl.jcommerce.apicat.contract.ApiDefinition;
+import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;

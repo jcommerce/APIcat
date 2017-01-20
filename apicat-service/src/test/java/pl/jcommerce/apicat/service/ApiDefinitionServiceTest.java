@@ -10,17 +10,23 @@ import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiDefinitionDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
+import pl.jcommerce.apicat.exception.ObjectNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiDefinitionModel;
+import pl.jcommerce.apicat.model.ApiSpecificationModel;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionDto;
+import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionUpdateDto;
 import pl.jcommerce.apicat.service.apidefinition.impl.ApiDefinitionServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
@@ -47,13 +53,14 @@ public class ApiDefinitionServiceTest {
 
     private final Long definitionId = 1L;
     private final Long contractId = 2L;
+    private final Long specificationId = 3L;
     private final String definitionName = "Test";
     private final String definitionType = SwaggerApiDefinition.TYPE;
     private final String testFilepath = "consumerContract.yaml";
     private final String content = getContent();
 
     @Test
-    public void createDefinition() {
+    public void testCreateDefinition() {
         ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
         when(apiDefinitionDao.create(any(ApiDefinitionModel.class))).thenReturn(apiDefinitionModel);
 
@@ -68,7 +75,7 @@ public class ApiDefinitionServiceTest {
     }
 
     @Test
-    public void getDefinition() {
+    public void testGetDefinition() {
         ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
 
@@ -77,6 +84,50 @@ public class ApiDefinitionServiceTest {
         assertEquals(definitionName, apiDefinitionDto.getName());
         assertEquals(content, apiDefinitionDto.getData());
         assertEquals(Collections.singletonList(contractId), apiDefinitionDto.getContractIds());
+    }
+
+    @Test(expected = ObjectNotFoundException.class)
+    public void testUpdateSpecificationContractNotFound() {
+        ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
+        when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
+
+        ApiContractModel apiContractModel = new ApiContractModel();
+        apiContractModel.setId(contractId);
+        when(apiContractDao.find(contractId)).thenReturn(apiContractModel);
+
+        ApiDefinitionUpdateDto apiDefinitionUpdateDto = new ApiDefinitionUpdateDto();
+        apiDefinitionUpdateDto.setName("Test2");
+        apiDefinitionService.updateDefinition(definitionId, apiDefinitionUpdateDto);
+
+        apiDefinitionUpdateDto.setContractIds(Arrays.asList(contractId, 3L));
+        apiDefinitionService.updateDefinition(definitionId, apiDefinitionUpdateDto);
+    }
+
+    @Test
+    public void testValidateAgainstSpecifications() {
+        ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
+        when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
+
+        ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
+        when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
+
+        ValidationResult result = apiDefinitionService.validateAgainstSpecifications(definitionId, Collections.singletonList(specificationId));
+        assertEquals(ValidationResultCategory.CORRECT, result.getValidationResultCategory());
+    }
+
+    @Test
+    public void testValidateAgainstAllSpecifications() {
+        ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
+        when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
+
+        ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
+        when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
+
+        ApiContractModel apiContractModel = setupContractModel();
+        when(apiContractDao.find(contractId)).thenReturn(apiContractModel);
+
+        ValidationResult result = apiDefinitionService.validateAgainstAllSpecifications(definitionId);
+        assertEquals(ValidationResultCategory.CORRECT, result.getValidationResultCategory());
     }
 
     private ApiDefinitionModel setupApiDefinitionModel() {
@@ -106,6 +157,23 @@ public class ApiDefinitionServiceTest {
     private ApiContractModel setupContractModel() {
         ApiContractModel model = new ApiContractModel();
         model.setId(contractId);
+
+        ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
+        apiDefinitionModel.setId(definitionId);
+        model.setApiDefinitionModel(apiDefinitionModel);
+
+        ApiSpecificationModel apiSpecificationModel  = new ApiSpecificationModel();
+        apiSpecificationModel.setId(specificationId);
+        model.setApiSpecificationModel(apiSpecificationModel);
+
         return model;
+    }
+
+    private ApiSpecificationModel setupApiSpecificationModel() {
+        ApiSpecificationModel apiSpecificationModel = new ApiSpecificationModel();
+        apiSpecificationModel.setId(specificationId);
+        apiSpecificationModel.setType(SwaggerApiSpecification.TYPE);
+        apiSpecificationModel.setContent(content);
+        return apiSpecificationModel;
     }
 }
