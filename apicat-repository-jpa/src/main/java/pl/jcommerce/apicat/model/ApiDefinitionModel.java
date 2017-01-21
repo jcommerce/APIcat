@@ -8,10 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 
-/**
- * Created by prho on 17.01.17.
- */
-
 @Entity
 @Getter
 @Setter
