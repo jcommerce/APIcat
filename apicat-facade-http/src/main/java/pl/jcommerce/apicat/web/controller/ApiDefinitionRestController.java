@@ -45,8 +45,8 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
     public ResponseEntity<Void> createDefinition(@RequestPart("file") MultipartFile file, @RequestPart String name, @RequestPart String type) {
         logger.debug("Call create api definition endpoint.");
         ApiDefinitionCreateDto apiDefinition = new ApiDefinitionCreateDto();
-        apiDefinition.setType(name);
-        apiDefinition.setName(type);
+        apiDefinition.setName(name);
+        apiDefinition.setType(type);
 
         Long definitionId = null;
 

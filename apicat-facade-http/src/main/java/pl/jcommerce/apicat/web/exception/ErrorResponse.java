@@ -5,6 +5,7 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import java.io.Serializable;
 
 class ErrorResponse implements Serializable {
+
     private final String message;
 
     private ErrorCode errorCode;

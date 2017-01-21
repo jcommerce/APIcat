@@ -10,6 +10,7 @@ import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 
 @ControllerAdvice
 public class RestControllerExceptionHandler {
+
     @ExceptionHandler(ApicatSystemException.class)
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)

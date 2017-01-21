@@ -56,7 +56,6 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
             throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION);
         }
         apiDefinition.setName(apiDefinitionDto.getName());
-
         apiDefinition.validate();
 
         ApiDefinitionModel apiDefinitionModel = mapper.map(apiDefinitionDto, ApiDefinitionModel.class);

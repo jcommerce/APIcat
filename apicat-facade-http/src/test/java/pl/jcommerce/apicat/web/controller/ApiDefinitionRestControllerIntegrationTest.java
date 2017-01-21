@@ -1,16 +1,17 @@
 package pl.jcommerce.apicat.web.controller;
 
 import com.jayway.restassured.response.Response;
+import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.http.HttpStatus;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto;
 import pl.jcommerce.apicat.web.AbstractBaseIntegrationTest;
 
 import java.io.File;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.core.IsEqual.equalTo;
+import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseIntegrationTest {
 
@@ -37,18 +38,16 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
     @Test
     public void testCreateAndReadDefinition() {
         File definitionFile = new File("src/test/resources/json/providerContract.json");//TODO move path to
+        final String testDefinitionName = "TEST";
+        final String testDefinitionType = "SWAGGER";
 
         Assert.assertTrue(definitionFile.exists());
-
-        ApiDefinitionCreateDto data = new ApiDefinitionCreateDto();
-        data.setName("Test definition");
-        data.setType("SWAGGER");
 
         Response response =
                 given().
                 multiPart("file", definitionFile).
-                formParam("name", "TEST").
-                formParam("type", "SWAGGER").
+                formParam("name", testDefinitionName).
+                formParam("type", testDefinitionType).
                 when().
                 post("/definitions").
                 then().
@@ -57,11 +56,13 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
 
         String locationDefinitionUrl = response.getHeader("Location");
 
-        given().
+       given().
                 when().
                 get(locationDefinitionUrl).
                 then().
-                body("name", equalTo("TEST")).
-                body("type", equalTo("SWAGGER"));
+                body("id", equalTo(1)).
+                body("type", equalTo(testDefinitionType)).
+                body("name", equalTo(testDefinitionName)).
+                body("data", notNullValue());
     }
 }
