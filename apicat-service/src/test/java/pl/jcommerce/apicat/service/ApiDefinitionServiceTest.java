@@ -15,7 +15,7 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiDefinitionDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
-import pl.jcommerce.apicat.exception.ObjectNotFoundException;
+import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiDefinitionModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
@@ -86,7 +86,7 @@ public class ApiDefinitionServiceTest {
         assertEquals(Collections.singletonList(contractId), apiDefinitionDto.getContractIds());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test(expected = ModelNotFoundException.class)
     public void testUpdateSpecificationContractNotFound() {
         ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);

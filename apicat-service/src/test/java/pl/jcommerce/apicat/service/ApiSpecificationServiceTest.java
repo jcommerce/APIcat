@@ -11,7 +11,7 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
-import pl.jcommerce.apicat.exception.ObjectNotFoundException;
+import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
@@ -75,7 +75,7 @@ public class ApiSpecificationServiceTest {
         assertEquals(contractId, apiSpecificationDto.getContractId());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test(expected = ModelNotFoundException.class)
     public void testUpdateSpecificationContractNotFound() {
         ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
         when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);

@@ -4,9 +4,6 @@ import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDt
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationUpdateDto;
 
-/**
- * Created by luwa on 18.01.17.
- */
 public interface ApiSpecificationService {
 
     Long createSpecification(ApiSpecificationCreateDto apiSpecificationDto, byte[] content);

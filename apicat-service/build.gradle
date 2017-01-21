@@ -8,4 +8,6 @@ dependencies {
 
     compile 'net.sf.dozer:dozer:5.5.1'
     compile 'org.mockito:mockito-all:1.10.19'
+    compile "org.springframework:spring-tx:4.3.5.RELEASE"
+    compile "org.springframework:spring-orm:4.3.5.RELEASE"
 }

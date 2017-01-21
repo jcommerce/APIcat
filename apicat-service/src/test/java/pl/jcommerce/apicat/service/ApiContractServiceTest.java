@@ -8,7 +8,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiDefinitionDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
-import pl.jcommerce.apicat.exception.ObjectNotFoundException;
+import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiDefinitionModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
@@ -65,7 +65,7 @@ public class ApiContractServiceTest {
         assertEquals(contractId, returnedContractId);
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test(expected = ModelNotFoundException.class)
     public void testCreateContractDefinitionNotFound() {
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);
@@ -107,7 +107,7 @@ public class ApiContractServiceTest {
         assertEquals(definitionId, apiContract.getDefinitionId());
     }
 
-    @Test(expected = ObjectNotFoundException.class)
+    @Test(expected = ModelNotFoundException.class)
     public void testUpdateContractSpecificationNotFound() {
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);

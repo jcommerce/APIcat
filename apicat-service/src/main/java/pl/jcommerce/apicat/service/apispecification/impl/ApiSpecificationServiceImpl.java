@@ -2,12 +2,12 @@ package pl.jcommerce.apicat.service.apispecification.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.jcommerce.apicat.contract.ApiSpecification;
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
-import pl.jcommerce.apicat.exception.ObjectNotFoundException;
-import pl.jcommerce.apicat.exception.ObjectType;
+import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
 import pl.jcommerce.apicat.service.BaseService;
@@ -16,9 +16,6 @@ import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDt
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationUpdateDto;
 
-/**
- * Created by luwa on 17.01.17.
- */
 @Service("apiSpecificationService")
 public class ApiSpecificationServiceImpl extends BaseService implements ApiSpecificationService {
 
@@ -29,6 +26,7 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     private ApiContractDao apiContractDao;
 
     @Override
+    @Transactional
     public Long createSpecification(ApiSpecificationCreateDto apiSpecificationDto, byte[] content) {
         //TODO Use correct ApiSpecificationBuilder depending on data.type field
         ApiSpecification apiSpecification = SwaggerApiSpecification.fromContent(new String(content));
@@ -41,27 +39,29 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiSpecificationDto getSpecification(Long id) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ObjectNotFoundException(ObjectType.SPECIFICATION);
+            throw new ModelNotFoundException("Could not find specyfication data model.");
         }
 
         return mapper.map(apiSpecificationModel, ApiSpecificationDto.class);
     }
 
     @Override
+    @Transactional
     public void updateSpecification(Long id, ApiSpecificationUpdateDto apiSpecificationDto) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ObjectNotFoundException(ObjectType.SPECIFICATION);
+            throw new ModelNotFoundException("Could not find specyfication data model.");
         }
 
         ApiContractModel apiContractModel = null;
         if (apiSpecificationDto.getContractId() != null) {
             apiContractModel = apiContractDao.find(apiSpecificationDto.getContractId());
             if (apiContractModel == null) {
-                throw new ObjectNotFoundException(ObjectType.CONTRACT);
+                throw new ModelNotFoundException("Could not find contract data model.");
             }
         }
 
@@ -71,10 +71,11 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     }
 
     @Override
+    @Transactional
     public void updateSpecificationFile(Long id, byte[] content) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ObjectNotFoundException(ObjectType.SPECIFICATION);
+            throw new ModelNotFoundException("Could not find specyfication data model.");
         }
 
         apiSpecificationModel.setContent(new String(content));
@@ -82,6 +83,7 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     }
 
     @Override
+    @Transactional
     public void deleteSpecification(Long id) {
         apiSpecificationDao.delete(id);
     }

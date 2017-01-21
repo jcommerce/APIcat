@@ -2,6 +2,7 @@ package pl.jcommerce.apicat.service.apidefinition.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
@@ -15,8 +16,7 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiDefinitionDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
-import pl.jcommerce.apicat.exception.ObjectNotFoundException;
-import pl.jcommerce.apicat.exception.ObjectType;
+import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
 import pl.jcommerce.apicat.model.ApiDefinitionModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
@@ -45,6 +45,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     private ApiSpecificationDao apiSpecificationDao;
 
     @Override
+    @Transactional
     public Long createDefinition(ApiDefinitionCreateDto apiDefinitionDto, byte[] content) {
         //TODO Use correct ApiDefinitionBuilder depending on data.type field
 
@@ -61,25 +62,27 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         ApiDefinitionModel apiDefinitionModel = mapper.map(apiDefinitionDto, ApiDefinitionModel.class);
         apiDefinitionModel.setStage(ApiSpecificationStage.DRAFT.name());
         apiDefinitionModel.setContent(apiDefinition.getContent());
-        apiDefinitionDao.create(apiDefinitionModel);
+        apiDefinitionModel = apiDefinitionDao.create(apiDefinitionModel);
         return apiDefinitionModel.getId();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ApiDefinitionDto getDefinition(Long id) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
         if (apiDefinitionModel == null) {
-            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+            throw new ModelNotFoundException("Could not find definition data model.");
         }
 
         return mapper.map(apiDefinitionModel, ApiDefinitionDto.class);
     }
 
     @Override
+    @Transactional
     public void updateDefinition(Long id, ApiDefinitionUpdateDto apiDefinitionDto) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
         if (apiDefinitionModel == null) {
-            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+            throw new ModelNotFoundException("Could not find definition data model.");
         }
 
         List<ApiContractModel> apiContractModels = new ArrayList<>();
@@ -87,7 +90,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
             for (Long contractId : apiDefinitionDto.getContractIds()) {
                 ApiContractModel apiContractModel = apiContractDao.find(contractId);
                 if (apiContractModel == null) {
-                    throw new ObjectNotFoundException(ObjectType.CONTRACT);
+                    throw new ModelNotFoundException("Could not find contract data model.");
                 }
                 apiContractModels.add(apiContractModel);
             }
@@ -99,10 +102,11 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     }
 
     @Override
+    @Transactional
     public void updateDefinitionFile(Long id, byte[] content) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
         if (apiDefinitionModel == null) {
-            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+            throw new ModelNotFoundException("Could not find definition data model.");
         }
 
         apiDefinitionModel.setContent(new String(content));
@@ -110,15 +114,17 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     }
 
     @Override
+    @Transactional
     public void deleteDefinition(Long id) {
         apiDefinitionDao.delete(id);
     }
 
     @Override
+    @Transactional
     public ValidationResult validateAgainstSpecifications(Long definitionId, List<Long> specificationIds) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(definitionId);
         if (apiDefinitionModel == null) {
-            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+            throw new ModelNotFoundException("Could not find definition data model.");
         }
         //TODO Use correct ApiDefinition implementation depending on type field
         SwaggerApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
@@ -128,7 +134,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         for (Long specificationId : specificationIds) {
             ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(specificationId);
             if (apiSpecificationModel == null) {
-                throw new ObjectNotFoundException(ObjectType.SPECIFICATION);
+                throw new ModelNotFoundException("Could not find specyfication data model.");
             }
             //TODO Use correct ApiSpecification implementation depending on type field
             SwaggerApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);
@@ -140,10 +146,11 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     }
 
     @Override
+    @Transactional
     public ValidationResult validateAgainstAllSpecifications(Long id) {
         ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
         if (apiDefinitionModel == null) {
-            throw new ObjectNotFoundException(ObjectType.DEFINITION);
+            throw new ModelNotFoundException("Could not find definition data model.");
         }
         //TODO Use correct ApiDefinition implementation depending on type field
         SwaggerApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
