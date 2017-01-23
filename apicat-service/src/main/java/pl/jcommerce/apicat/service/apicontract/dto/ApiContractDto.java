@@ -11,8 +11,8 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 @Setter
 public class ApiContractDto {
 
-    Long id;
-    Long definitionId;
-    Long specificationId;
-    ValidationResult validationResult;
+    private Long id;
+    private Long definitionId;
+    private Long specificationId;
+    private ValidationResult validationResult;
 }

@@ -2,9 +2,7 @@ package pl.jcommerce.apicat.web.controller;
 
 import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
 import org.junit.Test;
-import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto;
 import pl.jcommerce.apicat.web.AbstractBaseIntegrationTest;
 
 import java.io.File;
@@ -16,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseIntegrationTest {
 
-    private final String testDefinitionName = "Test definition name";
+    private final String testDefinitionName = "Test definition";
     private final String testDefinitionType = "SWAGGER";
 
     @Test
@@ -25,26 +23,27 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
         assertTrue(definitionFile.exists());
 
         Response response =
-                given().
-                        multiPart("file", definitionFile).
-                        formParam("name", testDefinitionName).
-                        formParam("type", testDefinitionType).
-                        when().
-                        post("/definitions").
-                        then().
-                        statusCode(200).
-                        extract().response();
+            given().
+                multiPart("file", definitionFile).
+                formParam("name", testDefinitionName).
+                formParam("type", testDefinitionType).
+            when().
+                post("/definitions").
+            then().
+                statusCode(HttpStatus.SC_OK).
+            extract().
+                response();
 
         String locationDefinitionUrl = response.getHeader("Location");
 
         given().
-                when().
-                get(locationDefinitionUrl).
-                then().
-                body("id", notNullValue()).
-                body("name", equalTo(testDefinitionName)).
-                body("type", equalTo(testDefinitionType)).
-                body("data", notNullValue());
+        when().
+            get(locationDefinitionUrl).
+        then().
+            body("id", notNullValue()).
+            body("name", equalTo(testDefinitionName)).
+            body("type", equalTo(testDefinitionType)).
+            body("data", notNullValue());
     }
 
     @Test
@@ -53,12 +52,12 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
         assertTrue(definitionFile.exists());
 
         given().
-                multiPart("file", definitionFile).
-                formParam("name", testDefinitionName).
-                formParam("type", testDefinitionType).
-                when().
-                post("/definitions").
-                then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);
+            multiPart("file", definitionFile).
+            formParam("name", testDefinitionName).
+            formParam("type", testDefinitionType).
+        when().
+            post("/definitions").
+        then().
+            statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }

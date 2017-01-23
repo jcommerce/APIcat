@@ -23,26 +23,27 @@ public class ApiSpecificationRestControllerIntegrationTest extends AbstractBaseI
         assertTrue(specificationFile.exists());
 
         Response response =
-                given().
-                        multiPart("file", specificationFile).
-                        formParam("name", testSpecificationName).
-                        formParam("type", testSpecificationType).
-                        when().
-                        post("/specifications").
-                        then().
-                        statusCode(200).
-                        extract().response();
+            given().
+                multiPart("file", specificationFile).
+                formParam("name", testSpecificationName).
+                formParam("type", testSpecificationType).
+            when().
+                post("/specifications").
+            then().
+                statusCode(HttpStatus.SC_OK).
+            extract().
+                response();
 
-        String locationDefinitionUrl = response.getHeader("Location");
+        String locationSpecificationUrl = response.getHeader("Location");
 
         given().
-                when().
-                get(locationDefinitionUrl).
-                then().
-                body("id", notNullValue()).
-                body("name", equalTo(testSpecificationName)).
-                body("type", equalTo(testSpecificationType)).
-                body("data", notNullValue());
+        when().
+            get(locationSpecificationUrl).
+        then().
+            body("id", notNullValue()).
+            body("name", equalTo(testSpecificationName)).
+            body("type", equalTo(testSpecificationType)).
+            body("data", notNullValue());
     }
 
     @Test
@@ -51,12 +52,12 @@ public class ApiSpecificationRestControllerIntegrationTest extends AbstractBaseI
         assertTrue(specificationFile.exists());
 
         given().
-                multiPart("file", specificationFile).
-                formParam("name", testSpecificationName).
-                formParam("type", testSpecificationType).
-                when().
-                post("/specifications").
-                then().
-                statusCode(HttpStatus.SC_BAD_REQUEST);
+            multiPart("file", specificationFile).
+            formParam("name", testSpecificationName).
+            formParam("type", testSpecificationType).
+        when().
+            post("/specifications").
+        then().
+            statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }

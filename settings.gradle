@@ -5,4 +5,3 @@ include 'apicat-repository'
 include 'apicat-repository-jpa'
 include 'apicat-service'
 include 'apicat-facade-http'
-

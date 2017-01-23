@@ -11,10 +11,10 @@ import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 @Setter
 public class ApiSpecificationDto {
 
-    Long id;
-    String type;
-    String name;
-    String data;
-    Long contractId;
-    ValidationResult validationResult;
+    private Long id;
+    private String type;
+    private String name;
+    private String data;
+    private Long contractId;
+    private ValidationResult validationResult;
 }

@@ -13,10 +13,10 @@ import java.util.List;
 @Setter
 public class ApiDefinitionDto {
 
-    Long id;
-    String type;
-    String name;
-    String data;
-    List<Long> contractIds;
-    ValidationResult validationResult;
+    private Long id;
+    private String type;
+    private String name;
+    private String data;
+    private List<Long> contractIds;
+    private ValidationResult validationResult;
 }

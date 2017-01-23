@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 public class ApiDefinitionUpdateDto {
 
-    String type;
-    String name;
-    List<Long> contractIds;
+    private String type;
+    private String name;
+    private List<Long> contractIds;
 }

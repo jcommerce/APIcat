@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class ApiContractUpdateDto {
 
-    Long definitionId;
-    Long specificationId;
+    private Long definitionId;
+    private Long specificationId;
 }

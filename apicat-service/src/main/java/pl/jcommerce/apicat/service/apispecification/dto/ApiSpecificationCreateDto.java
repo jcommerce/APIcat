@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class ApiSpecificationCreateDto {
 
-    String type;
-    String name;
+    private String type;
+    private String name;
 }

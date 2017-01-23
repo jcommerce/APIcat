@@ -1,8 +1,6 @@
 package pl.jcommerce.apicat.web.controller;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.service.apidefinition.ApiDefinitionService;
@@ -20,11 +18,10 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static pl.jcommerce.apicat.contract.exception.ErrorCode.READ_FILE_EXCEPTION;
 
+@Slf4j
 @RestController
 @RequestMapping("/definitions")
 public class ApiDefinitionRestController extends AbstractBaseRestController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ApiDefinitionRestController.class);
 
     private ApiDefinitionService apiDefinitionService;
 
@@ -35,25 +32,24 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<ApiDefinitionDto> getDefinition(@PathVariable Long id) {
-        logger.debug("Call api definition endpoint with id: {}", id);
+        log.debug("Call api definition endpoint with id: {}", id);
         ApiDefinitionDto apiDefinition = apiDefinitionService.getDefinition(id);
         return new ResponseEntity<>(apiDefinition, HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Void> createDefinition(@RequestPart("file") MultipartFile file, @RequestPart String name, @RequestPart String type) {
-        logger.debug("Call create api definition endpoint.");
+        log.debug("Call create api definition endpoint.");
         ApiDefinitionCreateDto apiDefinition = new ApiDefinitionCreateDto();
         apiDefinition.setName(name);
         apiDefinition.setType(type);
 
         Long definitionId;
-
         try {
             definitionId = apiDefinitionService.createDefinition(apiDefinition, file.getBytes());
-            logger.debug("Api definition created with id: {}", definitionId);
+            log.debug("Api definition created with id: {}", definitionId);
         } catch (IOException e) {
-            logger.error("Definition file error: {}.", e);
+            log.error("Definition file error: {}.", e);
             throw new ApicatSystemException(READ_FILE_EXCEPTION, e.getMessage());
         }
 
@@ -62,18 +58,18 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
 
     @PutMapping(path = "/{id}")
     public ResponseEntity<Void> updateDefinition(@PathVariable Long id, @RequestBody ApiDefinitionUpdateDto apiDefinitionUpdateDto) {
-        logger.debug("Call Api definition update with id: {}", id);
+        log.debug("Call Api definition update with id: {}", id);
         apiDefinitionService.updateDefinition(id, apiDefinitionUpdateDto);
         return obtainResponseEntityWithLocationHeader(linkTo(methodOn(getClass()).getDefinition(id)).withSelfRel().getHref());
     }
 
     @PutMapping(path = "/{id}/file")
     public ResponseEntity<Void> updateDefinitionFile(@PathVariable Long id, @RequestPart("file") MultipartFile file) {
-        logger.debug("Call Api definition update file with id: {}", id);
+        log.debug("Call Api definition update file with id: {}", id);
         try {
             apiDefinitionService.updateDefinitionFile(id, file.getBytes());
         } catch (IOException e) {
-            logger.error("Definition file error: {}.", e);
+            log.error("Definition file error: {}.", e);
             throw new ApicatSystemException(READ_FILE_EXCEPTION, e.getMessage());
         }
         return obtainResponseEntityWithLocationHeader(linkTo(methodOn(getClass()).getDefinition(id)).withSelfRel().getHref());
@@ -81,7 +77,7 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> removeDefinition(@PathVariable Long id) {
-        logger.debug("Call Api definition delete with id: {}", id);
+        log.debug("Call Api definition delete with id: {}", id);
         apiDefinitionService.deleteDefinition(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

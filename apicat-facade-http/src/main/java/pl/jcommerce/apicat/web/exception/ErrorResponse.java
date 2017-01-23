@@ -1,30 +1,24 @@
 package pl.jcommerce.apicat.web.exception;
 
+import lombok.Getter;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
 
 import java.io.Serializable;
 
 class ErrorResponse implements Serializable {
 
+    @Getter
     private final String message;
 
+    @Getter
     private ErrorCode errorCode;
 
-    public ErrorResponse(String message) {
+    ErrorResponse(String message) {
         this.message = message;
     }
-
 
     ErrorResponse(String message, ErrorCode errorCode) {
         this.message = message;
         this.errorCode = errorCode;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public ErrorCode getErrorCode() {
-        return errorCode;
     }
 }
