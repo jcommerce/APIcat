@@ -32,8 +32,7 @@ public class ApiContractRestController extends AbstractBaseRestController {
     public Object getContract(@PathVariable Long id) {
         logger.debug("Call api contract endpoint with id: {}", id);
         ApiContractDto apiContractDto = apiContractService.getContract(id);
-        ResponseEntity<ApiContractDto> response = new ResponseEntity<>(apiContractDto, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(apiContractDto, HttpStatus.OK);
     }
 
     @PostMapping

@@ -37,8 +37,7 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
     public ResponseEntity<ApiDefinitionDto> getDefinition(@PathVariable Long id) {
         logger.debug("Call api definition endpoint with id: {}", id);
         ApiDefinitionDto apiDefinition = apiDefinitionService.getDefinition(id);
-        ResponseEntity<ApiDefinitionDto> response = new ResponseEntity<>(apiDefinition, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(apiDefinition, HttpStatus.OK);
     }
 
     @PostMapping
@@ -48,7 +47,7 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
         apiDefinition.setName(name);
         apiDefinition.setType(type);
 
-        Long definitionId = null;
+        Long definitionId;
 
         try {
             definitionId = apiDefinitionService.createDefinition(apiDefinition, file.getBytes());

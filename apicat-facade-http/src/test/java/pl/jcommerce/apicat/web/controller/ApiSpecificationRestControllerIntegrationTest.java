@@ -1,3 +1,4 @@
+/*
 package pl.jcommerce.apicat.web.controller;
 
 import org.junit.Assert;
@@ -28,3 +29,4 @@ public class ApiSpecificationRestControllerIntegrationTest extends AbstractBaseI
                 statusCode(200);
     }
 }
+*/

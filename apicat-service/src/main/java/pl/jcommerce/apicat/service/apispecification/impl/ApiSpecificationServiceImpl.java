@@ -43,7 +43,7 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     public ApiSpecificationDto getSpecification(Long id) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ModelNotFoundException("Could not find specyfication data model.");
+            throw new ModelNotFoundException("Could not find specification data model.");
         }
 
         return mapper.map(apiSpecificationModel, ApiSpecificationDto.class);
@@ -54,7 +54,7 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     public void updateSpecification(Long id, ApiSpecificationUpdateDto apiSpecificationDto) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ModelNotFoundException("Could not find specyfication data model.");
+            throw new ModelNotFoundException("Could not find specification data model.");
         }
 
         ApiContractModel apiContractModel = null;
@@ -75,7 +75,7 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     public void updateSpecificationFile(Long id, byte[] content) {
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
         if (apiSpecificationModel == null) {
-            throw new ModelNotFoundException("Could not find specyfication data model.");
+            throw new ModelNotFoundException("Could not find specification data model.");
         }
 
         apiSpecificationModel.setContent(new String(content));

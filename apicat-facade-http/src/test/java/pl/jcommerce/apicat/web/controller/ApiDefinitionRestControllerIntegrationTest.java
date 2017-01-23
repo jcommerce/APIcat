@@ -45,18 +45,18 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
 
         Response response =
                 given().
-                multiPart("file", definitionFile).
-                formParam("name", testDefinitionName).
-                formParam("type", testDefinitionType).
-                when().
-                post("/definitions").
-                then().
-                statusCode(200).
-                extract().response();
+                        multiPart("file", definitionFile).
+                        formParam("name", testDefinitionName).
+                        formParam("type", testDefinitionType).
+                        when().
+                        post("/definitions").
+                        then().
+                        statusCode(200).
+                        extract().response();
 
         String locationDefinitionUrl = response.getHeader("Location");
 
-       given().
+        given().
                 when().
                 get(locationDefinitionUrl).
                 then().

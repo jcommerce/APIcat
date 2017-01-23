@@ -48,5 +48,4 @@
         <class-b>pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto</class-b>
     </mapping>
 
-
 </mappings>

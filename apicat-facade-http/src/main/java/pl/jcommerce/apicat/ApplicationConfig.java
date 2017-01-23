@@ -55,7 +55,7 @@ public class ApplicationConfig {
         vendorAdapter.setShowSql(true);
         vendorAdapter.setDatabasePlatform("org.eclipse.persistence.platform.database.H2Platform");
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
-        entityManagerFactoryBean.setPackagesToScan(new String[]{"pl.jcommerce.apicat"});
+        entityManagerFactoryBean.setPackagesToScan("pl.jcommerce.apicat");
         entityManagerFactoryBean.setJpaDialect(new EclipseLinkJpaDialect());
         //TODO try add loadtimeweaver
         //entityManagerFactoryBean.setLoadTimeWeave(instrumentationLoadTimeWeaver());
@@ -63,7 +63,6 @@ public class ApplicationConfig {
         props.setProperty("eclipselink.weaving", "false");
         props.setProperty("javax.persistence.schema-generation.database.action", "create");
         props.setProperty("eclipselink.ddl-generation", "create-tables");
-
 
         entityManagerFactoryBean.setJpaProperties(props);
 
@@ -83,6 +82,7 @@ public class ApplicationConfig {
         return transactionManager;
 
     }
+
     @Bean
     public Docket createDocket() {
         return new Docket(DocumentationType.SWAGGER_2)

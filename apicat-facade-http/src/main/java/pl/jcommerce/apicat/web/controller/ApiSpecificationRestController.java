@@ -36,8 +36,7 @@ public class ApiSpecificationRestController extends AbstractBaseRestController {
     public ResponseEntity<ApiSpecificationDto> getSpecification(@PathVariable Long id) {
         logger.debug("Call api specification endpoint with id: {}", id);
         ApiSpecificationDto apiSpecification = apiSpecificationService.getSpecification(id);
-        ResponseEntity<ApiSpecificationDto> response = new ResponseEntity<>(apiSpecification, HttpStatus.OK);
-        return response;
+        return new ResponseEntity<>(apiSpecification, HttpStatus.OK);
     }
 
     @PostMapping
@@ -47,10 +46,9 @@ public class ApiSpecificationRestController extends AbstractBaseRestController {
         apiSpecification.setType(name);
         apiSpecification.setName(type);
 
-        Long specificationId = null;
-
+        Long specificationId;
         try {
-            apiSpecificationService.createSpecification(apiSpecification, file.getBytes());
+            specificationId = apiSpecificationService.createSpecification(apiSpecification, file.getBytes());
             logger.debug("Api specification created with id: {}", specificationId);
         } catch (IOException e) {
             logger.debug("Definition file error: ", e);
@@ -83,7 +81,7 @@ public class ApiSpecificationRestController extends AbstractBaseRestController {
     public ResponseEntity<Void> removeSpecification(@PathVariable Long id) {
         logger.debug("Call Api specification delete with id: {}", id);
         apiSpecificationService.deleteSpecification(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

@@ -48,8 +48,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     @Transactional
     public Long createDefinition(ApiDefinitionCreateDto apiDefinitionDto, byte[] content) {
         //TODO Use correct ApiDefinitionBuilder depending on data.type field
-
-        ApiDefinition apiDefinition = null;
+        ApiDefinition apiDefinition;
         try {
             apiDefinition = SwaggerApiDefinitionBuilder.fromContent(new String(content)).build();
         } catch (Exception ex) {
@@ -133,7 +132,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         for (Long specificationId : specificationIds) {
             ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(specificationId);
             if (apiSpecificationModel == null) {
-                throw new ModelNotFoundException("Could not find specyfication data model.");
+                throw new ModelNotFoundException("Could not find specification data model.");
             }
             //TODO Use correct ApiSpecification implementation depending on type field
             SwaggerApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);

@@ -38,7 +38,7 @@ public class ApiContractServiceImpl extends BaseService implements ApiContractSe
 
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(apiContractDto.getSpecificationId());
         if (apiSpecificationModel == null) {
-            throw new ModelNotFoundException("Could not find specyfication data model.");
+            throw new ModelNotFoundException("Could not find specification data model.");
         }
 
         ApiContractModel apiContractModel = new ApiContractModel();
@@ -70,7 +70,7 @@ public class ApiContractServiceImpl extends BaseService implements ApiContractSe
 
         ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(apiContractDto.getSpecificationId());
         if (apiSpecificationModel == null) {
-            throw new ModelNotFoundException("Could not find specyfication data model.");
+            throw new ModelNotFoundException("Could not find specification data model.");
         }
 
         ApiContractModel apiContractModel = apiContractDao.find(id);
