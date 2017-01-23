@@ -10,6 +10,7 @@ import net.minidev.json.JSONValue;
 import org.apache.commons.io.FileUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.parser.ParserException;
+import org.yaml.snakeyaml.scanner.ScannerException;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
@@ -80,7 +81,7 @@ public class SwaggerApiDefinition extends ApiDefinition {
             try {
                 Object obj = yaml.load(content);
                 content = JSONValue.toJSONString(obj);
-            } catch (ParserException e) {
+            } catch (ParserException | ScannerException e) {
                 throw new ApicatSystemException(ErrorCode.PARSE_INPUT_DATA_EXCEPTION, e.getMessage());
             }
         }

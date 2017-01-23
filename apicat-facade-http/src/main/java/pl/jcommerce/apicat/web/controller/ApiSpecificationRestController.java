@@ -43,8 +43,8 @@ public class ApiSpecificationRestController extends AbstractBaseRestController {
     public ResponseEntity<Void> createSpecification(@RequestPart("file") MultipartFile file, @RequestPart String name, @RequestPart String type) {
         logger.debug("Call create api specification endpoint.");
         ApiSpecificationCreateDto apiSpecification = new ApiSpecificationCreateDto();
-        apiSpecification.setType(name);
-        apiSpecification.setName(type);
+        apiSpecification.setName(name);
+        apiSpecification.setType(type);
 
         Long specificationId;
         try {

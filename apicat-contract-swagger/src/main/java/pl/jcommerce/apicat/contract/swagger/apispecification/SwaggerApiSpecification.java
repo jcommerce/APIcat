@@ -22,7 +22,7 @@ import java.io.IOException;
 @AutoService(ApiSpecification.class)
 public class SwaggerApiSpecification extends ApiSpecification {
 
-    public static final String TYPE = "Swagger";
+    public static final String TYPE = "SWAGGER";
 
     @Getter
     @Setter

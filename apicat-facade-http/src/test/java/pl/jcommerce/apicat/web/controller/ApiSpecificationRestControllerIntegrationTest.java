@@ -1,28 +1,59 @@
 package pl.jcommerce.apicat.web.controller;
 
+import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.junit.Assert;
 import org.junit.Test;
-import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
 import pl.jcommerce.apicat.web.AbstractBaseIntegrationTest;
 
 import java.io.File;
 
 import static com.jayway.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 public class ApiSpecificationRestControllerIntegrationTest extends AbstractBaseIntegrationTest {
 
+    private final String testSpecificationName = "Test specification name";
+    private final String testSpecificationType = "SWAGGER";
+
     @Test
-    public void testCreateSpecification() {
-        Assert.assertTrue(new File("Readme.md").exists());
-        ApiSpecificationCreateDto data = new ApiSpecificationCreateDto();
-        data.setName("Test specification");
-        data.setType("SWAGGER");
+    public void testCreateAndReadSpecification() {
+        File specificationFile = new File(getFilepath("json/consumerContract.json"));
+        assertTrue(specificationFile.exists());
+
+        Response response =
+                given().
+                        multiPart("file", specificationFile).
+                        formParam("name", testSpecificationName).
+                        formParam("type", testSpecificationType).
+                        when().
+                        post("/specifications").
+                        then().
+                        statusCode(200).
+                        extract().response();
+
+        String locationDefinitionUrl = response.getHeader("Location");
 
         given().
-                multiPart("file", new File("Readme.md")).
-                formParam("name", "TEST").
-                formParam("type", "SWAGGER").
+                when().
+                get(locationDefinitionUrl).
+                then().
+                body("id", notNullValue()).
+                body("name", equalTo(testSpecificationName)).
+                body("type", equalTo(testSpecificationType)).
+                body("data", notNullValue());
+    }
+
+    @Test
+    public void testCreateSpecificationWithInvalidContentData() {
+        File specificationFile = new File(getFilepath("yaml/incorrectYamlFormat.yaml"));
+        assertTrue(specificationFile.exists());
+
+        given().
+                multiPart("file", specificationFile).
+                formParam("name", testSpecificationName).
+                formParam("type", testSpecificationType).
                 when().
                 post("/specifications").
                 then().
