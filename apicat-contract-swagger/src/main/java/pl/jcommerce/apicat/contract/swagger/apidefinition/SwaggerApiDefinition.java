@@ -17,12 +17,9 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * Created by krka on 31.10.2016.
- */
 public class SwaggerApiDefinition extends ApiDefinition {
 
-    public static final String TYPE = "Swagger";
+    public static final String TYPE = "SWAGGER";
 
     @Getter
     @Setter
@@ -91,48 +88,17 @@ public class SwaggerApiDefinition extends ApiDefinition {
     }
 
     private static SwaggerApiDefinition createSwaggerApiDefinition(JsonNode node) {
-        Swagger swaggerDefinition = new SwaggerParser().read(node);
+        Swagger swaggerDefinition;
+        try {
+            swaggerDefinition = new SwaggerParser().read(node);
+        } catch (IllegalArgumentException e) {
+            throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION, e.getMessage());
+        }
         SwaggerApiDefinition swaggerApiDefinition = new SwaggerApiDefinition();
         swaggerApiDefinition.setSwaggerDefinition(swaggerDefinition);
         swaggerApiDefinition.setJsonNode(node);
         return swaggerApiDefinition;
     }
-
-
-//    @Override
-//    public void validateAllContracts()  {
-//        for (ApiContract apiContract : apiContracts) {
-//            if (!validateContract(apiContract)) {
-//                valid = false;
-//                break;
-//            }
-//        }
-//    }
-
-//    private boolean validateContract(ApiContract apiContract) {
-//        Optional<ApiContractValidator> apiContractValidator = apiContractValidators.stream().filter(a -> a.support(apiContract)).findAny();
-//        return !(apiContractValidator.isPresent() && !apiContractValidator.get().validate(apiContract));
-//    }
-
-//    @Override
-//    public void validateDefinition() {
-//        Optional<ApiDefinitionValidator> apiDefinitionValidator = validators.stream().filter(a -> a.support(this)).findAny();
-//        if (apiDefinitionValidator.isPresent()) {
-//            if(!apiDefinitionValidator.get().validate(this))
-//                valid = false;
-//        } else
-//            valid = false;
-//    }
-
-//    @Override
-//    public void validateSpecifications(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
-//        Optional<ApiContractValidator> apiContractValidator = apiContractValidators.stream().filter(a -> a.support(apiDefinition, apiSpecification)).findAny();
-//        if (apiContractValidator.isPresent()) {
-//            if(!apiContractValidator.get().validate(apiDefinition, apiSpecification))
-//                valid = false;
-//        } else
-//            valid = false;
-//    }
 
     @Override
     public String getType() {

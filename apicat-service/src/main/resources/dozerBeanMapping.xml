@@ -43,9 +43,4 @@
         </field>
     </mapping>
 
-    <mapping>
-        <class-a>pl.jcommerce.apicat.model.ApiDefinitionModel</class-a>
-        <class-b>pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionCreateDto</class-b>
-    </mapping>
-
 </mappings>

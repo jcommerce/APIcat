@@ -88,7 +88,12 @@ public class SwaggerApiSpecification extends ApiSpecification {
     }
 
     private static SwaggerApiSpecification createSwaggerApiSpecification(JsonNode node) {
-        Swagger swaggerSpecification = new SwaggerParser().read(node);
+        Swagger swaggerSpecification;
+        try {
+            swaggerSpecification = new SwaggerParser().read(node);
+        } catch (IllegalArgumentException e) {
+            throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION, e.getMessage());
+        }
         SwaggerApiSpecification swaggerApiSpecification = new SwaggerApiSpecification();
         swaggerApiSpecification.setSwaggerDefinition(swaggerSpecification);
         swaggerApiSpecification.setJsonNode(node);

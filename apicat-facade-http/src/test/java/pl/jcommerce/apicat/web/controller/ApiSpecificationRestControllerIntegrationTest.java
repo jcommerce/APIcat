@@ -1,6 +1,6 @@
-/*
 package pl.jcommerce.apicat.web.controller;
 
+import org.apache.http.HttpStatus;
 import org.junit.Assert;
 import org.junit.Test;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
@@ -26,7 +26,6 @@ public class ApiSpecificationRestControllerIntegrationTest extends AbstractBaseI
                 when().
                 post("/specifications").
                 then().
-                statusCode(200);
+                statusCode(HttpStatus.SC_BAD_REQUEST);
     }
 }
-*/

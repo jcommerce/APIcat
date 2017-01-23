@@ -6,9 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
-import pl.jcommerce.apicat.contract.ApiSpecificationStage;
-import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
-import pl.jcommerce.apicat.contract.exception.ErrorCode;
+import pl.jcommerce.apicat.contract.ApiStage;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinitionBuilder;
 import pl.jcommerce.apicat.contract.swagger.apispecification.SwaggerApiSpecification;
@@ -48,18 +46,12 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     @Transactional
     public Long createDefinition(ApiDefinitionCreateDto apiDefinitionDto, byte[] content) {
         //TODO Use correct ApiDefinitionBuilder depending on data.type field
-        ApiDefinition apiDefinition;
-        try {
-            apiDefinition = SwaggerApiDefinitionBuilder.fromContent(new String(content)).build();
-        } catch (Exception ex) {
-            throw new ApicatSystemException(ErrorCode.PARSE_JSON_EXCEPTION);
-        }
+        ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.fromContent(new String(content)).build();
         apiDefinition.setName(apiDefinitionDto.getName());
         apiDefinition.validate();
 
-        ApiDefinitionModel apiDefinitionModel = mapper.map(apiDefinitionDto, ApiDefinitionModel.class);
-        apiDefinitionModel.setStage(ApiSpecificationStage.DRAFT.name());
-        apiDefinitionModel.setContent(apiDefinition.getContent());
+        ApiDefinitionModel apiDefinitionModel = mapper.map(apiDefinition, ApiDefinitionModel.class);
+        apiDefinitionModel.setStage(ApiStage.DRAFT.name());
         apiDefinitionModel = apiDefinitionDao.create(apiDefinitionModel);
         return apiDefinitionModel.getId();
     }

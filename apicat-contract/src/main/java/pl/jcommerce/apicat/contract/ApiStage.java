@@ -5,7 +5,7 @@ package pl.jcommerce.apicat.contract;
  *
  * @author Daniel Charczyński
  */
-public enum ApiSpecificationStage {
+public enum ApiStage {
     /**
      * ApiSpecification definition must be valid
      */

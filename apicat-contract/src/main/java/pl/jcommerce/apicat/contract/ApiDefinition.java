@@ -23,13 +23,21 @@ import java.util.ServiceLoader;
 @Slf4j
 public abstract class ApiDefinition {
 
-    //TODO: adjust to model
-    //TODO: move ApiContractValidator to APIContract
-    //TODO: all methods should be implemented
-
     @Getter
     @Setter
     protected String name;
+
+    @Getter
+    @Setter
+    private String version;
+
+    @Getter
+    @Setter
+    private ApiStage stage;
+
+    @Getter
+    @Setter
+    private String author;
 
     @Getter
     @Setter

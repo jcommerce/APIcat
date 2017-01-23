@@ -48,7 +48,7 @@ public abstract class ApiSpecification {
      */
     @Getter
     @Setter
-    private ApiSpecificationStage stage;
+    private ApiStage stage;
     /**
      * Api specification author
      */
