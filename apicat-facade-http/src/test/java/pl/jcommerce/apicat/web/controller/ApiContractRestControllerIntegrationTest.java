@@ -8,12 +8,9 @@ import pl.jcommerce.apicat.service.apicontract.dto.ApiContractCreateDto;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractUpdateDto;
 import pl.jcommerce.apicat.web.AbstractBaseIntegrationTest;
 
-import java.io.File;
-
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by luwa on 23.01.17.
@@ -21,11 +18,6 @@ import static org.junit.Assert.assertTrue;
 public class ApiContractRestControllerIntegrationTest extends AbstractBaseIntegrationTest {
 
     private final String contractsPath = "/contracts/";
-
-    private final String testDefinitionName = "Test definition name";
-    private final String testDefinitionType = "SWAGGER";
-    private final String testSpecificationName = "Test specification name";
-    private final String testSpecificationType = "SWAGGER";
 
     @Test
     public void testCreateAndReadContract() {
@@ -126,71 +118,5 @@ public class ApiContractRestControllerIntegrationTest extends AbstractBaseIntegr
         then().
             statusCode(HttpStatus.SC_NOT_FOUND).
             body("id", nullValue());
-    }
-
-    private Long createContract() {
-        Long definitionId = createDefinition("json/providerContract.json");
-        assertNotNull(definitionId);
-
-        Long specificationId = createSpecification("json/consumerContract.json");
-        assertNotNull(specificationId);
-
-        ApiContractCreateDto contractCreateDto = new ApiContractCreateDto();
-        contractCreateDto.setDefinitionId(definitionId);
-        contractCreateDto.setSpecificationId(specificationId);
-
-        Response response =
-            given().
-                contentType(ContentType.JSON).
-                body(contractCreateDto).
-            when().
-                post(contractsPath).
-            then().
-                statusCode(HttpStatus.SC_OK).
-            extract().
-                response();
-
-        String locationContractUrl = response.getHeader("Location");
-        return Long.valueOf(locationContractUrl.substring(locationContractUrl.lastIndexOf("/") + 1));
-    }
-
-    private Long createDefinition(String filename) {
-        File definitionFile = new File(getFilepath(filename));
-        assertTrue(definitionFile.exists());
-
-        Response response =
-            given().
-                multiPart("file", definitionFile).
-                formParam("name", testDefinitionName).
-                formParam("type", testDefinitionType).
-            when().
-                post("/definitions").
-            then().
-                statusCode(HttpStatus.SC_OK).
-            extract().
-                response();
-
-        String locationDefinitionUrl = response.getHeader("Location");
-        return Long.valueOf(locationDefinitionUrl.substring(locationDefinitionUrl.lastIndexOf("/") + 1));
-    }
-
-    private Long createSpecification(String filename) {
-        File specificationFile = new File(getFilepath(filename));
-        assertTrue(specificationFile.exists());
-
-        Response response =
-        given().
-            multiPart("file", specificationFile).
-            formParam("name", testSpecificationName).
-            formParam("type", testSpecificationType).
-        when().
-            post("/specifications").
-        then().
-            statusCode(HttpStatus.SC_OK).
-        extract().
-            response();
-
-        String locationSpecificationUrl = response.getHeader("Location");
-        return Long.valueOf(locationSpecificationUrl.substring(locationSpecificationUrl.lastIndexOf("/") + 1));
     }
 }
