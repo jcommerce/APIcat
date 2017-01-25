@@ -21,9 +21,6 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by krka on 28.10.2016.
- */
 public class SwaggerApiTest {
 
     @Test
