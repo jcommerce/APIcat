@@ -1,9 +1,25 @@
-group 'pl.jcommerce.apicat'
-version '1.0-SNAPSHOT'
+group "pl.jcommerce.apicat"
+version "1.0-SNAPSHOT"
 
+ext.assertjSwaggerVersion = "0.5.0"
+ext.autoServiceVersion = "1.0-rc2"
+ext.commonsDbcpVersion = "2.1.1"
+ext.dozerVersion = "5.5.1"
+ext.eclipselinkVersion = "2.5.0"
+ext.h2dbVersion = "1.4.193"
+ext.jsonSmartVersion = "2.2.1"
+ext.junitVersion = "4.12"
+ext.lombokVersion = "1.16.10"
+ext.mockitoVersion = "1.10.19"
+ext.restAssuredVersion = "2.4.1"
+ext.slf4jVersion = "1.6.1"
+ext.springBootVersion = "1.4.3.RELEASE"
+ext.springVersion = "4.3.5.RELEASE"
+ext.springHateoasVersion = "0.23.0.RELEASE"
+ext.swaggerVersion = "2.6.1"
 
 subprojects {
-    apply plugin: 'java'
+    apply plugin: "java"
 
     sourceCompatibility = 1.8
     repositories {
@@ -11,10 +27,9 @@ subprojects {
     }
 
     dependencies {
-        compile 'org.projectlombok:lombok:1.16.10'
-        compile 'org.slf4j:slf4j-simple:1.6.1'
-        compile 'net.minidev:json-smart:2.2.1'
-        
-        testCompile 'junit:junit:4.12'
+        compile "org.slf4j:slf4j-simple:$slf4jVersion"
+        compile "org.projectlombok:lombok:$lombokVersion"
+
+        testCompile "junit:junit:$junitVersion"
     }
 }

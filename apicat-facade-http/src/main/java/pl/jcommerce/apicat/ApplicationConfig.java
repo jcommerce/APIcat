@@ -1,6 +1,6 @@
 package pl.jcommerce.apicat;
 
-import org.apache.commons.dbcp.BasicDataSource;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +58,7 @@ public class ApplicationConfig {
         entityManagerFactoryBean.setPackagesToScan("pl.jcommerce.apicat");
         entityManagerFactoryBean.setJpaDialect(new EclipseLinkJpaDialect());
         //TODO try add loadtimeweaver
-        //entityManagerFactoryBean.setLoadTimeWeave(instrumentationLoadTimeWeaver());
+        //entityManagerFactoryBean.setLoadTimeWeaver(instrumentationLoadTimeWeaver());
         Properties props = new Properties();
         props.setProperty("eclipselink.weaving", "false");
         props.setProperty("javax.persistence.schema-generation.database.action", "create");
