@@ -3,6 +3,7 @@ package pl.jcommerce.apicat.web.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 import pl.jcommerce.apicat.service.apidefinition.ApiDefinitionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionDto;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionUpdateDto;
 
 import java.io.IOException;
+import java.util.List;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -82,4 +84,17 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}/validate/{specificationIds}")
+    public ResponseEntity<ValidationResult> validateAgainstSpecifications(@PathVariable Long id, @PathVariable List<Long> specificationIds) {
+        log.debug("Call api definition endpoint with id: {}", id);
+        ValidationResult result = apiDefinitionService.validateAgainstSpecifications(id, specificationIds);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/{id}/validateAll")
+    public ResponseEntity<ValidationResult> validateAllSpecifications(@PathVariable Long id) {
+        log.debug("Call api definition endpoint with id: {}", id);
+        ValidationResult result = apiDefinitionService.validateAgainstAllSpecifications(id);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }

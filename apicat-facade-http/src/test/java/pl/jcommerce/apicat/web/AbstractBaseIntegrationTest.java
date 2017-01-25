@@ -36,9 +36,12 @@ public class AbstractBaseIntegrationTest {
 
     protected Long createContract() {
         Long definitionId = createDefinition("json/providerContract.json");
-
         Long specificationId = createSpecification("json/consumerContract.json");
 
+        return createContract(definitionId, specificationId);
+    }
+
+    protected Long createContract(Long definitionId, Long specificationId) {
         ApiContractCreateDto contractCreateDto = new ApiContractCreateDto();
         contractCreateDto.setDefinitionId(definitionId);
         contractCreateDto.setSpecificationId(specificationId);

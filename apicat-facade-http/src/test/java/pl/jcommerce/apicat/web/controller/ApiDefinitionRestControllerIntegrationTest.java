@@ -5,17 +5,19 @@ import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
+import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionUpdateDto;
 import pl.jcommerce.apicat.web.AbstractBaseIntegrationTest;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseIntegrationTest {
 
@@ -147,6 +149,52 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
         then().
             statusCode(HttpStatus.SC_NOT_FOUND).
             body("id", nullValue());
+    }
+
+    @Test
+    public void testValidateDefinition() {
+        Long definitionId = createDefinition("json/providerContract.json");
+        Long correctSpecificationId = createSpecification("json/consumerContract.json");
+        Long invalidSpecificationId = createSpecification("json/consumerContractWithoutEndpoints.json");
+
+        List<ValidationProblem> validationProblemsFromSelected =
+            given().
+            when().
+                get(definitionsPath + definitionId + "/validate/" + correctSpecificationId + "," + invalidSpecificationId ).
+            then().
+                statusCode(HttpStatus.SC_OK).
+                body("validationResultCategory", equalTo(ValidationResultCategory.ERROR.name())).
+            extract().
+                path("problemList");
+
+        assertFalse(validationProblemsFromSelected.isEmpty());
+
+        Long correctContractId = createContract(definitionId, correctSpecificationId);
+        Long invalidContractId = createContract(definitionId, invalidSpecificationId);
+
+        ApiDefinitionUpdateDto definitionUpdateDto = new ApiDefinitionUpdateDto();
+        definitionUpdateDto.setContractIds(Arrays.asList(correctContractId, invalidContractId));
+
+        given().
+            contentType(ContentType.JSON).
+            body(definitionUpdateDto).
+        when().
+            put(definitionsPath + definitionId).
+        then().
+            statusCode(HttpStatus.SC_OK);
+
+        List<ValidationProblem> allValidationProblems =
+            given().
+            when().
+                get(definitionsPath + definitionId + "/validateAll").
+            then().
+                statusCode(HttpStatus.SC_OK).
+                body("validationResultCategory", equalTo(ValidationResultCategory.ERROR.name())).
+            extract().
+                path("problemList");
+
+            assertFalse(allValidationProblems.isEmpty());
+            assertEquals(validationProblemsFromSelected.size(), allValidationProblems.size());
     }
 
     private String getSwaggerTitle(String data) {
