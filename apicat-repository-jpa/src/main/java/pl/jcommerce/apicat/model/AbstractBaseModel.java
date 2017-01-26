@@ -15,11 +15,11 @@ public abstract class AbstractBaseModel {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     Long id;
 
-    @Column(name = "creation_date")
+    @Column(name = "CREATION_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
-    @Column(name = "modification_date")
+    @Column(name = "MODIFICATION_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date modificationDate;
 
