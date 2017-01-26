@@ -10,7 +10,13 @@ buildscript {
     }
 }
 
+configurations {
+    javaagent
+}
+
 dependencies {
+    javaagent "org.springframework:spring-instrument:$springVersion"
+
     compile project(":apicat-contract")
     compile project(":apicat-service")
 
@@ -27,6 +33,10 @@ dependencies {
 
     testCompile "com.jayway.restassured:rest-assured:$restAssuredVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+}
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.javaagent.singleFile}"
 }
 
 apply plugin: "org.springframework.boot"
