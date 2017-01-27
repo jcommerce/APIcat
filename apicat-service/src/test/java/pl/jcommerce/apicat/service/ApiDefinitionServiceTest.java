@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
@@ -26,6 +27,7 @@ import pl.jcommerce.apicat.service.apidefinition.impl.ApiDefinitionServiceImpl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -87,7 +89,7 @@ public class ApiDefinitionServiceTest {
     }
 
     @Test(expected = ModelNotFoundException.class)
-    public void testUpdateSpecificationContractNotFound() {
+    public void testUpdateDefinitionContractNotFound() {
         ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
         when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
 
@@ -99,8 +101,24 @@ public class ApiDefinitionServiceTest {
         apiDefinitionUpdateDto.setName("Test2");
         apiDefinitionService.updateDefinition(definitionId, apiDefinitionUpdateDto);
 
+        Mockito.verify(apiDefinitionDao).update(apiDefinitionModel);
+
         apiDefinitionUpdateDto.setContractIds(Arrays.asList(contractId, 3L));
         apiDefinitionService.updateDefinition(definitionId, apiDefinitionUpdateDto);
+    }
+
+    @Test
+    public void testDeleteDefinition() {
+        ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
+        addContract(apiDefinitionModel);
+        when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
+
+        apiDefinitionService.deleteDefinition(definitionId);
+
+        for (ApiContractModel contractModel : apiDefinitionModel.getApiContractModels()) {
+            Mockito.verify(apiContractDao).update(contractModel);
+        }
+        Mockito.verify(apiDefinitionDao).delete(definitionId);
     }
 
     @Test
@@ -131,15 +149,21 @@ public class ApiDefinitionServiceTest {
     }
 
     private ApiDefinitionModel setupApiDefinitionModel() {
-        ApiContractModel apiContractModel = setupContractModel();
-
         ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
         apiDefinitionModel.setId(definitionId);
         apiDefinitionModel.setName(definitionName);
         apiDefinitionModel.setType(definitionType);
         apiDefinitionModel.setContent(content);
-        apiDefinitionModel.setApiContractModels(Collections.singletonList(apiContractModel));
+        addContract(apiDefinitionModel);
         return apiDefinitionModel;
+    }
+
+    private void addContract(ApiDefinitionModel apiDefinitionModel) {
+        ApiContractModel apiContractModel = setupContractModel();
+        if (apiDefinitionModel.getApiContractModels() == null) {
+            apiDefinitionModel.setApiContractModels(new ArrayList<>());
+        }
+        apiDefinitionModel.getApiContractModels().add(apiContractModel);
     }
 
     private String getContent() {
@@ -162,7 +186,7 @@ public class ApiDefinitionServiceTest {
         apiDefinitionModel.setId(definitionId);
         model.setApiDefinitionModel(apiDefinitionModel);
 
-        ApiSpecificationModel apiSpecificationModel  = new ApiSpecificationModel();
+        ApiSpecificationModel apiSpecificationModel = new ApiSpecificationModel();
         apiSpecificationModel.setId(specificationId);
         model.setApiSpecificationModel(apiSpecificationModel);
 

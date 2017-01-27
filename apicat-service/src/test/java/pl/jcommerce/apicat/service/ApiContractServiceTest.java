@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiDefinitionDao;
@@ -16,6 +17,9 @@ import pl.jcommerce.apicat.service.apicontract.dto.ApiContractCreateDto;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractDto;
 import pl.jcommerce.apicat.service.apicontract.dto.ApiContractUpdateDto;
 import pl.jcommerce.apicat.service.apicontract.impl.ApiContractServiceImpl;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.any;
@@ -127,7 +131,42 @@ public class ApiContractServiceTest {
 
         apiContractService.updateContract(contractId, apiContractUpdateDto);
 
+        Mockito.verify(apiContractDao).update(apiContractModel);
+
         apiContractUpdateDto.setSpecificationId(4L);
         apiContractService.updateContract(contractId, apiContractUpdateDto);
+    }
+
+    @Test
+    public void testDeleteContract() {
+        ApiDefinitionModel apiDefinitionModel = new ApiDefinitionModel();
+        apiDefinitionModel.setId(definitionId);
+
+        ApiSpecificationModel apiSpecificationModel = new ApiSpecificationModel();
+        apiSpecificationModel.setId(specificationId);
+
+        ApiContractModel apiContractModel = new ApiContractModel();
+        apiContractModel.setId(contractId);
+
+        apiContractModel.setApiDefinitionModel(apiDefinitionModel);
+        apiContractModel.setApiSpecificationModel(apiSpecificationModel);
+
+        ApiContractModel apiContractModel2 = new ApiContractModel();
+        apiContractModel2.setId(4L);
+        apiContractModel2.setApiDefinitionModel(apiDefinitionModel);
+
+        List<ApiContractModel> contractModelList = new ArrayList<>();
+        contractModelList.add(apiContractModel2);
+        contractModelList.add(apiContractModel);
+        apiDefinitionModel.setApiContractModels(contractModelList);
+        apiSpecificationModel.setApiContractModel(apiContractModel);
+
+        when(apiContractDao.find(contractId)).thenReturn(apiContractModel);
+
+        apiContractService.deleteContract(contractId);
+
+        Mockito.verify(apiSpecificationDao).update(apiSpecificationModel);
+        Mockito.verify(apiDefinitionDao).update(apiDefinitionModel);
+        Mockito.verify(apiContractDao).delete(contractId);
     }
 }

@@ -85,6 +85,19 @@ public class ApiSpecificationServiceImpl extends BaseService implements ApiSpeci
     @Override
     @Transactional
     public void deleteSpecification(Long id) {
+        ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(id);
+        if (apiSpecificationModel == null) {
+            throw new ModelNotFoundException("Could not find specification data model.");
+        }
+
+        if(apiSpecificationModel.getApiContractModel() != null && apiSpecificationModel.getApiContractModel().getApiSpecificationModel() != null) {
+            ApiContractModel apiContractModel = apiSpecificationModel.getApiContractModel();
+            if (apiContractModel.getApiSpecificationModel().getId().equals(id)) {
+                apiContractModel.setApiSpecificationModel(null);
+                apiContractDao.update(apiContractModel);
+            }
+        }
+
         apiSpecificationDao.delete(id);
     }
 }

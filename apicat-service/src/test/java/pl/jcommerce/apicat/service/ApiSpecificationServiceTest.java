@@ -5,6 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.exception.ErrorCode;
@@ -13,6 +14,7 @@ import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
 import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
+import pl.jcommerce.apicat.model.ApiDefinitionModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
@@ -88,8 +90,21 @@ public class ApiSpecificationServiceTest {
         apiSpecificationUpdateDto.setName("Test2");
         apiSpecificationService.updateSpecification(specificationId, apiSpecificationUpdateDto);
 
+        Mockito.verify(apiSpecificationDao).update(apiSpecificationModel);
+
         apiSpecificationUpdateDto.setContractId(3L);
         apiSpecificationService.updateSpecification(specificationId, apiSpecificationUpdateDto);
+    }
+
+    @Test
+    public void testDeleteSpecification() {
+        ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
+        when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
+
+        apiSpecificationService.deleteSpecification(specificationId);
+
+        Mockito.verify(apiContractDao).update(apiSpecificationModel.getApiContractModel());
+        Mockito.verify(apiSpecificationDao).delete(specificationId);
     }
 
     private ApiSpecificationModel setupApiSpecificationModel() {
@@ -119,6 +134,11 @@ public class ApiSpecificationServiceTest {
     private ApiContractModel setupContractModel() {
         ApiContractModel model = new ApiContractModel();
         model.setId(contractId);
+
+        ApiSpecificationModel apiSpecificationModel = new ApiSpecificationModel();
+        apiSpecificationModel.setId(specificationId);
+        model.setApiSpecificationModel(apiSpecificationModel);
+
         return model;
     }
 }

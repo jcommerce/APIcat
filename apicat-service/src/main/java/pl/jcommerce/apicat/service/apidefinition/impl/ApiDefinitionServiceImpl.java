@@ -106,6 +106,21 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
     @Override
     @Transactional
     public void deleteDefinition(Long id) {
+        ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
+        if (apiDefinitionModel == null) {
+            throw new ModelNotFoundException("Could not find definition data model.");
+        }
+
+        if (apiDefinitionModel.getApiContractModels() != null) {
+            List<ApiContractModel> apiContractModels = apiDefinitionModel.getApiContractModels();
+            for (ApiContractModel apiContractModel : apiContractModels) {
+                if (apiContractModel.getApiDefinitionModel() != null && apiContractModel.getApiDefinitionModel().getId().equals(id)) {
+                    apiContractModel.setApiDefinitionModel(null);
+                    apiContractDao.update(apiContractModel);
+                }
+            }
+        }
+
         apiDefinitionDao.delete(id);
     }
 

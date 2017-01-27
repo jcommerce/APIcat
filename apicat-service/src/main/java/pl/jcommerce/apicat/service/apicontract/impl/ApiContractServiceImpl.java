@@ -86,6 +86,25 @@ public class ApiContractServiceImpl extends BaseService implements ApiContractSe
     @Override
     @Transactional
     public void deleteContract(Long id) {
+        ApiContractModel apiContractModel = apiContractDao.find(id);
+        if (apiContractModel == null) {
+            throw new ModelNotFoundException("Could not find contract data model.");
+        }
+
+        if (apiContractModel.getApiSpecificationModel() != null) {
+            ApiSpecificationModel apiSpecificationModel = apiContractModel.getApiSpecificationModel();
+            if (apiSpecificationModel.getApiContractModel() != null && apiSpecificationModel.getApiContractModel().getId().equals(id)) {
+                apiSpecificationModel.setApiContractModel(null);
+                apiSpecificationDao.update(apiSpecificationModel);
+            }
+        }
+
+        if (apiContractModel.getApiDefinitionModel() != null && apiContractModel.getApiDefinitionModel().getApiContractModels() != null) {
+            ApiDefinitionModel apiDefinitionModel = apiContractModel.getApiDefinitionModel();
+            apiDefinitionModel.getApiContractModels().removeIf(contractModel -> contractModel.getId().equals(id));
+            apiDefinitionDao.update(apiDefinitionModel);
+        }
+
         apiContractDao.delete(id);
     }
 }
