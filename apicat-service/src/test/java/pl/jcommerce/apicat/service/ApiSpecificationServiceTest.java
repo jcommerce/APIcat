@@ -14,7 +14,6 @@ import pl.jcommerce.apicat.dao.ApiContractDao;
 import pl.jcommerce.apicat.dao.ApiSpecificationDao;
 import pl.jcommerce.apicat.exception.ModelNotFoundException;
 import pl.jcommerce.apicat.model.ApiContractModel;
-import pl.jcommerce.apicat.model.ApiDefinitionModel;
 import pl.jcommerce.apicat.model.ApiSpecificationModel;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationCreateDto;
 import pl.jcommerce.apicat.service.apispecification.dto.ApiSpecificationDto;
@@ -60,7 +59,6 @@ public class ApiSpecificationServiceTest {
         apiSpecificationCreateDto.setType(specificationType);
 
         byte[] bytes = content.getBytes();
-
         Long returnedContractId = apiSpecificationService.createSpecification(apiSpecificationCreateDto, bytes);
         assertEquals(specificationId, returnedContractId);
     }
@@ -128,6 +126,7 @@ public class ApiSpecificationServiceTest {
         } catch (IOException e) {
             throw new ApicatSystemException(ErrorCode.READ_FILE_EXCEPTION, e.getMessage());
         }
+
         return content;
     }
 
