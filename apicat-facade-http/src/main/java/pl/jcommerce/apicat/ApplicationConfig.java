@@ -4,6 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaDialect;
@@ -22,7 +23,6 @@ import java.util.Properties;
 
 @Configuration
 @EnableSwagger2
-//@EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.DISABLED)
 public class ApplicationConfig {
 
     @Value("${database.driverClassName}")
@@ -46,9 +46,8 @@ public class ApplicationConfig {
     @Value("${jpa.generation.ddl}")
     private String jpaDdlGeneration;
 
-
-
-
+    @Value("${jpa.weaving}")
+    private String jpaWeaving;
 
     @Bean
     public DataSource dataSource() {
@@ -70,14 +69,20 @@ public class ApplicationConfig {
         entityManagerFactoryBean.setJpaVendorAdapter(vendorAdapter);
         entityManagerFactoryBean.setPackagesToScan("pl.jcommerce.apicat");
         entityManagerFactoryBean.setJpaDialect(new EclipseLinkJpaDialect());
+        entityManagerFactoryBean.setLoadTimeWeaver(loadTimeWeaver());
 
         Properties props = new Properties();
-        props.setProperty("eclipselink.weaving", "false");
+        props.setProperty("eclipselink.weaving", jpaWeaving);
         props.setProperty("javax.persistence.schema-generation.database.action", jpaSchemaGeneration);
         props.setProperty("eclipselink.ddl-generation", jpaDdlGeneration);
         entityManagerFactoryBean.setJpaProperties(props);
 
         return entityManagerFactoryBean;
+    }
+
+    @Bean
+    public InstrumentationLoadTimeWeaver loadTimeWeaver() {
+        return new InstrumentationLoadTimeWeaver();
     }
 
     @Bean
