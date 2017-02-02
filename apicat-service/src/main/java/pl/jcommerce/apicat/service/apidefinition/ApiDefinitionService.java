@@ -25,4 +25,6 @@ public interface ApiDefinitionService {
     ValidationResult validateAgainstSpecifications(Long definitionId, List<Long> specificationIds);
 
     ValidationResult validateAgainstAllSpecifications(Long id);
+
+    boolean releaseDefinition(Long id);
 }

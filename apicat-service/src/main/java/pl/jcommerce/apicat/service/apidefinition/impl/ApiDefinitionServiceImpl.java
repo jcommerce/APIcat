@@ -27,9 +27,6 @@ import pl.jcommerce.apicat.service.apidefinition.dto.ApiDefinitionUpdateDto;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by luwa on 17.01.17.
- */
 @Service("apiDefinitionService")
 public class ApiDefinitionServiceImpl extends BaseService implements ApiDefinitionService {
 
@@ -88,6 +85,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
 
         mapper.map(apiDefinitionDto, apiDefinitionModel);
         apiDefinitionModel.setApiContractModels(apiContractModels);
+        apiDefinitionModel.setStage(ApiStage.DRAFT.name());
         apiDefinitionDao.update(apiDefinitionModel);
     }
 
@@ -100,6 +98,7 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         }
 
         apiDefinitionModel.setContent(new String(content));
+        apiDefinitionModel.setStage(ApiStage.DRAFT.name());
         apiDefinitionDao.update(apiDefinitionModel);
     }
 
@@ -175,5 +174,42 @@ public class ApiDefinitionServiceImpl extends BaseService implements ApiDefiniti
         apiDefinition.setApiContracts(apiContracts);
 
         return apiDefinition.validateAllContracts();
+    }
+
+    @Override
+    @Transactional
+    public boolean releaseDefinition(Long id) {
+        ApiDefinitionModel apiDefinitionModel = apiDefinitionDao.find(id);
+        if (apiDefinitionModel == null) {
+            throw new ModelNotFoundException("Could not find definition data model.");
+        }
+        //TODO Use correct ApiDefinition implementation depending on type field
+        SwaggerApiDefinition apiDefinition = mapper.map(apiDefinitionModel, SwaggerApiDefinition.class);
+        apiDefinition.generateSwaggerFromContent();
+
+        List<ApiContract> apiContracts = new ArrayList<>();
+        for (ApiContractModel apiContractModel : apiDefinitionModel.getApiContractModels()) {
+            ApiSpecificationModel apiSpecificationModel = apiSpecificationDao.find(apiContractModel.getApiSpecificationModel().getId());
+            SwaggerApiSpecification apiSpecification = mapper.map(apiSpecificationModel, SwaggerApiSpecification.class);
+            apiSpecification.generateSwaggerFromContent();
+
+            ApiContract apiContract = new ApiContract();
+            apiContract.setApiDefinition(apiDefinition);
+            apiContract.setApiSpecification(apiSpecification);
+            apiContracts.add(apiContract);
+        }
+        apiDefinition.setApiContracts(apiContracts);
+
+        if (apiDefinition.releaseDefinition()) {
+            apiDefinitionModel.setStage(ApiStage.RELEASED.name());
+            apiDefinitionDao.update(apiDefinitionModel);
+            return true;
+        } else {
+            if (!apiDefinitionModel.getStage().equals(ApiStage.DRAFT.name())) {
+                apiDefinitionModel.setStage(ApiStage.DRAFT.name());
+                apiDefinitionDao.update(apiDefinitionModel);
+            }
+            return false;
+        }
     }
 }

@@ -16,6 +16,7 @@ public class ApiDefinitionDto {
     private Long id;
     private String type;
     private String name;
+    private String stage;
     private String data;
     private List<Long> contractIds;
     private ValidationResult validationResult;

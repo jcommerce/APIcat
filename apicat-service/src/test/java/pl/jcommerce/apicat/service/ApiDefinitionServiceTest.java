@@ -32,12 +32,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-/**
- * Created by luwa on 18.01.17.
- */
 @RunWith(MockitoJUnitRunner.class)
 public class ApiDefinitionServiceTest {
 
@@ -141,11 +139,20 @@ public class ApiDefinitionServiceTest {
         ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
         when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
 
-        ApiContractModel apiContractModel = setupContractModel();
-        when(apiContractDao.find(contractId)).thenReturn(apiContractModel);
-
         ValidationResult result = apiDefinitionService.validateAgainstAllSpecifications(definitionId);
         assertEquals(ValidationResultCategory.CORRECT, result.getValidationResultCategory());
+    }
+
+    @Test
+    public void testReleaseDefinition() {
+        ApiDefinitionModel apiDefinitionModel = setupApiDefinitionModel();
+        when(apiDefinitionDao.find(definitionId)).thenReturn(apiDefinitionModel);
+
+        ApiSpecificationModel apiSpecificationModel = setupApiSpecificationModel();
+        when(apiSpecificationDao.find(specificationId)).thenReturn(apiSpecificationModel);
+
+        assertTrue(apiDefinitionService.releaseDefinition(definitionId));
+        Mockito.verify(apiDefinitionDao).update(apiDefinitionModel);
     }
 
     private ApiDefinitionModel setupApiDefinitionModel() {
