@@ -8,6 +8,7 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 import pl.jcommerce.apicat.contract.validation.ApiContractValidator;
 import pl.jcommerce.apicat.contract.validation.ApiDefinitionValidator;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
+import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,7 @@ public abstract class ApiDefinition {
 
     @Getter
     @Setter
-    private ApiStage stage;
+    private ApiStage stage = ApiStage.DRAFT;
 
     @Getter
     @Setter
@@ -84,6 +85,7 @@ public abstract class ApiDefinition {
 
         validationResult = Optional.empty();
         contractsValidationResults = Optional.empty();
+        stage = ApiStage.DRAFT;
     }
 
     private boolean isValidatorAlreadyAdded(ApiDefinitionValidator apiDefinitionValidator) {
@@ -99,6 +101,7 @@ public abstract class ApiDefinition {
         apiContracts.add(apiContract);
         apiContract.setApiDefinition(this); //TODO verify - the relation is bidirectional because ApiContract contains apiDefinition property
         contractsValidationResults = Optional.empty();
+        stage = ApiStage.DRAFT;
     }
 
     public Optional<ValidationResult> validate() {
@@ -177,6 +180,22 @@ public abstract class ApiDefinition {
         for (ApiContract contract : apiContracts) {
             contract.setAutodiscoverValidators(autodiscoverValidators);
             contract.addValidator(apiContractValidator);
+        }
+    }
+
+    /**
+     * Validates all contracts assigned to this definition
+     * and changes state to RELEASED if there is no issues with them
+     *
+     * @return value if definition was successfully released
+     */
+    public boolean releaseDefinition() {
+        if (validateAllContracts().getValidationResultCategory().equals(ValidationResultCategory.CORRECT)) {
+            stage = ApiStage.RELEASED;
+            return true;
+        } else {
+            stage = ApiStage.DRAFT;
+            return false;
         }
     }
 }

@@ -4,6 +4,7 @@ import org.junit.Test;
 import pl.jcommerce.apicat.contract.ApiContract;
 import pl.jcommerce.apicat.contract.ApiDefinition;
 import pl.jcommerce.apicat.contract.ApiSpecification;
+import pl.jcommerce.apicat.contract.ApiStage;
 import pl.jcommerce.apicat.contract.exception.ApicatSystemException;
 import pl.jcommerce.apicat.contract.swagger.apicontract.SwaggerDefinitionApiContractValidator;
 import pl.jcommerce.apicat.contract.swagger.apicontract.SwaggerEndpointApiContractValidator;
@@ -160,5 +161,25 @@ public class SwaggerApiTest {
     @Test(expected = ApicatSystemException.class)
     public void shouldSwaggerOpenAPISpecificationExceptionBeDetected() {
         SwaggerApiSpecification.fromPath("contracts/yaml/incorrectYamlFormat.yaml");
+    }
+
+    @Test
+    public void testReleaseDefinition() {
+        ApiSpecification apiSpecificationCorrect = SwaggerApiSpecification.fromPath("contracts/yaml/consumerContract.yaml");
+        ApiSpecification apiSpecificationIncorrectParameter = SwaggerApiSpecification.fromPath("contracts/yaml/consumerContractWithoutNotRequiredParameter.yaml");
+
+        ApiDefinition apiDefinition = SwaggerApiDefinitionBuilder.
+                fromPath("contracts/yaml/providerContract.yaml").
+                withContractedApiSpecification(apiSpecificationCorrect).
+                build();
+        assertTrue(apiDefinition.releaseDefinition());
+        assertEquals(ApiStage.RELEASED, apiDefinition.getStage());
+
+        ApiContract apiContract = new ApiContract(apiDefinition, apiSpecificationIncorrectParameter);
+        apiDefinition.addContract(apiContract);
+        assertEquals(ApiStage.DRAFT, apiDefinition.getStage());
+
+        assertFalse(apiDefinition.releaseDefinition());
+        assertEquals(ApiStage.DRAFT, apiDefinition.getStage());
     }
 }
