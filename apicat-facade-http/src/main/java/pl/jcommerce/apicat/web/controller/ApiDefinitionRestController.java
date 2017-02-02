@@ -86,15 +86,25 @@ public class ApiDefinitionRestController extends AbstractBaseRestController {
 
     @GetMapping(path = "/{id}/validate/{specificationIds}")
     public ResponseEntity<ValidationResult> validateAgainstSpecifications(@PathVariable Long id, @PathVariable List<Long> specificationIds) {
-        log.debug("Call api definition endpoint with id: {}", id);
+        log.debug("Call api definition validate against specifications endpoint with id: {}", id);
         ValidationResult result = apiDefinitionService.validateAgainstSpecifications(id, specificationIds);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @GetMapping(path = "/{id}/validateAll")
     public ResponseEntity<ValidationResult> validateAllSpecifications(@PathVariable Long id) {
-        log.debug("Call api definition endpoint with id: {}", id);
+        log.debug("Call api definition validate all endpoint with id: {}", id);
         ValidationResult result = apiDefinitionService.validateAgainstAllSpecifications(id);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PatchMapping(path = "/{id}/release")
+    public ResponseEntity<Void> releaseDefinition(@PathVariable Long id) {
+        log.debug("Call api definition release endpoint with id: {}", id);
+        if(apiDefinitionService.releaseDefinition(id)) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 }

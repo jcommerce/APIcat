@@ -4,6 +4,7 @@ import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
+import pl.jcommerce.apicat.contract.ApiStage;
 import pl.jcommerce.apicat.contract.swagger.apidefinition.SwaggerApiDefinition;
 import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResultCategory;
@@ -195,6 +196,65 @@ public class ApiDefinitionRestControllerIntegrationTest extends AbstractBaseInte
 
             assertFalse(allValidationProblems.isEmpty());
             assertEquals(validationProblemsFromSelected.size(), allValidationProblems.size());
+    }
+
+    @Test
+    public void testReleaseDefinition() {
+        Long definitionId = createDefinition("json/providerContract.json");
+        Long correctSpecificationId = createSpecification("json/consumerContract.json");
+        Long invalidSpecificationId = createSpecification("json/consumerContractWithoutEndpoints.json");
+
+        Long correctContractId = createContract(definitionId, correctSpecificationId);
+        Long invalidContractId = createContract(definitionId, invalidSpecificationId);
+
+        //Test correct definition
+        ApiDefinitionUpdateDto definitionUpdateDto = new ApiDefinitionUpdateDto();
+        definitionUpdateDto.setContractIds(Collections.singletonList(correctContractId));
+        given().
+            contentType(ContentType.JSON).
+            body(definitionUpdateDto).
+        when().
+            put(definitionsPath + definitionId).
+        then().
+            statusCode(HttpStatus.SC_OK);
+
+        given().
+        when().
+            patch(definitionsPath + definitionId + "/release").
+        then().
+            statusCode(HttpStatus.SC_OK);
+
+        given().
+        when().
+            get(definitionsPath + definitionId).
+        then().
+            statusCode(HttpStatus.SC_OK).
+            body("id", notNullValue()).
+            body("stage", equalTo(ApiStage.RELEASED.name()));
+
+        //Test incorrect definition
+        definitionUpdateDto.setContractIds(Arrays.asList(correctContractId, invalidContractId));
+        given().
+            contentType(ContentType.JSON).
+            body(definitionUpdateDto).
+        when().
+            put(definitionsPath + definitionId).
+        then().
+            statusCode(HttpStatus.SC_OK);
+
+        given().
+        when().
+            patch(definitionsPath + definitionId + "/release").
+        then().
+            statusCode(HttpStatus.SC_FORBIDDEN);
+
+        given().
+        when().
+            get(definitionsPath + definitionId).
+        then().
+            statusCode(HttpStatus.SC_OK).
+            body("id", notNullValue()).
+            body("stage", equalTo(ApiStage.DRAFT.name()));
     }
 
     private String getSwaggerTitle(String data) {
