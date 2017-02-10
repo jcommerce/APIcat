@@ -1,0 +1,90 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "ApiCat test provider contract. Removed GET action.",
+    "version": "1.0.0",
+    "title": "ApiCat provider contract"
+  },
+  "host": "jcommerce.pl",
+  "basePath": "/v1",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/contract/{id}": {
+    },
+    "/contract": {
+      "post": {
+        "summary": "Create contract",
+        "operationId": "createContract",
+        "consumes": [
+          "application/json",
+          "application/xml"
+        ],
+        "produces": [
+          "application/json",
+          "application/xml"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "contract",
+            "description": "Contract object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Request"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/Reply"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Request": {
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "definitionId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "specificationId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "Reply": {
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "definitionId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "specificationId": {
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    }
+  }
+}

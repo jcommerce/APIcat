@@ -14,11 +14,9 @@ import pl.jcommerce.apicat.contract.validation.problem.ValidationProblem;
 import pl.jcommerce.apicat.contract.validation.result.ValidationResult;
 
 import java.text.MessageFormat;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * Created by krka on 23.10.2016.
- */
 @AutoService(ApiContractValidator.class)
 public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractValidator {
 
@@ -28,10 +26,16 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
     @Override
     public ValidationResult validate(ApiDefinition apiDefinition, ApiSpecification apiSpecification) {
         result = new ValidationResult();
-        apiSpecificationDefinitions = ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition().getDefinitions();
+        apiSpecificationDefinitions = cloneDefinitions(apiSpecification);
         Map<String, Model> apiDefinitionDefinitions = ((SwaggerApiDefinition) apiDefinition).getSwaggerDefinition().getDefinitions();
 
-        apiDefinitionDefinitions.forEach(this::checkDefinitionExistence);
+        for (Map.Entry<String, Model> definition : apiDefinitionDefinitions.entrySet()) {
+            checkDefinitionExistence(definition.getKey(), definition.getValue());
+        }
+
+        if (!apiSpecificationDefinitions.isEmpty()) {
+            createErrors();
+        }
 
         return result;
     }
@@ -40,7 +44,12 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
         if (!apiSpecificationDefinitions.containsKey(definitionName)) {
             result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.DEFINITION_NOT_USED, definitionName), ProblemLevel.ERROR));
         } else {
-            providerModel.getProperties().forEach((s, property) -> checkPropertyExistence(s, property, definitionName));
+            for (Map.Entry<String, Property> property : providerModel.getProperties().entrySet()) {
+                checkPropertyExistence(property.getKey(), property.getValue(), definitionName);
+            }
+        }
+        if (apiSpecificationDefinitions.get(definitionName) != null && apiSpecificationDefinitions.get(definitionName).getProperties().isEmpty()) {
+            apiSpecificationDefinitions.remove(definitionName);
         }
     }
 
@@ -51,6 +60,26 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
             } else {
                 result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, propertyKey, definitionName), ProblemLevel.WARN));
             }
+        } else {
+            apiSpecificationDefinitions.get(definitionName).getProperties().remove(propertyKey);
         }
+    }
+
+    private void createErrors() {
+        for (Map.Entry<String, Model> definition : apiSpecificationDefinitions.entrySet()) {
+            for (String property : definition.getValue().getProperties().keySet()) {
+                result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_NOT_EXISTS, property, definition.getKey()), ProblemLevel.ERROR));
+            }
+        }
+    }
+
+    private Map<String, Model> cloneDefinitions(ApiSpecification apiSpecification) {
+        Map<String, Model> definitions = ((SwaggerApiSpecification) apiSpecification).getSwaggerDefinition().getDefinitions();
+        Map<String, Model> clone = new LinkedHashMap<>(definitions);
+        for (Map.Entry<String, Model> entry : definitions.entrySet()) {
+            clone.replace(entry.getKey(), (Model) entry.getValue().clone());
+        }
+
+        return clone;
     }
 }

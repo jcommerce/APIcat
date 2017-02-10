@@ -51,7 +51,7 @@ public abstract class ApiDefinition {
     private List<ApiDefinitionValidator> validators = null;
 
     @Getter
-    private Optional<ValidationResult> validationResult = Optional.empty();
+    protected Optional<ValidationResult> validationResult = Optional.empty();
 
     @Getter
     private Optional<ValidationResult> contractsValidationResults = Optional.empty();

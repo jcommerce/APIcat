@@ -28,8 +28,8 @@ dependencies {
     compile "org.apache.commons:commons-dbcp2:$commonsDbcpVersion"
     compile "com.h2database:h2:$h2dbVersion" /* change to testCompile in future */
 
-    compile "io.springfox:springfox-swagger2:$swaggerVersion"
-    compile "io.springfox:springfox-swagger-ui:$swaggerVersion"
+    compile "io.springfox:springfox-swagger2:$springfoxSwaggerVersion"
+    compile "io.springfox:springfox-swagger-ui:$springfoxSwaggerVersion"
 
     testCompile "com.jayway.restassured:rest-assured:$restAssuredVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"

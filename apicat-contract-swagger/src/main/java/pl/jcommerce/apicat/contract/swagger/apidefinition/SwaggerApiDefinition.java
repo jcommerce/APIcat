@@ -17,6 +17,7 @@ import pl.jcommerce.apicat.contract.exception.ErrorCode;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public class SwaggerApiDefinition extends ApiDefinition {
 
@@ -104,5 +105,17 @@ public class SwaggerApiDefinition extends ApiDefinition {
     @Override
     public String getType() {
         return TYPE;
+    }
+
+    @Override
+    public void setContent(String content) {
+        super.setContent(content);
+        this.validationResult = Optional.empty();
+        refreshSwaggerFromContent();
+    }
+
+    private void refreshSwaggerFromContent() {
+        setJsonNode(createJsonNode(getJson(getContent())));
+        setSwaggerDefinition(new SwaggerParser().read(jsonNode));
     }
 }

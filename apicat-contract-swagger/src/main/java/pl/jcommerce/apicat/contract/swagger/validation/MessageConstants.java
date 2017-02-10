@@ -19,6 +19,8 @@ public class MessageConstants {
 
     public final static String OPERATION_NOT_USED = "Method {0} with the operation ID = {1} from {2} endpoint is not used";
 
+    public final static String OPERATION_NOT_EXISTS = "Operation with ID = {0} not exists";
+
     public final static String PARAMETER_NOT_USED = "Parameter {0} from the method {1} with the operation ID = {2} from {3} endpoint is not used";
 
     public final static String RESPONSE_NOT_USED = "Response with the code {0} and the message {1} from the method {2} with the operation ID = {3} from {4} endpoint is not used";
@@ -26,4 +28,6 @@ public class MessageConstants {
     public final static String DEFINITION_NOT_USED = "Definition {0} is not used";
 
     public final static String PROPERTY_NOT_USED = "Property {0} in the definition {1} is not used";
+
+    public final static String PROPERTY_NOT_EXISTS = "Property {0} in the definition {1} not exists";
 }

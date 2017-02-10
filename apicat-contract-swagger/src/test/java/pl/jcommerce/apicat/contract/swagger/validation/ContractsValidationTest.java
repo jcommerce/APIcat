@@ -18,10 +18,6 @@ import java.text.MessageFormat;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by krka on 28.10.2016.
- */
-
 @Slf4j
 public class ContractsValidationTest {
 
@@ -62,11 +58,11 @@ public class ContractsValidationTest {
         assertFalse(contract.isValid());
 
         ValidationResult validationResult = getResults(contract);
-        assertEquals(ValidationResultCategory.ERROR, validationResult.getValidationResultCategory());
+        assertEquals(ValidationResultCategory.WARN, validationResult.getValidationResultCategory());
         assertEquals(1, validationResult.getProblemList().size());
         assertTrue(validationResult.getProblemList().contains(
                 new ValidationProblem(MessageFormat.format(MessageConstants.ENDPOINT_NOT_USED, "/pets/findByStatus"),
-                        ProblemLevel.ERROR)));
+                        ProblemLevel.WARN)));
     }
 
     @Test
@@ -76,11 +72,11 @@ public class ContractsValidationTest {
         assertFalse(contract.isValid());
 
         ValidationResult validationResult = getResults(contract);
-        assertEquals(ValidationResultCategory.ERROR, validationResult.getValidationResultCategory());
+        assertEquals(ValidationResultCategory.WARN, validationResult.getValidationResultCategory());
         assertEquals(1, validationResult.getProblemList().size());
         assertTrue(validationResult.getProblemList().contains(
                 new ValidationProblem(MessageFormat.format(MessageConstants.OPERATION_NOT_USED, HttpMethod.PUT, "updatePet", "/pets"),
-                        ProblemLevel.ERROR)));
+                        ProblemLevel.WARN)));
     }
 
     @Test
@@ -125,11 +121,11 @@ public class ContractsValidationTest {
         assertFalse(contract.isValid());
 
         ValidationResult validationResult = getResults(contract);
-        assertEquals(ValidationResultCategory.ERROR, validationResult.getValidationResultCategory());
+        assertEquals(ValidationResultCategory.WARN, validationResult.getValidationResultCategory());
         assertEquals(1, validationResult.getProblemList().size());
         assertTrue(validationResult.getProblemList().contains(
                 new ValidationProblem(MessageFormat.format(MessageConstants.PARAMETER_NOT_USED, "password", HttpMethod.GET, "loginUser", "/users/login"),
-                        ProblemLevel.ERROR)));
+                        ProblemLevel.WARN)));
     }
 
     @Test

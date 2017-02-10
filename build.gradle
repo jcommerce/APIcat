@@ -16,7 +16,8 @@ ext.slf4jVersion = "1.6.1"
 ext.springBootVersion = "1.4.3.RELEASE"
 ext.springVersion = "4.3.5.RELEASE"
 ext.springHateoasVersion = "0.23.0.RELEASE"
-ext.swaggerVersion = "2.6.1"
+ext.springfoxSwaggerVersion = "2.6.1"
+ext.swaggerVersion = "1.5.12"
 
 subprojects {
     apply plugin: "java"
