@@ -30,4 +30,6 @@ public class MessageConstants {
     public final static String PROPERTY_NOT_USED = "Property {0} in the definition {1} is not used";
 
     public final static String PROPERTY_NOT_EXISTS = "Property {0} in the definition {1} not exists";
+
+    public final static String PROPERTY_WRONG_TYPE = "Property {0} has wrong type";
 }

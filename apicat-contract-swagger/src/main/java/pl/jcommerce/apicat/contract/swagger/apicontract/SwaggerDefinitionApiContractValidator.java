@@ -60,6 +60,9 @@ public class SwaggerDefinitionApiContractValidator extends SwaggerApiContractVal
             } else {
                 result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, propertyKey, definitionName), ProblemLevel.WARN));
             }
+        } else if (!apiSpecificationDefinitions.get(definitionName).getProperties().get(propertyKey).getType().equals(property.getType())) {
+            result.addProblem(new ValidationProblem(MessageFormat.format(MessageConstants.PROPERTY_WRONG_TYPE, propertyKey)));
+            apiSpecificationDefinitions.get(definitionName).getProperties().remove(propertyKey);
         } else {
             apiSpecificationDefinitions.get(definitionName).getProperties().remove(propertyKey);
         }

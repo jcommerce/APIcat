@@ -216,7 +216,7 @@ public class UseCasesTest {
         if (result.isPresent()) {
             assertEquals(ValidationResultCategory.ERROR, result.get().getValidationResultCategory());
             List<ValidationProblem> problemList = result.get().getProblemList();
-            assertEquals(2, problemList.size());
+            assertEquals(3, problemList.size());
             assertTrue(
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_EXISTS, "definitionId", "Request"),
@@ -225,6 +225,10 @@ public class UseCasesTest {
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, "definitionIdTest", "Request"),
                             ProblemLevel.WARN)));
+            assertTrue(
+                    problemList.contains(new ValidationProblem(
+                            MessageFormat.format(MessageConstants.PROPERTY_WRONG_TYPE, "specificationId"),
+                            ProblemLevel.ERROR)));
         } else {
             fail();
         }
@@ -241,7 +245,7 @@ public class UseCasesTest {
         if (result.isPresent()) {
             assertEquals(ValidationResultCategory.ERROR, result.get().getValidationResultCategory());
             List<ValidationProblem> problemList = result.get().getProblemList();
-            assertEquals(2, problemList.size());
+            assertEquals(3, problemList.size());
             assertTrue(
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_EXISTS, "id", "Request"),
@@ -250,6 +254,10 @@ public class UseCasesTest {
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, "idTest", "Request"),
                             ProblemLevel.WARN)));
+            assertTrue(
+                    problemList.contains(new ValidationProblem(
+                            MessageFormat.format(MessageConstants.PROPERTY_WRONG_TYPE, "definitionId"),
+                            ProblemLevel.ERROR)));
         } else {
             fail();
         }
@@ -266,7 +274,7 @@ public class UseCasesTest {
         if (result.isPresent()) {
             assertEquals(ValidationResultCategory.ERROR, result.get().getValidationResultCategory());
             List<ValidationProblem> problemList = result.get().getProblemList();
-            assertEquals(2, problemList.size());
+            assertEquals(3, problemList.size());
             assertTrue(
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_EXISTS, "specificationId", "Reply"),
@@ -275,6 +283,10 @@ public class UseCasesTest {
                     problemList.contains(new ValidationProblem(
                             MessageFormat.format(MessageConstants.PROPERTY_NOT_USED, "specificationIdTest", "Reply"),
                             ProblemLevel.WARN)));
+            assertTrue(
+                    problemList.contains(new ValidationProblem(
+                            MessageFormat.format(MessageConstants.PROPERTY_WRONG_TYPE, "id"),
+                            ProblemLevel.ERROR)));
         } else {
             fail();
         }

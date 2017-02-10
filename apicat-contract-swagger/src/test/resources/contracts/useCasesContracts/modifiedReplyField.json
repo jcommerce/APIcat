@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "ApiCat test provider contract. Modified specificationId field.",
+    "description": "ApiCat test provider contract. Modified id and specificationId field.",
     "version": "1.0.0",
     "title": "ApiCat provider contract"
   },
@@ -102,8 +102,7 @@
       ],
       "properties": {
         "id": {
-          "type": "integer",
-          "format": "int64"
+          "type": "boolean"
         },
         "definitionId": {
           "type": "integer",
